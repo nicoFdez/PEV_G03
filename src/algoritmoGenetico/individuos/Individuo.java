@@ -20,7 +20,15 @@ public abstract class Individuo<T> {
 		return 0;
 	}
 	
-	public void cruceMonopunto(Individuo<T> other) {
+	public void mutacionBasica(double probMutacion) {
 		
+	}
+	
+	public T[] getCromosoma() {
+		return cromosoma;
+	}
+
+	public void setCromosoma(T[] cromosoma) {
+		this.cromosoma = cromosoma;
 	}
 }

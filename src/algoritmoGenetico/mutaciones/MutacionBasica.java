@@ -4,11 +4,12 @@ import algoritmoGenetico.individuos.Individuo;
 
 public class MutacionBasica implements Mutacion {
 
-	
 	@Override
-	public Individuo mutar(Individuo a) {
+	public void mutar(Individuo[] poblacion, double probMutacion) {
 		
-		return null;
+		for(int i=0; i<poblacion.length; i++) {
+			poblacion[i].mutacionBasica(probMutacion);
+		}
 	}
 
 }

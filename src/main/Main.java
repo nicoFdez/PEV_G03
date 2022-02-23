@@ -32,13 +32,13 @@ public class Main {
 		ag->iniciarPoblacion();
 		
 		while(this.generacionActual < this.maxGeneraciones) {
-		//Seleccion
-		//Cruce
-		//Mutacion
-		evaluar();
-		generaGrafica();
-		//Siguiente generacion
-		generacionActual++;
+			//Seleccion
+			//Cruce
+			//Mutacion
+			evaluar();
+			generaGrafica();
+			//Siguiente generacion
+			generacionActual++;
 		}
 	}
 

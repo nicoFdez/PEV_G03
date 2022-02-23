@@ -4,5 +4,5 @@ import algoritmoGenetico.individuos.Individuo;
 
 public interface Mutacion {
 	
-	public Individuo mutar(Individuo a);
+	public void mutar(Individuo[] poblacion, double probMutacion);
 }

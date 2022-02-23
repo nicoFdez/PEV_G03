@@ -79,18 +79,17 @@ public class IndividuoF1 extends Individuo<Boolean> {
 		return result;
 	}
 	
-	public Boolean[] getCromosoma()
-	{
-		return this.cromosoma;
+	@Override
+	public void mutacionBasica(double probMutacion) {
+		Random rand = new Random();
+		for(int i=0; i<this.cromosoma.length; i++) {
+			double r = rand.nextDouble();
+			if(r <= probMutacion) {
+				cromosoma[i] = rand.nextBoolean();
+			}
+		}
 	}
 	
-	public void cruceMonopunto(IndividuoF1 other) {
-		
-		
-	}
 	
 	private double precision;
-	
-	
-	
 }
