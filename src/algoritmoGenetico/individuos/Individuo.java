@@ -15,4 +15,12 @@ public abstract class Individuo<T> {
 	protected int tamGen(double precision, double min, double max) {
 		return (int) (Math.log10(((max - min) / precision) + 1) / Math.log10(2));
 	}
+	
+	public double getFitness() {
+		return 0;
+	}
+	
+	public void cruceMonopunto(Individuo<T> other) {
+		
+	}
 }

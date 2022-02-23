@@ -1,5 +1,8 @@
 package algoritmoGenetico.mutaciones;
 
-public interface Mutacion {
+import algoritmoGenetico.individuos.Individuo;
 
+public interface Mutacion {
+	
+	public Individuo mutar(Individuo a);
 }

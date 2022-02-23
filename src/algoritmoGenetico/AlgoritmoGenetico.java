@@ -14,8 +14,3 @@ public class AlgoritmoGenetico {
 	private Individuo elMejor;
 	private int pos_mejor;
 }
-
-
-public static double function1(IndividuoF1 x) {
-	
-}
