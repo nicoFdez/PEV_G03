@@ -1,6 +1,12 @@
 package main;
 
 import algoritmoGenetico.AlgoritmoGenetico;
+import algoritmoGenetico.seleccion.*;
+import algoritmoGenetico.cruces.*;
+import algoritmoGenetico.mutaciones.*;
+
+
+
 
 public class Main {
 	public void main(String[] args) {
@@ -21,25 +27,38 @@ public class Main {
 		frame.setContentPane(plot);
 		frame.setVisible(true);
 		*/
-		
+		Initialice();
 		run();
 		
 	}
+	
+	public void Initialice() {
+		ag = new AlgoritmoGenetico();
+		ag.setSeleccion(new SeleccionRuleta());
+		ag.setCruce(new CruceMonopunto());
+		ag.setMutacion(new MutacionBasica());
+		
+	}
+	
 
 	public void run() {
-		AlgoritmoGenetico ag = new AlgoritmoGenetico();
-		
-		ag->iniciarPoblacion();
-		
-		while(this.generacionActual < this.maxGeneraciones) {
-			//Seleccion
-			//Cruce
-			//Mutacion
-			evaluar();
-			generaGrafica();
+		//ag->iniciarPoblacion();
+		int generacionActual = 0;
+		while(generacionActual < ag.getMaxGeneraciones()) {
+			ag.Seleccion();
+			ag.Cruce();
+			ag.Mutacion();
+			ag.Evaluar();
+			//generaGrafica();
 			//Siguiente generacion
 			generacionActual++;
 		}
 	}
+	
+	AlgoritmoGenetico ag;
+	
+	
+	
+	
 
 }
