@@ -24,6 +24,10 @@ public abstract class Individuo<T> {
 		
 	}
 	
+	public void initialize() {
+		
+	}
+	
 	public T[] getCromosoma() {
 		return cromosoma;
 	}

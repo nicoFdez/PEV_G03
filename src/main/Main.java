@@ -9,7 +9,7 @@ import algoritmoGenetico.mutaciones.*;
 
 
 public class Main {
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		
 		/*
 		// define your data
@@ -32,17 +32,17 @@ public class Main {
 		
 	}
 	
-	public void Initialice() {
+	private static void Initialice() {
 		ag = new AlgoritmoGenetico();
+		ag.inicializarPoblacion(100);
+		ag.setMaxGeneraciones(100);
 		ag.setSeleccion(new SeleccionRuleta());
 		ag.setCruce(new CruceMonopunto());
 		ag.setMutacion(new MutacionBasica());
-		
 	}
-	
 
-	public void run() {
-		//ag->iniciarPoblacion();
+
+	private static void run() {
 		int generacionActual = 0;
 		while(generacionActual < ag.getMaxGeneraciones()) {
 			ag.Seleccion();
@@ -55,7 +55,7 @@ public class Main {
 		}
 	}
 	
-	AlgoritmoGenetico ag;
+	static AlgoritmoGenetico ag;
 	
 	
 	

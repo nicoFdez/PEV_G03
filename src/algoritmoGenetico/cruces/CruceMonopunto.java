@@ -15,14 +15,14 @@ public class CruceMonopunto<T> implements Cruce{
 	public Individuo[] cruzar(Individuo[] poblacion, double probCruce) 
 	{
 		//Preparamos una lista en la que nos vamos a quedar con aquells individuos que tienen que ser cruzados
-		ArrayList<Individuo<T>> individuosCruzar = new ArrayList<Individuo<T>>();
+		ArrayList<Integer> individuosCruzar = new ArrayList<Integer>();
 		Random rand = new Random();
 		
 		//Recorremos todos los individuos y segun un radom y la probabilidad de cruce vemos a cuales les toca 
 		for(int i = 0 ; i< poblacion.length; i++) {
 			//Si la probabilidad se da, nos quedamos con este individuo
 			if(rand.nextDouble() <= probCruce) 
-				individuosCruzar.add(poblacion[i]);
+				individuosCruzar.add(i);
 		}
 		
 		//En caso de que la lista de individuos seleccionados sea impar, nos deshacemos de uno de estos 
@@ -31,11 +31,10 @@ public class CruceMonopunto<T> implements Cruce{
 			individuosCruzar.remove(0);
 		
 		//Recorremos los individuos por parejas y hacemos que se crucen de forma monopunto
-		for(int i=0; i<individuosCruzar.size(); i+=2 ) 	
-			cruceMonopunto(individuosCruzar.get(i), individuosCruzar.get(i+1));
+		for(int i=0; i<individuosCruzar.size(); i+=2 )
+			cruceMonopunto(poblacion[individuosCruzar.get(i)], poblacion[individuosCruzar.get(i+1)]);
 		
-		
-		return null;
+		return poblacion;
 	}
 	
 	
@@ -55,7 +54,6 @@ public class CruceMonopunto<T> implements Cruce{
 		for(int i=0; i<l; i++) 
 			if(i < r) cromo2[i] = cromo1[i];
 			else cromo1[i] = cromo2[i];
-		
 	}
 
 }

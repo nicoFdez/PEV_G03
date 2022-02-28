@@ -10,7 +10,6 @@ public class IndividuoF1 extends Individuo<Boolean> {
 		this.precision = precision;
 		
 		this.nGenes = 2;
-		this.cromosoma = new Boolean[nGenes];
 		
 		//Limites que puede alcanzar el individuo
 		this.min = new double[this.nGenes];
@@ -21,15 +20,18 @@ public class IndividuoF1 extends Individuo<Boolean> {
 		this.max[1] = 5.8;
 		
 		//tamaño del array de "bits" que tiene cada uno de los genes
+		this.tamGenes = new int[this.nGenes];
 		this.tamGenes[0] = tamGen(precision, min[0], max[0]);
 		this.tamGenes[1] = tamGen(precision, min[1], max[1]);
 		
 		//Tamaño total de individuo en bits
 		this.tamTotal = this.tamGenes[0] + this.tamGenes[1];
+		this.cromosoma = new Boolean[tamTotal];
 	}
 	
 	//Metodo que inicializa el individuo, al ser el genotipo un array de booleanos la inicializacion es
 	//un monton de booleanos aleatorios
+	@Override
 	public void initialize() {
 		for(int i = 0; i < this.tamTotal; i++) 
 			this.cromosoma[i] = this.rand.nextBoolean();
@@ -69,12 +71,12 @@ public class IndividuoF1 extends Individuo<Boolean> {
 		Boolean[] gen = Arrays.copyOfRange(this.cromosoma, inicio, inicio + this.tamGenes[val]);
 		//Divido en sus partes entera y deciaml
 		Boolean[] entera = Arrays.copyOfRange(gen, 0, numBitsParteEntera);
-		Boolean[] decimal = Arrays.copyOfRange(gen, numBitsParteEntera, numBitsParteEntera+numBitsDecimal);
+		Boolean[] decimal = Arrays.copyOfRange(gen, numBitsParteEntera, numBitsParteEntera + numBitsDecimal);
 
 		result = bin2dec(entera);
 		result = result + (bin2dec(decimal)* this.precision);
-		
-		return result;
+		double value = this.min[val] + (result * (this.max[val]-this.min[val])/(Math.pow(2, this.tamTotal) - 1));
+		return value;
 	}
 	
 	
