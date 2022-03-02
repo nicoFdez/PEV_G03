@@ -1,5 +1,7 @@
 package algoritmoGenetico;
 
+import java.util.Arrays;
+
 import algoritmoGenetico.cruces.Cruce;
 import algoritmoGenetico.individuos.Individuo;
 import algoritmoGenetico.individuos.IndividuoF1;
@@ -11,10 +13,10 @@ public class AlgoritmoGenetico {
 	
 	
 	public AlgoritmoGenetico() {
-		this.elMejor = new IndividuoF1(0.001);
+		this.elMejor = new IndividuoF1(0.0001);
 		this.elMejor.initialize();
 		
-		this.probCruce = 1.0;
+		this.probCruce = 0.6;
 		this.probMutacion = 0.05;
 	}
 	
@@ -46,9 +48,10 @@ public class AlgoritmoGenetico {
 				this.pos_mejor = i;
 			}
 			//En caso de que sea intereante nos lo quedamos
-			if(this.fitness[i] > elMejor.getFitness()) {
-				elMejor= poblacion[i];
-			}
+		}
+		
+		if(this.fitness[this.pos_mejor] > elMejor.getFitness()) {			
+			elMejor.copyFromAnother(this.poblacion[this.pos_mejor]);
 		}
 		
 		//Sacamos la aptitud media

@@ -55,45 +55,30 @@ public class IndividuoF1 extends Individuo<Boolean> {
 	
 	public double getFenotipo(int val) {
 		double result=0;
-		
-		//Tamaño de las partes de un numero 
-		//La parte decimal la sacamos según precisión
-		int numBitsDecimal= this.tamGen(1, 0, (1/this.precision)-1);
-		//La parte entera es el total menos la parte decimal
-		int numBitsParteEntera = this.tamGenes[val]-numBitsDecimal;
-		
-		
-		
-		//Sacamos el inicio del cromosoma en el que empieza un gen
 		int inicio =0;
 		for(int i = 0; i<val; i++) {
 			inicio+=this.tamGenes[i];
 		}
 		
-		//Me quedo con el gen en cuestion
-		Boolean[] gen = Arrays.copyOfRange(this.cromosoma, inicio, inicio + this.tamGenes[val]);
-		//Divido en sus partes entera y deciaml
-		Boolean[] entera = Arrays.copyOfRange(gen, 0, numBitsParteEntera);
-		Boolean[] decimal = Arrays.copyOfRange(gen, numBitsParteEntera, numBitsParteEntera + numBitsDecimal);
-		
-		//Boolean[] seats = new Boolean[numBitsParteEntera];
-		//Boolean[] seatsDecimal = new Boolean[numBitsDecimal];
-		//Arrays.fill(seats, true);
-		//Arrays.fill(seatsDecimal, true);
-		//double maximum = bin2dec(seats);
-		//maximum = maximum + (bin2dec(decimal)* this.precision);
+		Boolean[] gen = Arrays.copyOfRange(this.cromosoma, inicio, inicio + this.tamGenes[val]); 
+		double value = this.min[val] + bin2dec(gen) * (this.max[val]-this.min[val])/(Math.pow(2, this.tamGenes[val]) - 1);
 
-		result = bin2dec(entera);
-		result = result + (bin2dec(decimal)* this.precision);
-		double value = this.min[val] + result * (this.max[val]-this.min[val])/(Math.pow(2, this.tamTotal) - 1);
-		//double value = this.min[val] + result * (this.max[val]-this.min[val])/(Math.pow(2, this.tamGenes[val]) - 1);
-
-		//value = ConvertRange(0,maximum , 0 , this.max[val]-this.min[val], result);
-		//value = value + this.min[val];
-		
 		return value;
 	}
 	
+	@Override
+	public void copyFromAnother(Individuo<Boolean> other) {
+		Boolean[] otherCromo = other.getCromosoma();
+		for(int i = 0; i<otherCromo.length; i++) {
+			if(otherCromo[i])
+				this.cromosoma[i] = true;
+			else 
+				this.cromosoma[i] = false;
+			//this.cromosoma[i] = otherCromo[i];
+		}
+		
+	}
+		
 	public static double ConvertRange(
 			double originalStart, double originalEnd, // original range
 			double newStart, double newEnd, // desired range

@@ -24,6 +24,10 @@ public abstract class Individuo<T> {
 		
 	}
 	
+	public void copyFromAnother(Individuo<T> other) {
+		
+	}
+	
 	public void initialize() {
 		
 	}
