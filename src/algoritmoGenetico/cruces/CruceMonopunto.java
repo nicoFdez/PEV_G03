@@ -43,6 +43,9 @@ public class CruceMonopunto<T> implements Cruce{
 		Random rand = new Random();
 		Object[] cromo1 = a.getCromosoma();
 		Object[] cromo2 = b.getCromosoma();
+		//System.out.println("Antes de realizar el cruce es");
+		//System.out.println(cromo1);
+		//System.out.println(cromo2);
 		
 		//Nos hacemos con la longitud del cromosoma para recorrerlo entero
 		int l = cromo1.length;
@@ -54,6 +57,13 @@ public class CruceMonopunto<T> implements Cruce{
 		for(int i=0; i<l; i++) 
 			if(i < r) cromo2[i] = cromo1[i];
 			else cromo1[i] = cromo2[i];
+		
+		
+		//System.out.println("Despues de realizar el cruce es");
+		//System.out.println(cromo1);
+		//System.out.println(cromo2);
+		a.setCromosoma(cromo1);
+		b.setCromosoma(cromo2);
 	}
 
 }

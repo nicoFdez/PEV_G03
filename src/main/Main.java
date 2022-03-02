@@ -34,7 +34,7 @@ public class Main {
 	
 	private static void Initialice() {
 		ag = new AlgoritmoGenetico();
-		ag.inicializarPoblacion(100);
+		ag.inicializarPoblacion(2);
 		ag.setMaxGeneraciones(100);
 		ag.setSeleccion(new SeleccionRuleta());
 		ag.setCruce(new CruceMonopunto());

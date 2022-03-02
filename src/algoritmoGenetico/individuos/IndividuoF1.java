@@ -41,6 +41,7 @@ public class IndividuoF1 extends Individuo<Boolean> {
 	//Metod que aplica la funcion 1 y devuelvel el valor
 	public double getValor() {
 		double x1 = this.getFenotipo(0), x2 = this.getFenotipo(1);
+		//System.out.println("Individuo con datos  a= "+ x1+ " y x2= "+x2 );
 		return (21.5 + x1 * Math.sin(4 * Math.PI * x1) + x2 * Math.sin(20 * Math.PI * x2));
 	}
 	
@@ -61,6 +62,8 @@ public class IndividuoF1 extends Individuo<Boolean> {
 		//La parte entera es el total menos la parte decimal
 		int numBitsParteEntera = this.tamGenes[val]-numBitsDecimal;
 		
+		
+		
 		//Sacamos el inicio del cromosoma en el que empieza un gen
 		int inicio =0;
 		for(int i = 0; i<val; i++) {
@@ -72,12 +75,33 @@ public class IndividuoF1 extends Individuo<Boolean> {
 		//Divido en sus partes entera y deciaml
 		Boolean[] entera = Arrays.copyOfRange(gen, 0, numBitsParteEntera);
 		Boolean[] decimal = Arrays.copyOfRange(gen, numBitsParteEntera, numBitsParteEntera + numBitsDecimal);
+		
+		//Boolean[] seats = new Boolean[numBitsParteEntera];
+		//Boolean[] seatsDecimal = new Boolean[numBitsDecimal];
+		//Arrays.fill(seats, true);
+		//Arrays.fill(seatsDecimal, true);
+		//double maximum = bin2dec(seats);
+		//maximum = maximum + (bin2dec(decimal)* this.precision);
 
 		result = bin2dec(entera);
 		result = result + (bin2dec(decimal)* this.precision);
-		double value = this.min[val] + (result * (this.max[val]-this.min[val])/(Math.pow(2, this.tamTotal) - 1));
+		double value = this.min[val] + result * (this.max[val]-this.min[val])/(Math.pow(2, this.tamTotal) - 1);
+		//double value = this.min[val] + result * (this.max[val]-this.min[val])/(Math.pow(2, this.tamGenes[val]) - 1);
+
+		//value = ConvertRange(0,maximum , 0 , this.max[val]-this.min[val], result);
+		//value = value + this.min[val];
+		
 		return value;
 	}
+	
+	public static double ConvertRange(
+			double originalStart, double originalEnd, // original range
+			double newStart, double newEnd, // desired range
+			double value) // value to convert
+		{
+		    double scale = (double)(newEnd - newStart) / (originalEnd - originalStart);
+		    return (int)(newStart + ((value - originalStart) * scale));
+		}
 	
 	
 	//Metodo que toma un numero codificado en binario y devuelve su representacion en decimal

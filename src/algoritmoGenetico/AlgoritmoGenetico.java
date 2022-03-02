@@ -14,7 +14,7 @@ public class AlgoritmoGenetico {
 		this.elMejor = new IndividuoF1(0.001);
 		this.elMejor.initialize();
 		
-		this.probCruce = 0.6;
+		this.probCruce = 1.0;
 		this.probMutacion = 0.05;
 	}
 	
@@ -39,7 +39,8 @@ public class AlgoritmoGenetico {
 		this.pos_mejor = 0;
 		for(int i =0 ; i< this.poblacion.length;i++) {
 			//Nos informamos del fitness de cada individuo
-			this.fitness[i]= this.poblacion[i].getFitness();
+			double fitnessActual = this.poblacion[i].getFitness();
+			this.fitness[i]= fitnessActual;
 			this.aptitudAcumulada += this.fitness[i];
 			if(this.fitness[i] > this.fitness[this.pos_mejor]) {
 				this.pos_mejor = i;
@@ -52,7 +53,8 @@ public class AlgoritmoGenetico {
 		
 		//Sacamos la aptitud media
 		this.aptitudMedia = this.aptitudAcumulada/this.tamPoblacion;
-		
+		//this.elMejor = new IndividuoF1(0.001);
+		//this.elMejor.initialize();
 		System.out.println("Mejor hasta el momento: " + this.elMejor.getFitness());
 		System.out.println("Mejor actual: " + this.poblacion[this.pos_mejor].getFitness());
 		System.out.println("Media poblacion: " + aptitudMedia);
