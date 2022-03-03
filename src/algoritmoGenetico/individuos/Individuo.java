@@ -33,7 +33,7 @@ public abstract class Individuo<T> {
 	}
 	
 	public T[] getCromosoma() {
-		return cromosoma;
+		return this.cromosoma;
 	}
 
 	public void setCromosoma(T[] cromosoma) {

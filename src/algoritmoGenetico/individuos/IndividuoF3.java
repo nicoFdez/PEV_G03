@@ -3,9 +3,9 @@ package algoritmoGenetico.individuos;
 import java.util.Arrays;
 import java.util.Random;
 
-public class IndividuoF1 extends Individuo<Boolean> {
+public class IndividuoF3 extends Individuo<Boolean> {
 	
-	public IndividuoF1(double precision){
+	public IndividuoF3(double precision){
 		this.rand = new Random();
 		this.precision = precision;
 		
@@ -14,10 +14,10 @@ public class IndividuoF1 extends Individuo<Boolean> {
 		//Limites que puede alcanzar el individuo
 		this.min = new double[this.nGenes];
 		this.max = new double[this.nGenes];	
-		this.min[0] = -3.0;
-		this.min[1] = 4.1;
-		this.max[0] = 12.1;
-		this.max[1] = 5.8;
+		this.min[0] = -512.0;
+		this.min[1] = -512.0;
+		this.max[0] = 512.0;
+		this.max[1] = 512.0;
 		
 		//tamaño del array de "bits" que tiene cada uno de los genes
 		this.tamGenes = new int[this.nGenes];
@@ -39,11 +39,14 @@ public class IndividuoF1 extends Individuo<Boolean> {
 	}
 	
 	//Metod que aplica la funcion 1 y devuelvel el valor
-	//Funcion a representar: f(x1 , x2) = 21.5 + x1.sen(4π x1)+x2.sen(20π x2)
 	public double getValor() {
 		double x1 = this.getFenotipo(0), x2 = this.getFenotipo(1);
-		//System.out.println("Individuo con datos  a= "+ x1+ " y x2= "+x2 );
-		return (21.5 + x1 * Math.sin(4 * Math.PI * x1) + x2 * Math.sin(20 * Math.PI * x2));
+		
+		double result =0;
+		double leftSideOfTheEcuation = -(x2+47)*Math.sin(Math.sqrt(Math.abs(x2+(x1/2)+47)));
+		double rightSideOfTheEcuation = -x1*Math.sin(Math.sqrt(Math.abs(x1-(x2+47))));
+		result = leftSideOfTheEcuation + rightSideOfTheEcuation;
+		return result;
 	}
 	
 	//Como en esta funcion el objetivo es llegar a un maximo el fitness lo podemos ver como el mismo valor de aplicar nuestras 
@@ -69,10 +72,15 @@ public class IndividuoF1 extends Individuo<Boolean> {
 	
 	@Override
 	public void copyFromAnother(Individuo<Boolean> other) {
-		//Tomamos el cromosoma del individuo que es mejor que nosotros y lo copiamos
 		Boolean[] otherCromo = other.getCromosoma();
-		for(int i = 0; i<otherCromo.length; i++) 
-			this.cromosoma[i] = otherCromo[i];
+		for(int i = 0; i<otherCromo.length; i++) {
+			if(otherCromo[i])
+				this.cromosoma[i] = true;
+			else 
+				this.cromosoma[i] = false;
+			//this.cromosoma[i] = otherCromo[i];
+		}
+		
 	}
 		
 	public static double ConvertRange(

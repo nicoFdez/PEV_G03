@@ -62,8 +62,8 @@ public class CruceMonopunto<T> implements Cruce{
 		//System.out.println("Despues de realizar el cruce es");
 		//System.out.println(cromo1);
 		//System.out.println(cromo2);
-		a.setCromosoma(cromo1);
-		b.setCromosoma(cromo2);
+		//a.setCromosoma(cromo1);
+		//b.setCromosoma(cromo2);
 	}
 
 }

@@ -33,6 +33,7 @@ public class Main {
 	}
 	
 	private static void Initialice() {
+		elitism = true;
 		ag = new AlgoritmoGenetico();
 		ag.inicializarPoblacion(100);
 		ag.setMaxGeneraciones(100);
@@ -45,18 +46,21 @@ public class Main {
 	private static void run() {
 		int generacionActual = 0;
 		while(generacionActual < ag.getMaxGeneraciones()) {
+			if(elitism)ag.saveElites();
 			ag.Seleccion();
 			ag.Cruce();
 			ag.Mutacion();
+			if(elitism)ag.recoverSavedElites();
 			ag.Evaluar();
 			//generaGrafica();
 			//Siguiente generacion
 			generacionActual++;
 		}
+		System.out.println("El mejor individuo de la evolucion ha dado: "+ag.getMejorIndividuo().getFitness()); 
 	}
 	
 	static AlgoritmoGenetico ag;
-	
+	static boolean elitism;
 	
 	
 	

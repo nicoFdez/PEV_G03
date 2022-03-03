@@ -13,11 +13,9 @@ public class AlgoritmoGenetico {
 	
 	
 	public AlgoritmoGenetico() {
-		this.elMejor = new IndividuoF1(0.0001);
-		this.elMejor.initialize();
-		
 		this.probCruce = 0.6;
 		this.probMutacion = 0.05;
+		this.porcElitismo = 0.03;
 	}
 	
 	public void Seleccion() {
@@ -51,7 +49,7 @@ public class AlgoritmoGenetico {
 		}
 		
 		if(this.fitness[this.pos_mejor] > elMejor.getFitness()) {			
-			elMejor.copyFromAnother(this.poblacion[this.pos_mejor]);
+			this.elMejor.copyFromAnother(this.poblacion[this.pos_mejor]);
 		}
 		
 		//Sacamos la aptitud media
@@ -107,19 +105,70 @@ public class AlgoritmoGenetico {
 		this.tamPoblacion = tam;
 		
 		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoF1(0.001);
+			this.poblacion[i] = new IndividuoF1(0.0001);
 			this.poblacion[i].initialize();
 		}
 		
 		this.fitness = new double[tamPoblacion];
+		this.elMejor = new IndividuoF1(0.0001);
+		this.elMejor.initialize();
+		
+		//Preparamos huecos para los elites
+		int numElites = (int)((double)tam*this.porcElitismo);
+		elites = new Individuo[numElites];
+		eliteValues = new double[numElites];
+		//Inicializamos
+		for(int i = 0; i< numElites; i++) {
+			elites[i] = new IndividuoF1(0.0001);
+			eliteValues[i] =0;
+		}
 	}
 
+	public void saveElites() {
+		//Reseteamos los elites porque nos toca buscar nuevos en la generacion actual
+		for(int i = 0; i< eliteValues.length;i++) {
+			eliteValues[i]=0;
+		}
+		
+		//Recorro toda la poblacion preguntando a cada individuo si es mejor que lo que tenemos actualmente
+		//guardado como la seccion de elites
+		for(int i = 0 ; i < this.poblacion.length; i++) {
+			double currentIndividualValue = this.poblacion[i].getFitness();
+			//Sabiendo el fitness del individuo actual recorro los valores de mis elites buscando a alguien
+			//que sea remplazado por este nuevo individuo
+			for(int j = 0; j< eliteValues.length;j++) {
+				if(currentIndividualValue > eliteValues[j]) {
+					eliteValues[j] = currentIndividualValue;
+					elites[j].copyFromAnother(this.poblacion[i]);
+				}
+			}
+		
+		}
+	}
+	
+	public void recoverSavedElites() {
+		//vamos a recorrer todos los elites mirando si los podemos reincorporar en la poblacion actual
+		for(int eliteIndex = 0; eliteIndex < elites.length; eliteIndex ++) {
+			//Miro el valor del elite actual que estoy analizando
+			double eliteValue = elites[eliteIndex].getFitness();
+			//recorro la poblacion hasta encontrar alguien que sea peor que el elite que estoy analizando
+			int i =0;
+			while(i < this.poblacion.length && this.poblacion[i].getFitness() > eliteValue)
+				i++;
+			//Si he encontrado a alguien lo sobreescribo para que sea igual al elite
+			if(i< this.poblacion.length)
+				this.poblacion[i].copyFromAnother(elites[eliteIndex]);
+		}
+	}
+	
 	private Seleccion selector;
 	private Cruce cruzador;
 	private Mutacion mutador;
 	
 	private int tamPoblacion;
 	private Individuo[] poblacion;
+	private Individuo[] elites;
+	private double[] eliteValues;
 	private double[] fitness;
 	private double aptitudAcumulada;
 	private double aptitudMedia;
@@ -131,4 +180,6 @@ public class AlgoritmoGenetico {
 	
 	private Individuo elMejor;
 	private int pos_mejor;
+	
+	private double porcElitismo;
 }
