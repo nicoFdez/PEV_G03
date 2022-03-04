@@ -1,0 +1,60 @@
+package algoritmoGenetico.seleccion;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import algoritmoGenetico.individuos.Individuo;
+
+public class SeleccionTruncamiento implements Seleccion{
+
+	
+	public void SeleccionTorneoDeterminista() {}
+	
+	@Override
+	public Individuo[] seleccionar(Individuo[] poblacion) {
+		
+		//Preparo las variables con las que voy a hacer esta clase de seleccion
+		double fitnessTotal = 0;
+		int nIndividuos = poblacion.length;
+		int tamTorneo = 3;
+		double valorTruncamiento = 0.5;
+		Random rand = new Random();
+		Individuo[] poblacionSeleccionada = new Individuo[nIndividuos];
+		
+		//Me hago con todos los individuos ordenados 
+		Individuo[] individuosOrdenados = competirTorneo(poblacion);
+		//Para sacar cada individuo de la seleccion final los obtengo de una forma u otra
+		//dependiendo del valor de truncamiento
+		for(int i=0; i<nIndividuos; i++) {
+			poblacionSeleccionada[i] = individuosOrdenados[(int)(i* valorTruncamiento)];
+		}
+		
+		return poblacionSeleccionada;
+	}
+	
+	private Individuo[] competirTorneo(Individuo[] participantes) {
+		//En estas listas voy a ir almacenando los fitness y los participantes en orden decreciente
+		List<Individuo> finalistas = new ArrayList<Individuo>();
+		List<Double> fitness = new ArrayList<Double>();
+		
+		//Recorro todos los participantes y para cada uno me quedo con su fitness y 
+		//analizo la posicion dentro de las listas que le corresponde teniendo en cuenta qu e
+		//va en orden decreciete
+		for(int i = 0; i< participantes.length; i++) {
+			int position =0;
+			double fitnessParticipante = participantes[i].getFitness();
+			//Busco una nueva pos mientras los finalistas sean mejores que yo
+			while(position < fitness.size() && fitness.get(i)> fitnessParticipante) 
+				position++;
+			
+			//Si ha ocurrido esto es o que no había nadie en la lista aun o soy el peor participante
+			if(position>= finalistas.size() && !finalistas.isEmpty()) position = finalistas.size()-1;
+			
+			//Añado el participante a su posicion dentro del torneo
+			fitness.add(position,fitnessParticipante);
+			finalistas.add(position,participantes[i]);
+		}
+		
+		return (Individuo[])finalistas.toArray();
+	}
+}
