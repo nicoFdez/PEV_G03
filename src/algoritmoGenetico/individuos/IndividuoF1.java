@@ -3,12 +3,11 @@ package algoritmoGenetico.individuos;
 import java.util.Arrays;
 import java.util.Random;
 
-public class IndividuoF1 extends Individuo<Boolean> {
+public class IndividuoF1 extends IndividuoBoolean {
 	
 	public IndividuoF1(double precision){
 		this.rand = new Random();
-		this.precision = precision;
-		
+
 		this.nGenes = 2;
 		
 		//Limites que puede alcanzar el individuo
@@ -29,85 +28,15 @@ public class IndividuoF1 extends Individuo<Boolean> {
 		this.cromosoma = new Boolean[tamTotal];
 	}
 	
-	//Metodo que inicializa el individuo, al ser el genotipo un array de booleanos la inicializacion es
-	//un monton de booleanos aleatorios
-	@Override
-	public void initialize() {
-		for(int i = 0; i < this.tamTotal; i++) 
-			this.cromosoma[i] = this.rand.nextBoolean();
-
-	}
 	
 	//Metod que aplica la funcion 1 y devuelvel el valor
 	//Funcion a representar: f(x1 , x2) = 21.5 + x1.sen(4π x1)+x2.sen(20π x2)
+	@Override
 	public double getValor() {
 		double x1 = this.getFenotipo(0), x2 = this.getFenotipo(1);
-		//System.out.println("Individuo con datos  a= "+ x1+ " y x2= "+x2 );
+		//System.out.println("(" + this.getFenotipo(0) + ", " + this.getFenotipo(1) + ")");
 		return (21.5 + x1 * Math.sin(4 * Math.PI * x1) + x2 * Math.sin(20 * Math.PI * x2));
-	}
-	
-	//Como en esta funcion el objetivo es llegar a un maximo el fitness lo podemos ver como el mismo valor de aplicar nuestras 
-	//x a la funcion 1
-	@Override
-	public double getFitness() {
-		return this.getValor();
-	}
-	
-	
-	public double getFenotipo(int val) {
-		double result=0;
-		int inicio =0;
-		for(int i = 0; i<val; i++) {
-			inicio+=this.tamGenes[i];
-		}
 		
-		Boolean[] gen = Arrays.copyOfRange(this.cromosoma, inicio, inicio + this.tamGenes[val]); 
-		double value = this.min[val] + bin2dec(gen) * (this.max[val]-this.min[val])/(Math.pow(2, this.tamGenes[val]) - 1);
-
-		return value;
 	}
 	
-	@Override
-	public void copyFromAnother(Individuo<Boolean> other) {
-		//Tomamos el cromosoma del individuo que es mejor que nosotros y lo copiamos
-		Boolean[] otherCromo = other.getCromosoma();
-		for(int i = 0; i<otherCromo.length; i++) 
-			this.cromosoma[i] = otherCromo[i];
-	}
-		
-	public static double ConvertRange(
-			double originalStart, double originalEnd, // original range
-			double newStart, double newEnd, // desired range
-			double value) // value to convert
-		{
-		    double scale = (double)(newEnd - newStart) / (originalEnd - originalStart);
-		    return (int)(newStart + ((value - originalStart) * scale));
-		}
-	
-	
-	//Metodo que toma un numero codificado en binario y devuelve su representacion en decimal
-	private double bin2dec(Boolean[] values) {
-		long result = 0;
-		for (boolean bit : values) {
-		    result = result * 2 + (bit ? 1 : 0);
-		}		
-		
-		return result;
-	}
-	
-	//Metodo que toma una probabilidad de mutacion y con ella se aplica a su propio cromosoma una mutacion basica 
-	//donde por cada uno de los genes del cromosoma prueba a ver si es necesario realizar una mutacion
-	@Override
-	public void mutacionBasica(double probMutacion) {
-		Random rand = new Random();
-		for(int i=0; i<this.cromosoma.length; i++) {
-			double r = rand.nextDouble();
-			if(r <= probMutacion) {
-				cromosoma[i] = rand.nextBoolean();
-			}
-		}
-	}
-	
-	
-	private double precision;
 }
