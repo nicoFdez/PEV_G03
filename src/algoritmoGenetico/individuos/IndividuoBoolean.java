@@ -38,7 +38,7 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 		for(int i = 0; i<val; i++) {
 			inicio+=this.tamGenes[i];
 		}
-		
+	
 		Boolean[] gen = Arrays.copyOfRange(this.cromosoma, inicio, inicio + this.tamGenes[val]); 
 		double value = this.min[val] + bin2dec(gen) * (this.max[val]-this.min[val])/(Math.pow(2, this.tamGenes[val]) - 1);
 
@@ -59,8 +59,7 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 		long result = 0;
 		for (boolean bit : values) {
 		    result = result * 2 + (bit ? 1 : 0);
-		}		
-		
+		}			
 		return result;
 	}
 	
