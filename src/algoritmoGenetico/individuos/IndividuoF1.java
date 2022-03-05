@@ -28,7 +28,6 @@ public class IndividuoF1 extends IndividuoBoolean {
 		this.cromosoma = new Boolean[tamTotal];
 	}
 	
-	
 	//Metod que aplica la funcion 1 y devuelvel el valor
 	//Funcion a representar: f(x1 , x2) = 21.5 + x1.sen(4π x1)+x2.sen(20π x2)
 	@Override

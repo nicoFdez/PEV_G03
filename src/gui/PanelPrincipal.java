@@ -45,7 +45,7 @@ public class PanelPrincipal {
 	
 	private static void Initialice() {
 		ag = new AlgoritmoGenetico();
-		ag.setElitism(false);
+		ag.setElitism(true);
 		ag.setMaxGeneraciones(100);
 		ag.inicializarPoblacion(1, 100);
 		ag.setSeleccion(new SeleccionRuleta());

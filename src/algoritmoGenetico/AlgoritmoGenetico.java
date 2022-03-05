@@ -24,7 +24,18 @@ public class AlgoritmoGenetico {
 	}
 	
 	public void Seleccion() {
-		this.selector.seleccionar(this.poblacion);
+		if(this.elitism) {
+			Arrays.sort(this.poblacion, comp);
+			this.saveElites();
+		}
+		
+		/*this.poblacion = */this.selector.seleccionar(this.poblacion);
+		
+		if(this.elitism) {
+			Arrays.sort(this.poblacion, comp);		
+			//Meter elite
+			this.recoverSavedElites();
+		}
 	}
 	
 	public void Cruce() {
@@ -39,12 +50,6 @@ public class AlgoritmoGenetico {
 	public void Evaluar(int nGeneracion) {
 		this.aptitudAcumulada=0;
 		this.aptitudMedia=0;
-		
-		if(this.elitism) {
-			Arrays.sort(this.poblacion, comp);		
-			//Meter elite
-			this.recoverSavedElites();
-		}
 		
 		//Miramos todos los individuos de nuestra poblacion
 		this.pos_mejor = 0;
@@ -67,12 +72,7 @@ public class AlgoritmoGenetico {
 				( !this.maximize && this.fitness[this.pos_mejor] < elMejor.getFitness())) {			
 			this.elMejor.copyFromAnother(this.poblacion[this.pos_mejor]);
 		}
-		
-		if(this.elitism) {
-			Arrays.sort(this.poblacion, comp);
-			this.saveElites();
-		}
-		
+				
 		//Sacamos la aptitud media
 		this.aptitudMedia = this.aptitudAcumulada/this.tamPoblacion;
 		System.out.println("Mejor hasta el momento: " + this.elMejor.getFitness());
