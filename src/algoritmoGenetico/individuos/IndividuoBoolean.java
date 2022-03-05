@@ -11,7 +11,7 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 		
 	}
 	
-	public IndividuoBoolean(IndividuoBoolean other) {
+	public IndividuoBoolean(Individuo other) {
 		this.nGenes = other.nGenes;
 		
 		this.min = new double[this.nGenes];
@@ -31,7 +31,7 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 		this.cromosoma = new Boolean[tamTotal];
 		
 		for(int i=0; i<this.cromosoma.length; i++)
-			this.cromosoma[i] = other.cromosoma[i];
+			this.cromosoma[i] = (Boolean)other.cromosoma[i];
 	}
 	
 	//Metodo que inicializa el individuo, al ser el genotipo un array de booleanos la inicializacion es

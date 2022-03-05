@@ -28,14 +28,39 @@ public class AlgoritmoGenetico {
 			Arrays.sort(this.poblacion, comp);
 			this.saveElites();
 		}
+		int[] pobSeleccionada = this.selector.seleccionar(this.poblacion);
 		
-		/*this.poblacion = */this.selector.seleccionar(this.poblacion);
+		switch(this.tipoPoblacion) {
+		case 1:
+			this.poblacion = seleccion1(pobSeleccionada);
+			break;
+		case 2:
+			this.poblacion = seleccion2(pobSeleccionada);
+			break;
+		}
+		
 		
 		if(this.elitism) {
 			Arrays.sort(this.poblacion, comp);		
 			//Meter elite
 			this.recoverSavedElites();
 		}
+	}
+	
+	private Individuo[] seleccion1(int[] pobSelec) {
+		Individuo[] pob = new Individuo[this.tamPoblacion];
+		for(int i=0; i<this.tamPoblacion; i++) {
+			pob[i] = new IndividuoF1(this.poblacion[pobSelec[i]]);
+		}
+		return pob;
+	}
+	
+	private Individuo[] seleccion2(int[] pobSelec) {
+		Individuo[] pob = new Individuo[this.tamPoblacion];
+		for(int i=0; i<this.tamPoblacion; i++) {
+			pob[i] = new IndividuoF2(this.poblacion[pobSelec[i]]);
+		}
+		return pob;
 	}
 	
 	public void Cruce() {
@@ -136,6 +161,8 @@ public class AlgoritmoGenetico {
 	}
 	
 	public void inicializarPoblacion(int tipo, int tam) {
+		
+		this.tipoPoblacion = tipo;
 		
 		this.mejorAbsoluto= new double[this.maxGeneraciones];
 		this.mediasGeneracion= new double[this.maxGeneraciones];
@@ -255,4 +282,6 @@ public class AlgoritmoGenetico {
 	private double[] mejoresGeneracion;
 	private double[] mediasGeneracion;
 	private double[] mejorAbsoluto;
+	
+	int tipoPoblacion;
 }

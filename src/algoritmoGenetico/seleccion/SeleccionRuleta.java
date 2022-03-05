@@ -9,7 +9,7 @@ public class SeleccionRuleta implements Seleccion{
 	public void SeleccionRuleta() {}
 	
 	@Override
-	public Individuo[] seleccionar(Individuo[] poblacion) {
+	public int[] seleccionar(Individuo[] poblacion) {
 		
 		//Preparo las variables con las que voy a hacer esta clase de seleccion
 		double fitnessTotal = 0;
@@ -35,7 +35,7 @@ public class SeleccionRuleta implements Seleccion{
 		//en la poblacion, cada uno de estos es representado por una seccion de la ruleta, sacamos un número aleatorio 
 		//y vemos cual es su traduccion en la ruleta para determinar el individuo seleccionado
 		Random rand = new Random();
-		Individuo[] poblacionSeleccionada = new Individuo[nIndividuos];
+		int[] poblacionSeleccionada = new int[nIndividuos];
 		for(int i=0; i<nIndividuos; i++) {
 			//Nuevo random
 			double r = rand.nextDouble();
@@ -44,7 +44,7 @@ public class SeleccionRuleta implements Seleccion{
 			while(fitness[j] < r) 
 				j++;
 			//Nos lo guardamos en la nueva poblacion
-			poblacionSeleccionada[i] = poblacion[j];
+			poblacionSeleccionada[i] = j;
 		}
 		
 		return poblacionSeleccionada;

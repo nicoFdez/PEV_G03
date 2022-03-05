@@ -28,6 +28,9 @@ public class IndividuoF2 extends IndividuoBoolean {
 		this.cromosoma = new Boolean[tamTotal];
 	}
 	
+	public IndividuoF2(Individuo other) {
+		super(other);
+	}
 	
 	//Metod que aplica la funcion 1 y devuelvel el valor
 	//Funcion a aplicar: f (xi,i = 1..2) = (∑i. cos((i +1)x1 + i))(∑i. cos((i +1)x2 + i))

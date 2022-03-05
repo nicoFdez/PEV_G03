@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.math.plot.canvas.Plot2DCanvas;
 
 import algoritmoGenetico.AlgoritmoGenetico;
 import algoritmoGenetico.cruces.CruceMonopunto;
@@ -24,6 +25,7 @@ import algoritmoGenetico.mutaciones.MutacionBasica;
 import algoritmoGenetico.seleccion.SeleccionRuleta;
 import java.awt.Color;
 import javax.swing.JPanel;
+import org.eclipse.swt.widgets.Canvas;
 
 public class PanelPrincipal {
 	private static Text probCruce;
@@ -39,8 +41,6 @@ public class PanelPrincipal {
 	 */
 	public static void main(String[] args) {
 		generarVentana();
-		Initialice();
-		run();
 	}
 	
 	private static void Initialice() {
@@ -81,6 +81,7 @@ public class PanelPrincipal {
 	public static void generarVentana() {
 		Display display = Display.getDefault();
 		Shell G03_P1 = new Shell();
+		
 		G03_P1.setSize(874, 496);
 		G03_P1.setText("G03_P1");
 		G03_P1.setLayout(null);
@@ -167,32 +168,27 @@ public class PanelPrincipal {
 		mutacion.setBounds(5, 407, 129, 23);
 		mutacion.select(0);
 		
-		Composite composite = new Composite(G03_P1, SWT.NONE);
-		composite.setBounds(232, 25, 586, 387);
-		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Button boton = new Button(G03_P1, SWT.NONE);
 		boton.setBounds(728, 418, 75, 25);
 		boton.setText("Empezar");
+		
+		Canvas canvas = new Canvas(G03_P1, SWT.NONE);
+		canvas.setBounds(267, 163, 64, 64);
+		
 		boton.addMouseListener(new MouseListener() {
 
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mouseDoubleClick(MouseEvent e) {}
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				System.out.println("Hola");
+				Initialice();
+				run();
 			}
 
 			@Override
-			public void mouseUp(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
+			public void mouseUp(MouseEvent e) {}			
 		});
 		
 		
