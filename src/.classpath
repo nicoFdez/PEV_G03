@@ -3,5 +3,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="lib" path="C:/Universidad/4Universidad/PEV/PEV_G03/jmathplot.jar"/>
+	<classpathentry kind="src" path="/org.eclipse.swt"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

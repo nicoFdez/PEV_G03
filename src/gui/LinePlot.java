@@ -1,6 +1,8 @@
 package gui;
 
 import javax.swing.*;
+
+import java.awt.Dimension;
 import java.util.ArrayList; // import the ArrayList class
 
 import org.math.plot.*;
@@ -30,6 +32,12 @@ public class LinePlot {
 	
 	public LinePlot() {
 		plot = new Plot2DPanel();
+		/*plot = new Plot2DPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(400, 200);
+            }
+        };*/
 	}
 	
 	
@@ -53,10 +61,14 @@ public class LinePlot {
 		plot.addLegend("SOUTH");
 		
 		// put the PlotPanel in a JFrame like a JPanel
-		JFrame frame = new JFrame("G03_P1");
-		frame.setSize(600, 600);
-		frame.setContentPane(plot);
-		frame.setVisible(true);
+		//JFrame frame = new JFrame("G03_P1");
+		//frame.setSize(600, 600);
+		//frame.setContentPane(plot);
+		//frame.setVisible(true);
+	}
+	
+	public Plot2DPanel getGraph() {
+		return this.plot;
 	}
 	
 	Plot2DPanel plot ;
