@@ -18,9 +18,7 @@ public class AlgoritmoGenetico {
 	
 	
 	public AlgoritmoGenetico() {
-		this.probCruce = 0.6;
-		this.probMutacion = 0.05;
-		this.porcElitismo = 0.03;
+		
 	}
 	
 	public void Seleccion() {
@@ -31,11 +29,20 @@ public class AlgoritmoGenetico {
 		int[] pobSeleccionada = this.selector.seleccionar(this.poblacion);
 		
 		switch(this.tipoPoblacion) {
-		case 1:
+		case Funcion1:
 			this.poblacion = seleccion1(pobSeleccionada);
 			break;
-		case 2:
+		case Funcion2:
 			this.poblacion = seleccion2(pobSeleccionada);
+			break;
+		case Funcion3:
+			this.poblacion = seleccion1(pobSeleccionada);
+			break;
+		case Funcion4:
+			this.poblacion = seleccion1(pobSeleccionada);
+			break;
+		case Funcion5:
+			this.poblacion = seleccion1(pobSeleccionada);
 			break;
 		}
 		
@@ -110,57 +117,7 @@ public class AlgoritmoGenetico {
 		this.mejorAbsoluto[nGeneracion] = this.elMejor.getFitness();
 	}
 	
-	
-	public void setSeleccion(Seleccion sel) {
-		selector = sel;
-	}
-	
-	public void setCruce(Cruce cruz) {
-		cruzador = cruz;
-	}
-	
-	public void setMutacion(Mutacion mut) {
-		mutador = mut;
-	}
-	
-	
-	public Individuo[] getPoblacion() {
-		return this.poblacion;
-	}
-	
-	public double getProbabilidadCruce() {
-		return this.probCruce;
-	}
-	
-	public double getProbabilidadMutacion() {
-		return this.probMutacion;
-	}
-	
-	public Individuo getMejorIndividuo() {
-		return this.elMejor;
-	}
-	
-	public void setMaxGeneraciones(int n) {
-		this.maxGeneraciones = n;
-	}
-	
-	public int getMaxGeneraciones() {
-		return this.maxGeneraciones;
-	}
-	
-	public double[] getMejoresAbsolutos() {
-		return this.mejorAbsoluto;
-	}
-	
-	public double[] getMediasGeneraciones() {
-		return this.mediasGeneracion;
-	}
-	
-	public double[] getMejoresGeneraciones() {
-		return this.mejoresGeneracion;
-	}
-	
-	public void inicializarPoblacion(int tipo, int tam) {
+	public void inicializarPoblacion(TiposFuncion tipo, int tam) {
 		
 		this.tipoPoblacion = tipo;
 		
@@ -168,12 +125,21 @@ public class AlgoritmoGenetico {
 		this.mediasGeneracion= new double[this.maxGeneraciones];
 		this.mejoresGeneracion = new double[this.maxGeneraciones];
 		switch(tipo) {
-		case 1:
+		case Funcion1:
 			inicializarPoblacion1(tam, 0.0001);
 			comp = new ComparadorMax();
 			break;
-		case 2:
+		case Funcion2:
 			inicializarPoblacion2(tam, 0.0001);
+			break;
+		case Funcion3:
+			inicializarPoblacion1(tam, 0.0001);
+			break;
+		case Funcion4:
+			inicializarPoblacion1(tam, 0.0001);
+			break;
+		case Funcion5:
+			inicializarPoblacion1(tam, 0.0001);
 			break;
 		}
 	}
@@ -249,8 +215,65 @@ public class AlgoritmoGenetico {
 		}	
 	}
 	
-	public void setElitism(Boolean b) {
-		this.elitism = b;
+	public void setElitism(double proportion) {
+		this.elitism = proportion > 0;
+		this.porcElitismo = proportion;
+	}
+	
+	public void setProbCruce(double prob) {
+		this.probCruce = prob;
+	}
+	
+	public void setProbMutacion(double prob) {
+		this.probMutacion = prob;
+	}
+	
+	public void setSeleccion(Seleccion sel) {
+		selector = sel;
+	}
+	
+	public void setCruce(Cruce cruz) {
+		cruzador = cruz;
+	}
+	
+	public void setMutacion(Mutacion mut) {
+		mutador = mut;
+	}
+	
+	public Individuo[] getPoblacion() {
+		return this.poblacion;
+	}
+	
+	public double getProbabilidadCruce() {
+		return this.probCruce;
+	}
+	
+	public double getProbabilidadMutacion() {
+		return this.probMutacion;
+	}
+	
+	public Individuo getMejorIndividuo() {
+		return this.elMejor;
+	}
+	
+	public void setMaxGeneraciones(int n) {
+		this.maxGeneraciones = n;
+	}
+	
+	public int getMaxGeneraciones() {
+		return this.maxGeneraciones;
+	}
+	
+	public double[] getMejoresAbsolutos() {
+		return this.mejorAbsoluto;
+	}
+	
+	public double[] getMediasGeneraciones() {
+		return this.mediasGeneracion;
+	}
+	
+	public double[] getMejoresGeneraciones() {
+		return this.mejoresGeneracion;
 	}
 	
 	private Seleccion selector;
@@ -283,5 +306,5 @@ public class AlgoritmoGenetico {
 	private double[] mediasGeneracion;
 	private double[] mejorAbsoluto;
 	
-	int tipoPoblacion;
+	TiposFuncion tipoPoblacion;
 }

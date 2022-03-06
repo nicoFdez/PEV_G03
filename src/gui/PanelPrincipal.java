@@ -2,31 +2,29 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import java.awt.GridLayout;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JLabel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpinnerNumberModel;
 
-import org.eclipse.swt.layout.BorderLayout;
-import org.eclipse.swt.widgets.Text;
 import org.math.plot.Plot2DPanel;
 
 import algoritmoGenetico.AlgoritmoGenetico;
 import algoritmoGenetico.cruces.CruceMonopunto;
 import algoritmoGenetico.mutaciones.MutacionBasica;
 import algoritmoGenetico.seleccion.SeleccionRuleta;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import algoritmoGenetico.TiposCruce;
+import algoritmoGenetico.TiposSeleccion;
+import algoritmoGenetico.TiposMutacion;
+import algoritmoGenetico.TiposFuncion;
 
 public class PanelPrincipal {
 
@@ -62,15 +60,51 @@ public class PanelPrincipal {
 		initialize();
 	}
 	
-	private static void inicializarAG(double porcElitism,int maxgeneraciones, int tipoFuncion, int nIndividuos ) {
+	private static void inicializarAG(int maxgeneraciones, int nIndividuos,
+			double probCruce, double probMutacion, double porcElitismo,
+			TiposSeleccion s, TiposCruce c, TiposMutacion m, TiposFuncion f) {
 		ag = new AlgoritmoGenetico();
-		ag.setElitism(porcElitism > 0);
+		ag.setProbCruce(probCruce);
+		ag.setProbMutacion(probMutacion);
+		ag.setElitism(porcElitismo);
 		ag.setMaxGeneraciones(maxgeneraciones);
-		ag.inicializarPoblacion(tipoFuncion, nIndividuos);
-		ag.setSeleccion(new SeleccionRuleta());
-		ag.setCruce(new CruceMonopunto());
-		ag.setMutacion(new MutacionBasica());
+		ag.inicializarPoblacion(f, nIndividuos);
 		
+		switch(s) {
+		case Ruleta:
+			ag.setSeleccion(new SeleccionRuleta());
+			break;
+		case EstocasticoUniversal:
+			ag.setSeleccion(new SeleccionRuleta());
+			break;
+		case Truncamiento:
+			ag.setSeleccion(new SeleccionRuleta());
+			break;
+		case Restos:
+			ag.setSeleccion(new SeleccionRuleta());
+			break;
+		case TorneoProbabilistico:
+			ag.setSeleccion(new SeleccionRuleta());
+			break;
+		case TorneoDeterminista:
+			ag.setSeleccion(new SeleccionRuleta());
+			break;
+		}
+		
+		switch(c) {
+		case Uniforme:
+			ag.setCruce(new CruceMonopunto());
+			break;
+		case Monopunto:
+			ag.setCruce(new CruceMonopunto());
+			break;
+		}
+		
+		switch(m) {
+		case Basica:
+			ag.setMutacion(new MutacionBasica());
+			break;
+		}
 	}
 
 
@@ -97,12 +131,10 @@ public class PanelPrincipal {
 		grafica.plot();
 		
 		JPanel panelGrafica = new JPanel();
-		//panelGrafica.setBackground(java.awt.Color.RED);
-		//panelGrafica.setLayout(new BorderLayout());
 		Plot2DPanel plt = grafica.getGraph();
-		plt.setPreferredSize(new Dimension(593, 379));
+		plt.setPreferredSize(new Dimension(591, 408));
 		panelGrafica.add(plt);
-		panelGrafica.setBounds(234, 11, 593, 379);
+		panelGrafica.setBounds(215, 56, 591, 408);
 		frmGrupoPrctica.getContentPane().add(panelGrafica);
 		frmGrupoPrctica.setVisible(true);
 	}
@@ -118,7 +150,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().setLayout(null);
 		
 		JLabel lblNmeroDeGeneraciones = new JLabel("N\u00FAmero de generaciones:");
-		lblNmeroDeGeneraciones.setBounds(10, 0, 123, 29);
+		lblNmeroDeGeneraciones.setBounds(10, 0, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblNmeroDeGeneraciones);
 		
 		JSpinner spinnerNGeneraciones = new JSpinner();
@@ -127,7 +159,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(spinnerNGeneraciones);
 		
 		JLabel lblTamaoDePoblacin = new JLabel("Tama\u00F1o de poblaci\u00F3n:");
-		lblTamaoDePoblacin.setBounds(10, 48, 123, 29);
+		lblTamaoDePoblacin.setBounds(10, 48, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblTamaoDePoblacin);
 		
 		JSpinner spinnerTamPoblacion = new JSpinner();
@@ -136,7 +168,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(spinnerTamPoblacion);
 		
 		JLabel lblProbabilidadDeCruce = new JLabel("Probabilidad de cruce: (ej. 0.2)");
-		lblProbabilidadDeCruce.setBounds(10, 103, 149, 29);
+		lblProbabilidadDeCruce.setBounds(10, 103, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblProbabilidadDeCruce);
 		
 		textFieldProbCruce = new JTextField();
@@ -145,8 +177,8 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(textFieldProbCruce);
 		textFieldProbCruce.setColumns(10);
 		
-		JLabel lblProbabilidadDeMutacin = new JLabel("Probabilidad de mutaci\u00F3n: (ej. 0.2)");
-		lblProbabilidadDeMutacin.setBounds(10, 151, 166, 29);
+		JLabel lblProbabilidadDeMutacin = new JLabel("Probabilidad de mutaci\u00F3n:");
+		lblProbabilidadDeMutacin.setBounds(10, 151, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblProbabilidadDeMutacin);
 		
 		textFieldProbMutacion = new JTextField();
@@ -155,8 +187,8 @@ public class PanelPrincipal {
 		textFieldProbMutacion.setBounds(10, 176, 86, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldProbMutacion);
 		
-		JLabel lblPorcentajeDeElitismo = new JLabel("Porcentaje de elitismo: (ej. 0.2)");
-		lblPorcentajeDeElitismo.setBounds(10, 200, 166, 29);
+		JLabel lblPorcentajeDeElitismo = new JLabel("Porcentaje de elitismo:");
+		lblPorcentajeDeElitismo.setBounds(10, 200, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblPorcentajeDeElitismo);
 		
 		textFieldPorcElitismo = new JTextField();
@@ -166,7 +198,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(textFieldPorcElitismo);
 		
 		JLabel lblPrecisinej = new JLabel("Precisi\u00F3n:");
-		lblPrecisinej.setBounds(10, 251, 166, 29);
+		lblPrecisinej.setBounds(10, 251, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblPrecisinej);
 		
 		textFieldPrecision = new JTextField();
@@ -176,48 +208,57 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(textFieldPrecision);
 		
 		JLabel lblMetodoSeleccion = new JLabel("Metodo Selecci\u00F3n:");
-		lblMetodoSeleccion.setBounds(10, 304, 166, 29);
+		lblMetodoSeleccion.setBounds(10, 304, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblMetodoSeleccion);
 		
 		JComboBox comboBoxMetodoSeleccion = new JComboBox();
-		comboBoxMetodoSeleccion.setModel(new DefaultComboBoxModel(new String[] {"Ruleta", "Estoc\u00E1stico universal", "Restos", "Torneo determinista", "Torneo probabil\u00EDstico", "Truncamiento"}));
+		comboBoxMetodoSeleccion.setModel(new DefaultComboBoxModel(TiposSeleccion.values()));
 		comboBoxMetodoSeleccion.setBounds(10, 328, 149, 22);
 		frmGrupoPrctica.getContentPane().add(comboBoxMetodoSeleccion);
-
-		//////////////
-		//comboBoxMetodoSeleccion.getSelectedIndex();
-		//comboBoxMetodoCruce.getSelectedIndex();
-		//comboBoxMetodoMutacion.getSelectedIndex();
-		//////////////////
 		
 		JLabel lblMetodoSeleccion_1 = new JLabel("Metodo Cruce:");
-		lblMetodoSeleccion_1.setBounds(10, 361, 166, 29);
+		lblMetodoSeleccion_1.setBounds(10, 361, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblMetodoSeleccion_1);
 		
 		JComboBox comboBoxMetodoCruce = new JComboBox();
-		comboBoxMetodoCruce.setModel(new DefaultComboBoxModel(new String[] {"Monopunto", "Uniforme"}));
+		comboBoxMetodoCruce.setModel(new DefaultComboBoxModel(TiposCruce.values()));
 		comboBoxMetodoCruce.setBounds(10, 385, 149, 22);
 		frmGrupoPrctica.getContentPane().add(comboBoxMetodoCruce);
 		
 		JLabel lblMetodoSeleccion_2 = new JLabel("Metodo Mutaci\u00F3n:");
-		lblMetodoSeleccion_2.setBounds(10, 418, 166, 29);
+		lblMetodoSeleccion_2.setBounds(10, 418, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblMetodoSeleccion_2);
 		
 		JComboBox comboBoxMetodoMutacion = new JComboBox();
-		comboBoxMetodoMutacion.setModel(new DefaultComboBoxModel(new String[] {"B\u00E1sica"}));
+		comboBoxMetodoMutacion.setModel(new DefaultComboBoxModel(TiposMutacion.values()));
 		comboBoxMetodoMutacion.setBounds(10, 442, 149, 22);
 		frmGrupoPrctica.getContentPane().add(comboBoxMetodoMutacion);
 		
 		JButton botonEvolucionar = new JButton("Evolucionar");
-		botonEvolucionar.setBounds(738, 476, 89, 23);
+		botonEvolucionar.setBounds(700, 476, 127, 23);
 		frmGrupoPrctica.getContentPane().add(botonEvolucionar);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(215, 56, 591, 408);
+		frmGrupoPrctica.getContentPane().add(panel);
+		
+		JComboBox comboBoxFuncion = new JComboBox();
+		comboBoxFuncion.setModel(new DefaultComboBoxModel(TiposFuncion.values()));
+		comboBoxFuncion.setBounds(375, 20, 123, 22);
+		frmGrupoPrctica.getContentPane().add(comboBoxFuncion);
+		
+		JLabel lblFuncin = new JLabel("Funci\u00F3n:");
+		lblFuncin.setBounds(323, 17, 54, 29);
+		frmGrupoPrctica.getContentPane().add(lblFuncin);
 		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				inicializarAG(0.02, 100,2,100);
+				inicializarAG((int)spinnerNGeneraciones.getValue(), (int)spinnerTamPoblacion.getValue(),
+						Double.parseDouble(textFieldProbCruce.getText()), Double.parseDouble(textFieldProbMutacion.getText()), Double.parseDouble(textFieldPorcElitismo.getText()),
+						TiposSeleccion.values()[comboBoxMetodoSeleccion.getSelectedIndex()] , TiposCruce.values()[comboBoxMetodoCruce.getSelectedIndex()],
+						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()], TiposFuncion.values()[comboBoxFuncion.getSelectedIndex()]);
 				bucleAG();
 			}
 
