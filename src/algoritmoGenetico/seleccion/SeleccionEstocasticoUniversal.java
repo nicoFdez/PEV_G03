@@ -9,7 +9,7 @@ public class SeleccionEstocasticoUniversal implements Seleccion{
 	public void SeleccionEstocasticoUniversal() {}
 	
 	@Override
-	public Individuo[] seleccionar(Individuo[] poblacion) {
+	public int[] seleccionar(Individuo[] poblacion, boolean minimization) {
 		
 		//Preparo las variables con las que voy a hacer esta clase de seleccion
 		double fitnessTotal = 0;
@@ -33,7 +33,7 @@ public class SeleccionEstocasticoUniversal implements Seleccion{
 		
 
 		Random rand = new Random();
-		Individuo[] poblacionSeleccionada = new Individuo[nIndividuos];
+		int[] poblacionSeleccionada = new int[nIndividuos];
 		
 		//Sacamos un numero aleatorio entre 0 y 1/numero de individuos 
 		double step = 1.0/nIndividuos;
@@ -46,7 +46,7 @@ public class SeleccionEstocasticoUniversal implements Seleccion{
 			while(!(fitness[j] > spot)) 
 				j++;
 			//Nos lo guardamos en la nueva poblacion
-			poblacionSeleccionada[i] = poblacion[j-1];
+			poblacionSeleccionada[i] = j-1;
 		}
 		
 		return poblacionSeleccionada;

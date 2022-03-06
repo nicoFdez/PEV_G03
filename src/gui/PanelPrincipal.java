@@ -20,6 +20,7 @@ import org.math.plot.Plot2DPanel;
 import algoritmoGenetico.AlgoritmoGenetico;
 import algoritmoGenetico.cruces.CruceMonopunto;
 import algoritmoGenetico.mutaciones.MutacionBasica;
+import algoritmoGenetico.seleccion.SeleccionRestos;
 import algoritmoGenetico.seleccion.SeleccionRuleta;
 import algoritmoGenetico.TiposCruce;
 import algoritmoGenetico.TiposSeleccion;
@@ -81,7 +82,7 @@ public class PanelPrincipal {
 			ag.setSeleccion(new SeleccionRuleta());
 			break;
 		case Restos:
-			ag.setSeleccion(new SeleccionRuleta());
+			ag.setSeleccion(new SeleccionRestos());
 			break;
 		case TorneoProbabilistico:
 			ag.setSeleccion(new SeleccionRuleta());

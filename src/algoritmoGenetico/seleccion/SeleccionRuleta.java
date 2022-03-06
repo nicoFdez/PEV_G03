@@ -9,16 +9,28 @@ public class SeleccionRuleta implements Seleccion{
 	public void SeleccionRuleta() {}
 	
 	@Override
-	public int[] seleccionar(Individuo[] poblacion) {
+	public int[] seleccionar(Individuo[] poblacion, boolean minimization) {
 		
 		//Preparo las variables con las que voy a hacer esta clase de seleccion
 		double fitnessTotal = 0;
 		int nIndividuos = poblacion.length;
 		double[] fitness = new double[nIndividuos];
 		
-		//Recorro toda la poblacion para hacerme tanto con sus fitness como con el total 
+		//Evitar fitness negativos
+		double max = poblacion[0].getFitness();
+		double min = poblacion[0].getFitness();	
 		for(int i=0; i<nIndividuos; i++) {
 			double f = poblacion[i].getFitness();
+			fitness[i] = f;
+			if(f > max) max = f;
+			if(f < min) min = f;
+		}
+		
+		//Recorro toda la poblacion para hacerme tanto con sus fitness como con el total 
+		for(int i=0; i<nIndividuos; i++) {
+			double f;
+			if(minimization) f = max - fitness[i];
+			else f = fitness[i] + min;
 			fitness[i] = f;
 			fitnessTotal += f;
 		}

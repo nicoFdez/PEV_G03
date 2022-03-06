@@ -9,16 +9,28 @@ public class SeleccionRestos implements Seleccion{
 	public void SeleccionRestos() {}
 	
 	@Override
-	public Individuo[] seleccionar(Individuo[] poblacion) {
+	public int[] seleccionar(Individuo[] poblacion, boolean minimization) {
 		
 		//Preparo las variables con las que voy a hacer esta clase de seleccion
 		double fitnessTotal = 0;
 		int nIndividuos = poblacion.length;
 		double[] fitness = new double[nIndividuos];
 		
-		//Recorro toda la poblacion para hacerme tanto con sus fitness como con el total 
+		//Evitar fitness negativos
+		double max = poblacion[0].getFitness();
+		double min = poblacion[0].getFitness();	
 		for(int i=0; i<nIndividuos; i++) {
 			double f = poblacion[i].getFitness();
+			fitness[i] = f;
+			if(f > max) max = f;
+			if(f < min) min = f;
+		}
+		
+		//Recorro toda la poblacion para hacerme tanto con sus fitness como con el total 
+		for(int i=0; i<nIndividuos; i++) {
+			double f;
+			if(minimization) f = max - fitness[i];
+			else f = fitness[i] + min;
 			fitness[i] = f;
 			fitnessTotal += f;
 		}
@@ -29,7 +41,7 @@ public class SeleccionRestos implements Seleccion{
 		}
 		
 		//Parte de seleccion por restos
-		Individuo[] poblacionSeleccionada = new Individuo[nIndividuos];
+		int[] poblacionSeleccionada = new int[nIndividuos];
 		int indicePoblacionSeleccionada=0;
 		//Recorro todos los individuos de la poblacion inicial para analizar si tengo que incluirlos o no
 		for(int i=0; i<nIndividuos; i++) {
@@ -37,7 +49,7 @@ public class SeleccionRestos implements Seleccion{
 			int numCopias = (int)fitness[i]*nIndividuos;
 			//Meto tantas copias en la poblacion final
 			for(int j = 0; j<numCopias; j++) {
-				poblacionSeleccionada[indicePoblacionSeleccionada] = poblacion[i];
+				poblacionSeleccionada[indicePoblacionSeleccionada] = i;
 				indicePoblacionSeleccionada++;
 			}
 		}
@@ -47,7 +59,7 @@ public class SeleccionRestos implements Seleccion{
 		//la seleccion restante se hace de manera aleatorio
 		for(int i = indicePoblacionSeleccionada; i< nIndividuos; i++)
 		{
-			poblacionSeleccionada[i] = poblacion[rand.nextInt(nIndividuos)];
+			poblacionSeleccionada[i] = rand.nextInt(nIndividuos);
 		}	
 		
 		return poblacionSeleccionada;

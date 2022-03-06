@@ -4,5 +4,5 @@ import algoritmoGenetico.individuos.Individuo;
 
 public interface Seleccion {
 
-	public int[] seleccionar(Individuo[] poblacion);
+	public int[] seleccionar(Individuo[] poblacion, boolean minimization);
 }

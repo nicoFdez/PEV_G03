@@ -26,22 +26,27 @@ public class AlgoritmoGenetico {
 			Arrays.sort(this.poblacion, comp);
 			this.saveElites();
 		}
-		int[] pobSeleccionada = this.selector.seleccionar(this.poblacion);
 		
+		int[] pobSeleccionada;
 		switch(this.tipoPoblacion) {
 		case Funcion1:
+			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
 			this.poblacion = seleccion1(pobSeleccionada);
 			break;
 		case Funcion2:
+			pobSeleccionada = this.selector.seleccionar(this.poblacion, true);
 			this.poblacion = seleccion2(pobSeleccionada);
 			break;
 		case Funcion3:
+			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
 			this.poblacion = seleccion1(pobSeleccionada);
 			break;
 		case Funcion4:
+			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
 			this.poblacion = seleccion1(pobSeleccionada);
 			break;
 		case Funcion5:
+			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
 			this.poblacion = seleccion1(pobSeleccionada);
 			break;
 		}
