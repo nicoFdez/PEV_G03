@@ -1,65 +1,67 @@
 package algoritmoGenetico.seleccion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+
+import algoritmoGenetico.individuos.ComparadorMax;
+import algoritmoGenetico.individuos.ComparadorMin;
 import algoritmoGenetico.individuos.Individuo;
 
 public class SeleccionTorneoDeterminista implements Seleccion{
 
 	
-	public void SeleccionTorneoDeterminista() {}
+	public  SeleccionTorneoDeterminista() {}
+	
+	public  SeleccionTorneoDeterminista(int tamTorn) {this.tamTorneo = tamTorn;}
+
 	
 	@Override
-	public Individuo[] seleccionar(Individuo[] poblacion) {
+	public int[] seleccionar(Individuo[] poblacion, boolean minimization) {
 		
 		//Preparo las variables con las que voy a hacer esta clase de seleccion
 		double fitnessTotal = 0;
 		int nIndividuos = poblacion.length;
-		int tamTorneo = 3;
 
 		//Para cada individuo de la poblacion final tomo 3 participantes de la poblacion inicial 
 		//hago un torneo con estos y me quedo con aquel que haya salido primero
 		Random rand = new Random();
-		Individuo[] poblacionSeleccionada = new Individuo[nIndividuos];
+		int[] poblacionSeleccionada = new int[nIndividuos];
 		Individuo[] individuosTorneo = new Individuo[tamTorneo];
+		List poblacionListada = Arrays.asList(poblacion);
+
+		
 		for(int i=0; i<nIndividuos; i++) {
 			// Saco k participantes
-			for(int j = 0 ; j <  tamTorneo; j++ ) {
+			for(int j = 0 ; j <  this.tamTorneo; j++ ) {
 				int r = rand.nextInt(nIndividuos);
 				individuosTorneo[j] = poblacion[r];
 			}
 			//Hago que compitan y me quedo con el mejor
-			individuosTorneo = competirTorneo(individuosTorneo);
-			poblacionSeleccionada[i] = individuosTorneo[0];
+			individuosTorneo = competirTorneo(individuosTorneo, minimization);
+			
+			//Los individuos vienen ordenados en el array individuosTorneo pero para sacar el indice del primero
+			//tengo que buscarlo en el array inicial que me llega de la poblacion
+			poblacionSeleccionada[i] =  poblacionListada.indexOf(individuosTorneo[0]);
 		}
 		
 		return poblacionSeleccionada;
 	}
 	
-	private Individuo[] competirTorneo(Individuo[] participantes) {
-		//En estas listas voy a ir almacenando los fitness y los participantes en orden decreciente
-		List<Individuo> finalistas = new ArrayList<Individuo>();
-		List<Double> fitness = new ArrayList<Double>();
+	
+	//Metodo que toma una serie de individuos  y los orden según lo requiera el AG, haciendo maximizacion o minimizacion
+	private Individuo[] competirTorneo(Individuo[] participantes, boolean minimization) {		
+		Comparator comp;
+		if(minimization)
+			comp = new ComparadorMin();
+		else 
+			comp = new ComparadorMax();
 		
-		//Recorro todos los participantes y para cada uno me quedo con su fitness y 
-		//analizo la posicion dentro de las listas que le corresponde teniendo en cuenta qu e
-		//va en orden decreciete
-		for(int i = 0; i< participantes.length; i++) {
-			int position =0;
-			double fitnessParticipante = participantes[i].getFitness();
-			//Busco una nueva pos mientras los finalistas sean mejores que yo
-			while(position < fitness.size() && fitness.get(i)> fitnessParticipante) 
-				position++;
-			
-			//Si ha ocurrido esto es o que no había nadie en la lista aun o soy el peor participante
-			if(position>= finalistas.size() && !finalistas.isEmpty()) position = finalistas.size()-1;
-			
-			//Añado el participante a su posicion dentro del torneo
-			fitness.add(position,fitnessParticipante);
-			finalistas.add(position,participantes[i]);
-		}
-		
-		return (Individuo[])finalistas.toArray();
+		Arrays.sort(participantes, comp);
+		return participantes;
 	}
+	
+	int tamTorneo;
 }

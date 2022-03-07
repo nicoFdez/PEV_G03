@@ -3,7 +3,12 @@ package algoritmoGenetico.individuos;
 import java.util.Arrays;
 import java.util.Random;
 
-public class IndividuoF3 extends Individuo<Boolean> {
+public class IndividuoF3 extends IndividuoBoolean {
+	
+	
+	public IndividuoF3(Individuo other) {
+		super(other);
+	}
 	
 	public IndividuoF3(double precision){
 		this.rand = new Random();

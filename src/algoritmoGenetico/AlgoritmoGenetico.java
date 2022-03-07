@@ -10,6 +10,8 @@ import algoritmoGenetico.individuos.ComparadorMin;
 import algoritmoGenetico.individuos.Individuo;
 import algoritmoGenetico.individuos.IndividuoF1;
 import algoritmoGenetico.individuos.IndividuoF2;
+import algoritmoGenetico.individuos.IndividuoF3;
+import algoritmoGenetico.individuos.IndividuoF4;
 import algoritmoGenetico.mutaciones.Mutacion;
 import algoritmoGenetico.seleccion.*;
 
@@ -38,12 +40,12 @@ public class AlgoritmoGenetico {
 			this.poblacion = seleccion2(pobSeleccionada);
 			break;
 		case Funcion3:
-			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
-			this.poblacion = seleccion1(pobSeleccionada);
+			pobSeleccionada = this.selector.seleccionar(this.poblacion, true);
+			this.poblacion = seleccion3(pobSeleccionada);
 			break;
 		case Funcion4:
 			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
-			this.poblacion = seleccion1(pobSeleccionada);
+			this.poblacion = seleccion4(pobSeleccionada);
 			break;
 		case Funcion5:
 			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
@@ -61,6 +63,7 @@ public class AlgoritmoGenetico {
 	
 	private Individuo[] seleccion1(int[] pobSelec) {
 		Individuo[] pob = new Individuo[this.tamPoblacion];
+		
 		for(int i=0; i<this.tamPoblacion; i++) {
 			pob[i] = new IndividuoF1(this.poblacion[pobSelec[i]]);
 		}
@@ -74,6 +77,23 @@ public class AlgoritmoGenetico {
 		}
 		return pob;
 	}
+	
+	private Individuo[] seleccion3(int[] pobSelec) {
+		Individuo[] pob = new Individuo[this.tamPoblacion];
+		for(int i=0; i<this.tamPoblacion; i++) {
+			pob[i] = new IndividuoF3(this.poblacion[pobSelec[i]]);
+		}
+		return pob;
+	}
+	
+	private Individuo[] seleccion4(int[] pobSelec) {
+		Individuo[] pob = new Individuo[this.tamPoblacion];
+		for(int i=0; i<this.tamPoblacion; i++) {
+			pob[i] = new IndividuoF4(this.poblacion[pobSelec[i]]);
+		}
+		return pob;
+	}
+	
 	
 	public void Cruce() {
 		this.poblacion = this.cruzador.cruzar(this.poblacion, this.probCruce);
@@ -206,6 +226,34 @@ public class AlgoritmoGenetico {
 		this.maximize = false;
 	}
 
+	public void inicializarPoblacion3(int tam, double precision) {
+		this.poblacion = new Individuo[tam];
+		this.tamPoblacion = tam;
+		
+		for(int i=0; i<this.tamPoblacion; i++) {
+			this.poblacion[i] = new IndividuoF3(precision);
+			this.poblacion[i].initialize();
+		}
+		
+		this.fitness = new double[tamPoblacion];
+		this.elMejor = new IndividuoF3(precision);
+		this.elMejor.initialize();
+		
+		//Preparamos huecos para los elites
+		int numElites = (int)((double)tam*this.porcElitismo);
+		elites = new Individuo[numElites];
+		eliteValues = new double[numElites];
+		//Inicializamos
+		for(int i = 0; i< numElites; i++) {
+			elites[i] = new IndividuoF2(precision);
+			elites[i].initialize();
+			eliteValues[i] = 0;
+		}
+		
+		this.comp = new ComparadorMin();
+		this.maximize = false;
+	}
+	
 	private void saveElites() {
 		int nElites = this.elites.length;		
 		for(int i = 0; i < nElites; i++) {

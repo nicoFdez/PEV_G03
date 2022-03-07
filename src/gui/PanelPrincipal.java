@@ -18,14 +18,18 @@ import javax.swing.SpinnerNumberModel;
 import org.math.plot.Plot2DPanel;
 
 import algoritmoGenetico.AlgoritmoGenetico;
+import algoritmoGenetico.TiposCruce;
+import algoritmoGenetico.TiposFuncion;
+import algoritmoGenetico.TiposMutacion;
+import algoritmoGenetico.TiposSeleccion;
 import algoritmoGenetico.cruces.CruceMonopunto;
 import algoritmoGenetico.mutaciones.MutacionBasica;
+import algoritmoGenetico.seleccion.SeleccionEstocasticoUniversal;
 import algoritmoGenetico.seleccion.SeleccionRestos;
 import algoritmoGenetico.seleccion.SeleccionRuleta;
-import algoritmoGenetico.TiposCruce;
-import algoritmoGenetico.TiposSeleccion;
-import algoritmoGenetico.TiposMutacion;
-import algoritmoGenetico.TiposFuncion;
+import algoritmoGenetico.seleccion.SeleccionTorneoDeterminista;
+import algoritmoGenetico.seleccion.SeleccionTorneoProbabilistico;
+import algoritmoGenetico.seleccion.SeleccionTruncamiento;
 
 public class PanelPrincipal {
 
@@ -34,8 +38,11 @@ public class PanelPrincipal {
 	private static JTextField textFieldProbMutacion;
 	private static JTextField textFieldPorcElitismo;
 	private static JTextField textFieldPrecision;
+	private static JLabel TextoMejorIndividuo;
 
 	private static AlgoritmoGenetico ag;
+	private JTextField textFieldProbTorneo;
+	private JTextField textFieldValorTruncamiento;
 
 	
 	/**
@@ -63,7 +70,8 @@ public class PanelPrincipal {
 	
 	private static void inicializarAG(int maxgeneraciones, int nIndividuos,
 			double probCruce, double probMutacion, double porcElitismo,
-			TiposSeleccion s, TiposCruce c, TiposMutacion m, TiposFuncion f) {
+			TiposSeleccion s, TiposCruce c, TiposMutacion m, TiposFuncion f,
+			int tamTorneo, double probTorneo, double valorTruncamiento) {
 		ag = new AlgoritmoGenetico();
 		ag.setProbCruce(probCruce);
 		ag.setProbMutacion(probMutacion);
@@ -76,19 +84,19 @@ public class PanelPrincipal {
 			ag.setSeleccion(new SeleccionRuleta());
 			break;
 		case EstocasticoUniversal:
-			ag.setSeleccion(new SeleccionRuleta());
+			ag.setSeleccion(new SeleccionEstocasticoUniversal());
 			break;
 		case Truncamiento:
-			ag.setSeleccion(new SeleccionRuleta());
+			ag.setSeleccion(new SeleccionTruncamiento(valorTruncamiento));
 			break;
 		case Restos:
 			ag.setSeleccion(new SeleccionRestos());
 			break;
 		case TorneoProbabilistico:
-			ag.setSeleccion(new SeleccionRuleta());
+			ag.setSeleccion(new SeleccionTorneoProbabilistico(tamTorneo, probTorneo));
 			break;
 		case TorneoDeterminista:
-			ag.setSeleccion(new SeleccionRuleta());
+			ag.setSeleccion(new SeleccionTorneoDeterminista(tamTorneo));
 			break;
 		}
 		
@@ -120,17 +128,23 @@ public class PanelPrincipal {
 			//Siguiente generacion
 			generacionActual++;
 		}
-		System.out.println("El mejor individuo de la evolucion ha dado: "+ ag.getMejorIndividuo().getFitness());
+		System.out.println("El mejor resultado: "+ ag.getMejorIndividuo().getFitness());
 		generarGrafica();
 	}
 	
 	private static void generarGrafica() {
+		//Generamos una grafica que contenga los datos del mejor hasta la fecha, el mejor de la generacion y la media de la generacion
+		//a medida que van pasando las generaciones
 		LinePlot grafica = new LinePlot();
 		grafica.addArrayOfPoints("Mejor Absoluto", ag.getMejoresAbsolutos());
 		grafica.addArrayOfPoints("Mejor de la generacion", ag.getMejoresGeneraciones());
 		grafica.addArrayOfPoints("Media de generaciones", ag.getMediasGeneraciones());
 		grafica.plot();
 		
+		//Cambiamos el texto de arriba de la gráfica para que muestre el mejor individuo de la evolucion 
+		TextoMejorIndividuo.setText("Mejor individuo: "+ag.getMejorIndividuo().getFitness());
+		
+		//Añadimos un panel con la grafica al JFrame para que se pueda ver en pantalla la grafica
 		JPanel panelGrafica = new JPanel();
 		Plot2DPanel plt = grafica.getGraph();
 		plt.setPreferredSize(new Dimension(591, 408));
@@ -252,6 +266,39 @@ public class PanelPrincipal {
 		lblFuncin.setBounds(323, 17, 54, 29);
 		frmGrupoPrctica.getContentPane().add(lblFuncin);
 		
+		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
+		TextoMejorIndividuo.setBounds(518, 26, 267, 14);
+		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
+		
+		JLabel lbLabelTamTorneo = new JLabel("Tama\u00F1o torneo:");
+		lbLabelTamTorneo.setBounds(10, 476, 102, 22);
+		frmGrupoPrctica.getContentPane().add(lbLabelTamTorneo);
+		
+		JSpinner spinnerTamTorneo = new JSpinner();
+		spinnerTamTorneo.setModel(new SpinnerNumberModel(3, 2, 10, 1));
+		spinnerTamTorneo.setBounds(122, 477, 48, 20);
+		frmGrupoPrctica.getContentPane().add(spinnerTamTorneo);
+		
+		JLabel lbLabelProbTorneo = new JLabel("Probabilidad torneo [0.1,0.5]:");
+		lbLabelProbTorneo.setBounds(198, 477, 162, 22);
+		frmGrupoPrctica.getContentPane().add(lbLabelProbTorneo);
+		
+		textFieldProbTorneo = new JTextField();
+		textFieldProbTorneo.setText("0.6");
+		textFieldProbTorneo.setColumns(10);
+		textFieldProbTorneo.setBounds(364, 477, 42, 20);
+		frmGrupoPrctica.getContentPane().add(textFieldProbTorneo);
+		
+		JLabel lbLabelValorTruncamiento = new JLabel("Valor truncamiento [0.1,0.5]:");
+		lbLabelValorTruncamiento.setBounds(416, 476, 162, 22);
+		frmGrupoPrctica.getContentPane().add(lbLabelValorTruncamiento);
+		
+		textFieldValorTruncamiento = new JTextField();
+		textFieldValorTruncamiento.setText("0.5\r\n");
+		textFieldValorTruncamiento.setColumns(10);
+		textFieldValorTruncamiento.setBounds(588, 477, 48, 20);
+		frmGrupoPrctica.getContentPane().add(textFieldValorTruncamiento);
+		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {
 			@Override
@@ -259,7 +306,8 @@ public class PanelPrincipal {
 				inicializarAG((int)spinnerNGeneraciones.getValue(), (int)spinnerTamPoblacion.getValue(),
 						Double.parseDouble(textFieldProbCruce.getText()), Double.parseDouble(textFieldProbMutacion.getText()), Double.parseDouble(textFieldPorcElitismo.getText()),
 						TiposSeleccion.values()[comboBoxMetodoSeleccion.getSelectedIndex()] , TiposCruce.values()[comboBoxMetodoCruce.getSelectedIndex()],
-						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()], TiposFuncion.values()[comboBoxFuncion.getSelectedIndex()]);
+						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()], TiposFuncion.values()[comboBoxFuncion.getSelectedIndex()],
+						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()) );
 				bucleAG();
 			}
 

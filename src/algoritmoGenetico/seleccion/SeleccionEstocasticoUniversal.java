@@ -16,9 +16,21 @@ public class SeleccionEstocasticoUniversal implements Seleccion{
 		int nIndividuos = poblacion.length;
 		double[] fitness = new double[nIndividuos];
 		
-		//Recorro toda la poblacion para hacerme tanto con sus fitness como con el total 
+		//Evitar fitness negativos
+		double max = poblacion[0].getFitness();
+		double min = poblacion[0].getFitness();	
 		for(int i=0; i<nIndividuos; i++) {
 			double f = poblacion[i].getFitness();
+			fitness[i] = f;
+			if(f > max) max = f;
+			if(f < min) min = f;
+		}
+		
+		//Recorro toda la poblacion para hacerme tanto con sus fitness como con el total 
+		for(int i=0; i<nIndividuos; i++) {
+			double f;
+			if(minimization) f = max - fitness[i];
+			else f = fitness[i] + min;
 			fitness[i] = f;
 			fitnessTotal += f;
 		}
@@ -46,7 +58,7 @@ public class SeleccionEstocasticoUniversal implements Seleccion{
 			while(!(fitness[j] > spot)) 
 				j++;
 			//Nos lo guardamos en la nueva poblacion
-			poblacionSeleccionada[i] = j-1;
+			poblacionSeleccionada[i] = j;
 		}
 		
 		return poblacionSeleccionada;
