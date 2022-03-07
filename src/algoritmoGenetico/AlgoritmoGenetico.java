@@ -30,25 +30,21 @@ public class AlgoritmoGenetico {
 		}
 		
 		int[] pobSeleccionada;
+		pobSeleccionada = this.selector.seleccionar(this.poblacion, !this.maximize);
 		switch(this.tipoPoblacion) {
 		case Funcion1:
-			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
 			this.poblacion = seleccion1(pobSeleccionada);
 			break;
 		case Funcion2:
-			pobSeleccionada = this.selector.seleccionar(this.poblacion, true);
 			this.poblacion = seleccion2(pobSeleccionada);
 			break;
 		case Funcion3:
-			pobSeleccionada = this.selector.seleccionar(this.poblacion, true);
 			this.poblacion = seleccion3(pobSeleccionada);
 			break;
 		case Funcion4:
-			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
 			this.poblacion = seleccion4(pobSeleccionada);
 			break;
 		case Funcion5:
-			pobSeleccionada = this.selector.seleccionar(this.poblacion, false);
 			this.poblacion = seleccion1(pobSeleccionada);
 			break;
 		}
@@ -158,10 +154,10 @@ public class AlgoritmoGenetico {
 			inicializarPoblacion2(tam, 0.0001);
 			break;
 		case Funcion3:
-			inicializarPoblacion1(tam, 0.0001);
+			inicializarPoblacion3(tam, 0.0001);
 			break;
 		case Funcion4:
-			inicializarPoblacion1(tam, 0.0001);
+			inicializarPoblacion4(tam, 0.0001);
 			break;
 		case Funcion5:
 			inicializarPoblacion1(tam, 0.0001);
@@ -245,7 +241,7 @@ public class AlgoritmoGenetico {
 		eliteValues = new double[numElites];
 		//Inicializamos
 		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoF2(precision);
+			elites[i] = new IndividuoF3(precision);
 			elites[i].initialize();
 			eliteValues[i] = 0;
 		}
@@ -253,6 +249,35 @@ public class AlgoritmoGenetico {
 		this.comp = new ComparadorMin();
 		this.maximize = false;
 	}
+	
+	public void inicializarPoblacion4(int tam, double precision) {
+		this.poblacion = new Individuo[tam];
+		this.tamPoblacion = tam;
+		
+		for(int i=0; i<this.tamPoblacion; i++) {
+			this.poblacion[i] = new IndividuoF4(precision);
+			this.poblacion[i].initialize();
+		}
+		
+		this.fitness = new double[tamPoblacion];
+		this.elMejor = new IndividuoF4(precision);
+		this.elMejor.initialize();
+		
+		//Preparamos huecos para los elites
+		int numElites = (int)((double)tam*this.porcElitismo);
+		elites = new Individuo[numElites];
+		eliteValues = new double[numElites];
+		//Inicializamos
+		for(int i = 0; i< numElites; i++) {
+			elites[i] = new IndividuoF4(precision);
+			elites[i].initialize();
+			eliteValues[i] = 0;
+		}
+		
+		this.comp = new ComparadorMin();
+		this.maximize = false;
+	}
+	
 	
 	private void saveElites() {
 		int nElites = this.elites.length;		
