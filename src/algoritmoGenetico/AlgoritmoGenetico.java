@@ -12,6 +12,7 @@ import algoritmoGenetico.individuos.IndividuoF1;
 import algoritmoGenetico.individuos.IndividuoF2;
 import algoritmoGenetico.individuos.IndividuoF3;
 import algoritmoGenetico.individuos.IndividuoF4;
+import algoritmoGenetico.individuos.IndividuoF5;
 import algoritmoGenetico.mutaciones.Mutacion;
 import algoritmoGenetico.seleccion.*;
 
@@ -45,7 +46,7 @@ public class AlgoritmoGenetico {
 			this.poblacion = seleccion4(pobSeleccionada);
 			break;
 		case Funcion5:
-			this.poblacion = seleccion1(pobSeleccionada);
+			this.poblacion = seleccion5(pobSeleccionada);
 			break;
 		}
 		
@@ -86,6 +87,14 @@ public class AlgoritmoGenetico {
 		Individuo[] pob = new Individuo[this.tamPoblacion];
 		for(int i=0; i<this.tamPoblacion; i++) {
 			pob[i] = new IndividuoF4(this.poblacion[pobSelec[i]]);
+		}
+		return pob;
+	}
+	
+	private Individuo[] seleccion5(int[] pobSelec) {
+		Individuo[] pob = new Individuo[this.tamPoblacion];
+		for(int i=0; i<this.tamPoblacion; i++) {
+			pob[i] = new IndividuoF5(this.poblacion[pobSelec[i]]);
 		}
 		return pob;
 	}
@@ -161,7 +170,7 @@ public class AlgoritmoGenetico {
 			inicializarPoblacion4(tam, 0.0001);
 			break;
 		case Funcion5:
-			inicializarPoblacion1(tam, 0.0001);
+			inicializarPoblacion5(tam);
 			break;
 		}
 	}
@@ -251,6 +260,34 @@ public class AlgoritmoGenetico {
 		this.maximize = false;
 	}
 	
+	public void inicializarPoblacion5(int tam) {
+		this.poblacion = new Individuo[tam];
+		this.tamPoblacion = tam;
+		
+		for(int i=0; i<this.tamPoblacion; i++) {
+			this.poblacion[i] = new IndividuoF5(this.nParamsf4);
+			this.poblacion[i].initialize();
+		}
+		
+		this.fitness = new double[tamPoblacion];
+		this.elMejor = new IndividuoF5(this.nParamsf4);
+		this.elMejor.initialize();
+		
+		//Preparamos huecos para los elites
+		int numElites = (int)((double)tam*this.porcElitismo);
+		elites = new Individuo[numElites];
+		eliteValues = new double[numElites];
+		//Inicializamos
+		for(int i = 0; i< numElites; i++) {
+			elites[i] = new IndividuoF5(this.nParamsf4);
+			elites[i].initialize();
+			eliteValues[i] = 0;
+		}
+		
+		this.comp = new ComparadorMin();
+		this.maximize = false;
+	}
+	
 	public void inicializarPoblacion4(int tam, double precision) {
 		this.poblacion = new Individuo[tam];
 		this.tamPoblacion = tam;
@@ -278,7 +315,6 @@ public class AlgoritmoGenetico {
 		this.comp = new ComparadorMin();
 		this.maximize = false;
 	}
-	
 	
 	private void saveElites() {
 		int nElites = this.elites.length;		
