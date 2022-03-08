@@ -12,7 +12,6 @@ public class IndividuoF3 extends IndividuoBoolean {
 	
 	public IndividuoF3(double precision){
 		this.rand = new Random();
-		this.precision = precision;
 		
 		this.nGenes = 2;
 		
@@ -34,15 +33,6 @@ public class IndividuoF3 extends IndividuoBoolean {
 		this.cromosoma = new Boolean[tamTotal];
 	}
 	
-	//Metodo que inicializa el individuo, al ser el genotipo un array de booleanos la inicializacion es
-	//un monton de booleanos aleatorios
-	@Override
-	public void initialize() {
-		for(int i = 0; i < this.tamTotal; i++) 
-			this.cromosoma[i] = this.rand.nextBoolean();
-
-	}
-	
 	//Metod que aplica la funcion 1 y devuelvel el valor
 	public double getValor() {
 		double x1 = this.getFenotipo(0), x2 = this.getFenotipo(1);
@@ -53,7 +43,4 @@ public class IndividuoF3 extends IndividuoBoolean {
 		result = leftSideOfTheEcuation - rightSideOfTheEcuation;
 		return result;
 	}
-	
-	
-	private double precision;
 }

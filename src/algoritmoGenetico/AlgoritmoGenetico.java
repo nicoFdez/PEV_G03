@@ -138,9 +138,10 @@ public class AlgoritmoGenetico {
 		this.mejorAbsoluto[nGeneracion] = this.elMejor.getFitness();
 	}
 	
-	public void inicializarPoblacion(TiposFuncion tipo, int tam) {
+	public void inicializarPoblacion(TiposFuncion tipo, int tam, int nParamsf4) {
 		
 		this.tipoPoblacion = tipo;
+		this.nParamsf4 = nParamsf4;
 		
 		this.mejorAbsoluto= new double[this.maxGeneraciones];
 		this.mediasGeneracion= new double[this.maxGeneraciones];
@@ -255,12 +256,12 @@ public class AlgoritmoGenetico {
 		this.tamPoblacion = tam;
 		
 		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoF4(precision);
+			this.poblacion[i] = new IndividuoF4(precision, this.nParamsf4);
 			this.poblacion[i].initialize();
 		}
 		
 		this.fitness = new double[tamPoblacion];
-		this.elMejor = new IndividuoF4(precision);
+		this.elMejor = new IndividuoF4(precision, this.nParamsf4);
 		this.elMejor.initialize();
 		
 		//Preparamos huecos para los elites
@@ -269,7 +270,7 @@ public class AlgoritmoGenetico {
 		eliteValues = new double[numElites];
 		//Inicializamos
 		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoF4(precision);
+			elites[i] = new IndividuoF4(precision, this.nParamsf4);
 			elites[i].initialize();
 			eliteValues[i] = 0;
 		}
@@ -384,5 +385,7 @@ public class AlgoritmoGenetico {
 	private double[] mediasGeneracion;
 	private double[] mejorAbsoluto;
 	
-	TiposFuncion tipoPoblacion;
+	private TiposFuncion tipoPoblacion;
+	
+	private int nParamsf4;
 }

@@ -27,7 +27,9 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 			this.tamGenes[i]=other.tamGenes[i];
 		}
 		
-		this.tamTotal = this.tamGenes[0] + this.tamGenes[1];
+		for(int i=0; i<this.nGenes; i++)
+			this.tamTotal += this.tamGenes[i];
+		
 		this.cromosoma = new Boolean[tamTotal];
 		
 		for(int i=0; i<this.cromosoma.length; i++)

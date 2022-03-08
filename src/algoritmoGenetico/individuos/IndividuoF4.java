@@ -9,11 +9,10 @@ public class IndividuoF4 extends IndividuoBoolean {
 		super(other);
 	}
 	
-	public IndividuoF4(double precision){
+	public IndividuoF4(double precision, int nParams){
 		this.rand = new Random();
-		this.precision = precision;
 		
-		this.nGenes = 2;
+		this.nGenes = nParams;
 		
 		//Limites que puede alcanzar el individuo
 		this.min = new double[this.nGenes];
@@ -46,8 +45,7 @@ public class IndividuoF4 extends IndividuoBoolean {
 		double result =0;
 		for(int i = 0; i< this.nGenes ; i++) {
 			double actualStep=0;
-			actualStep = Math.sin(genes[i])*
-							Math.pow(
+			actualStep = Math.sin(genes[i])* Math.pow(
 									Math.sin(((i+1)*Math.pow(genes[i], 2))/Math.PI)
 									, 20);
 			
@@ -56,8 +54,4 @@ public class IndividuoF4 extends IndividuoBoolean {
 		result = -result;
 		return result;
 	}
-
-
-	
-	private double precision;
 }

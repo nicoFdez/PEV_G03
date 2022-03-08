@@ -71,13 +71,13 @@ public class PanelPrincipal {
 	private static void inicializarAG(int maxgeneraciones, int nIndividuos,
 			double probCruce, double probMutacion, double porcElitismo,
 			TiposSeleccion s, TiposCruce c, TiposMutacion m, TiposFuncion f,
-			int tamTorneo, double probTorneo, double valorTruncamiento) {
+			int tamTorneo, double probTorneo, double valorTruncamiento, int nParamsf4) {
 		ag = new AlgoritmoGenetico();
 		ag.setProbCruce(probCruce);
 		ag.setProbMutacion(probMutacion);
 		ag.setElitism(porcElitismo);
 		ag.setMaxGeneraciones(maxgeneraciones);
-		ag.inicializarPoblacion(f, nIndividuos);
+		ag.inicializarPoblacion(f, nIndividuos, nParamsf4);
 		
 		switch(s) {
 		case Ruleta:
@@ -259,15 +259,15 @@ public class PanelPrincipal {
 		
 		JComboBox comboBoxFuncion = new JComboBox();
 		comboBoxFuncion.setModel(new DefaultComboBoxModel(TiposFuncion.values()));
-		comboBoxFuncion.setBounds(375, 20, 123, 22);
+		comboBoxFuncion.setBounds(427, 20, 123, 22);
 		frmGrupoPrctica.getContentPane().add(comboBoxFuncion);
 		
 		JLabel lblFuncin = new JLabel("Funci\u00F3n:");
-		lblFuncin.setBounds(323, 17, 54, 29);
+		lblFuncin.setBounds(375, 17, 54, 29);
 		frmGrupoPrctica.getContentPane().add(lblFuncin);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
-		TextoMejorIndividuo.setBounds(518, 26, 267, 14);
+		TextoMejorIndividuo.setBounds(570, 26, 235, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
 		
 		JLabel lbLabelTamTorneo = new JLabel("Tama\u00F1o torneo:");
@@ -299,6 +299,15 @@ public class PanelPrincipal {
 		textFieldValorTruncamiento.setBounds(588, 477, 48, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldValorTruncamiento);
 		
+		JLabel lblParmetrosfuncin = new JLabel("Par\u00E1metros(Funci\u00F3n 4):");
+		lblParmetrosfuncin.setBounds(179, 17, 156, 29);
+		frmGrupoPrctica.getContentPane().add(lblParmetrosfuncin);
+		
+		JSpinner spinnerNParams = new JSpinner();
+		spinnerNParams.setModel(new SpinnerNumberModel(3, 1, 7, 1));
+		spinnerNParams.setBounds(323, 21, 42, 20);
+		frmGrupoPrctica.getContentPane().add(spinnerNParams);
+		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {
 			@Override
@@ -307,7 +316,7 @@ public class PanelPrincipal {
 						Double.parseDouble(textFieldProbCruce.getText()), Double.parseDouble(textFieldProbMutacion.getText()), Double.parseDouble(textFieldPorcElitismo.getText()),
 						TiposSeleccion.values()[comboBoxMetodoSeleccion.getSelectedIndex()] , TiposCruce.values()[comboBoxMetodoCruce.getSelectedIndex()],
 						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()], TiposFuncion.values()[comboBoxFuncion.getSelectedIndex()],
-						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()) );
+						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()), (int)spinnerNParams.getValue());
 				bucleAG();
 			}
 
