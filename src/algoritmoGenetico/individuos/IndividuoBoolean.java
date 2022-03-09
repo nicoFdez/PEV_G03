@@ -100,4 +100,14 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 			}
 		}
 	}
+	
+	@Override
+	public Boolean[] getCromosoma() {
+		Boolean[] result = new Boolean[this.cromosoma.length];
+		
+		for(int i=0; i<this.cromosoma.length; i++)
+			result[i] = this.cromosoma[i].booleanValue();
+		
+		return result;
+	}
 }

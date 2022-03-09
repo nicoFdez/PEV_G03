@@ -22,7 +22,10 @@ import algoritmoGenetico.TiposCruce;
 import algoritmoGenetico.TiposFuncion;
 import algoritmoGenetico.TiposMutacion;
 import algoritmoGenetico.TiposSeleccion;
+import algoritmoGenetico.cruces.CruceAritmetico;
+import algoritmoGenetico.cruces.CruceBLXAlpha;
 import algoritmoGenetico.cruces.CruceMonopunto;
+import algoritmoGenetico.cruces.CruceUniforme;
 import algoritmoGenetico.mutaciones.MutacionBasica;
 import algoritmoGenetico.seleccion.SeleccionEstocasticoUniversal;
 import algoritmoGenetico.seleccion.SeleccionRestos;
@@ -102,10 +105,18 @@ public class PanelPrincipal {
 		
 		switch(c) {
 		case Uniforme:
-			ag.setCruce(new CruceMonopunto());
+			ag.setCruce(new CruceUniforme());
 			break;
 		case Monopunto:
 			ag.setCruce(new CruceMonopunto());
+			break;
+		case AritmeticoF5:
+			if(f == TiposFuncion.Funcion5) ag.setCruce(new CruceAritmetico());
+			else ag.setCruce(new CruceMonopunto());
+			break;
+		case BLXAlphaF5:
+			if(f == TiposFuncion.Funcion5) ag.setCruce(new CruceBLXAlpha());
+			else ag.setCruce(new CruceMonopunto());
 			break;
 		}
 		
@@ -250,7 +261,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(comboBoxMetodoMutacion);
 		
 		JButton botonEvolucionar = new JButton("Evolucionar");
-		botonEvolucionar.setBounds(700, 476, 127, 23);
+		botonEvolucionar.setBounds(678, 14, 127, 23);
 		frmGrupoPrctica.getContentPane().add(botonEvolucionar);
 		
 		JPanel panel = new JPanel();
@@ -259,15 +270,15 @@ public class PanelPrincipal {
 		
 		JComboBox comboBoxFuncion = new JComboBox();
 		comboBoxFuncion.setModel(new DefaultComboBoxModel(TiposFuncion.values()));
-		comboBoxFuncion.setBounds(427, 20, 123, 22);
+		comboBoxFuncion.setBounds(260, 14, 123, 22);
 		frmGrupoPrctica.getContentPane().add(comboBoxFuncion);
 		
 		JLabel lblFuncin = new JLabel("Funci\u00F3n:");
-		lblFuncin.setBounds(375, 17, 54, 29);
+		lblFuncin.setBounds(208, 11, 54, 29);
 		frmGrupoPrctica.getContentPane().add(lblFuncin);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
-		TextoMejorIndividuo.setBounds(570, 26, 235, 14);
+		TextoMejorIndividuo.setBounds(403, 20, 235, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
 		
 		JLabel lbLabelTamTorneo = new JLabel("Tama\u00F1o torneo:");
@@ -300,12 +311,12 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(textFieldValorTruncamiento);
 		
 		JLabel lblParmetrosfuncin = new JLabel("Par\u00E1metros(Funci\u00F3n 4):");
-		lblParmetrosfuncin.setBounds(179, 17, 156, 29);
+		lblParmetrosfuncin.setBounds(641, 475, 156, 29);
 		frmGrupoPrctica.getContentPane().add(lblParmetrosfuncin);
 		
 		JSpinner spinnerNParams = new JSpinner();
 		spinnerNParams.setModel(new SpinnerNumberModel(3, 1, 7, 1));
-		spinnerNParams.setBounds(323, 21, 42, 20);
+		spinnerNParams.setBounds(785, 479, 42, 20);
 		frmGrupoPrctica.getContentPane().add(spinnerNParams);
 		
 		//Añadimos la funcionalidad de que empiece el AG

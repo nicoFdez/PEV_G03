@@ -34,7 +34,7 @@ public class CruceUniforme<T> implements Cruce {
 			cruceUniforme(individuosCruzar.get(i), individuosCruzar.get(i+1));
 		
 		
-		return null;
+		return poblacion;
 	}
 	
 	
@@ -55,7 +55,8 @@ public class CruceUniforme<T> implements Cruce {
 				cromo1[i] = cromo2[i];
 				cromo2[i] = aux;
 			}
-
 		}
+		a.setCromosoma(cromo1);
+		b.setCromosoma(cromo2);
 	}
 }

@@ -19,6 +19,5 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="swing2swt.jar"/>
 	<classpathentry kind="lib" path="jmathplot.jar"/>
-	<classpathentry kind="src" path="/org.eclipse.swt"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

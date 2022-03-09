@@ -112,4 +112,14 @@ public class IndividuoF5 extends Individuo<Double> {
 			}
 		}
 	}
+	
+	@Override
+	public Double[] getCromosoma() {
+		Double[] result = new Double[this.cromosoma.length];
+		
+		for(int i=0; i<this.cromosoma.length; i++)
+			result[i] = this.cromosoma[i].doubleValue();
+		
+		return result;
+	}
 }
