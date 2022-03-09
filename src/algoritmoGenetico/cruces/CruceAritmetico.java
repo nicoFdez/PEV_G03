@@ -8,7 +8,9 @@ import algoritmoGenetico.individuos.Individuo;
 public class CruceAritmetico<T> implements Cruce {
 
 	
-	public void CruceUniforme() {}
+	public CruceAritmetico(double alpha) {
+		this.alpha = alpha;
+	}
 	
 	@Override
 	public Individuo[] cruzar(Individuo[] poblacion, double probCruce) 
@@ -34,7 +36,7 @@ public class CruceAritmetico<T> implements Cruce {
 			cruceAritmetico(individuosCruzar.get(i), individuosCruzar.get(i+1));
 		
 		
-		return null;
+		return poblacion;
 	}
 	
 	

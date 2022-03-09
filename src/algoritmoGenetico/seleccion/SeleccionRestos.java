@@ -56,10 +56,29 @@ public class SeleccionRestos implements Seleccion{
 		
 		Random rand = new Random();
 		//La seleccion por restos necesita ser completada con "cualquier otro metodo de seleccion" 
-		//la seleccion restante se hace de manera aleatorio
+		//la seleccion restante se hace utilizando selección por ruleta
+		
 		for(int i = indicePoblacionSeleccionada; i< nIndividuos; i++)
 		{
-			poblacionSeleccionada[i] = rand.nextInt(nIndividuos);
+			//------------RULETA-------------------					
+			//Reutilizo el array fitness para tener en este el fitness acumulado de los individuos
+			for(int j=0; j<nIndividuos; j++) {
+				//si no estoy en el primer elemento del array, le sumo el valor almacenado en la posicion anterior
+				if(j!=0) fitness[j] += fitness[j-1];
+			}
+			
+			for(int j=0; j<nIndividuos - indicePoblacionSeleccionada; j++) {
+				//Nuevo random
+				double r = rand.nextDouble();
+				//Buscamos el individuo que lo representa en nuestro array
+				int k=0;
+				while(fitness[k] < r) 
+					k++;
+				//Nos lo guardamos en la nueva poblacion
+				poblacionSeleccionada[i] = k;
+			}		
+			//-------------------------------------
+			
 		}	
 		
 		return poblacionSeleccionada;

@@ -24,12 +24,7 @@ public class AlgoritmoGenetico {
 		
 	}
 	
-	public void Seleccion() {
-		if(this.elitism) {
-			Arrays.sort(this.poblacion, comp);
-			this.saveElites();
-		}
-		
+	public void Seleccion() {	
 		int[] pobSeleccionada;
 		pobSeleccionada = this.selector.seleccionar(this.poblacion, !this.maximize);
 		switch(this.tipoPoblacion) {
@@ -48,13 +43,6 @@ public class AlgoritmoGenetico {
 		case Funcion5:
 			this.poblacion = seleccion5(pobSeleccionada);
 			break;
-		}
-		
-		
-		if(this.elitism) {
-			Arrays.sort(this.poblacion, comp);		
-			//Meter elite
-			this.recoverSavedElites();
 		}
 	}
 	
@@ -316,18 +304,24 @@ public class AlgoritmoGenetico {
 		this.maximize = false;
 	}
 	
-	private void saveElites() {
-		int nElites = this.elites.length;		
-		for(int i = 0; i < nElites; i++) {
-			this.elites[i].copyFromAnother(this.poblacion[i]);
+	public void saveElites() {	
+		if(this.elitism) {
+			Arrays.sort(this.poblacion, comp);			
+			int nElites = this.elites.length;		
+			for(int i = 0; i < nElites; i++) {
+				this.elites[i].copyFromAnother(this.poblacion[i]);
+			}	
 		}
 	}
 	
-	private void recoverSavedElites() {	
-		int nElites = this.elites.length;		
-		for(int i = this.tamPoblacion - nElites; i < this.tamPoblacion; i++) {
-			this.poblacion[i].copyFromAnother(this.elites[i-(this.tamPoblacion - nElites)]);
-		}	
+	public void recoverSavedElites() {
+		if(this.elitism) {
+			Arrays.sort(this.poblacion, comp);
+			int nElites = this.elites.length;		
+			for(int i = this.tamPoblacion - nElites; i < this.tamPoblacion; i++) {
+				this.poblacion[i].copyFromAnother(this.elites[i-(this.tamPoblacion - nElites)]);
+			}
+		}
 	}
 	
 	public void setElitism(double proportion) {
