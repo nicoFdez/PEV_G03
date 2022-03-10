@@ -34,6 +34,8 @@ import algoritmoGenetico.seleccion.SeleccionTorneoDeterminista;
 import algoritmoGenetico.seleccion.SeleccionTorneoProbabilistico;
 import algoritmoGenetico.seleccion.SeleccionTruncamiento;
 
+
+//Clase que implementa el punto de entrada de la ejecución del programa y que sostiene tanto la ventana como el bucle principal
 public class PanelPrincipal {
 
 	private static JFrame frmGrupoPrctica;
@@ -72,10 +74,12 @@ public class PanelPrincipal {
 		initialize();
 	}
 	
+	//Método que recibe los parámetros configurados en la ventana de la aplicación y los utliiza para configurar el algoritmo genético
 	private static void inicializarAG(int maxgeneraciones, int nIndividuos,
 			double probCruce, double probMutacion, double porcElitismo,
 			TiposSeleccion s, TiposCruce c, TiposMutacion m, TiposFuncion f,
 			int tamTorneo, double probTorneo, double valorTruncamiento, int nParamsf4, double alpha) {
+		//Creo y el algoritmo genético y configuro los parámetros más generales
 		ag = new AlgoritmoGenetico();
 		ag.setProbCruce(probCruce);
 		ag.setProbMutacion(probMutacion);
@@ -83,6 +87,7 @@ public class PanelPrincipal {
 		ag.setMaxGeneraciones(maxgeneraciones);
 		ag.inicializarPoblacion(f, nIndividuos, nParamsf4);
 		
+		//Preparo un operador de selección u otro dependiendo de lo que me haya dicho la ventana
 		switch(s) {
 		case Ruleta:
 			ag.setSeleccion(new SeleccionRuleta());
@@ -104,6 +109,7 @@ public class PanelPrincipal {
 			break;
 		}
 		
+		//Preparo un operador de cruce u otro dependiendo de lo que me haya dicho la ventana
 		switch(c) {
 		case Uniforme:
 			ag.setCruce(new CruceUniforme());
@@ -121,6 +127,7 @@ public class PanelPrincipal {
 			break;
 		}
 		
+		//Preparo un operador de mutación u otro dependiendo de lo que me haya dicho la ventana
 		switch(m) {
 		case Basica:
 			ag.setMutacion(new MutacionBasica());
@@ -129,6 +136,7 @@ public class PanelPrincipal {
 	}
 
 
+	//Método que sostiene el bucle principal de la evolución del algoritmo genético
 	private static void bucleAG() {
 		int generacionActual = 0;
 		while(generacionActual < ag.getMaxGeneraciones()) {
@@ -144,6 +152,9 @@ public class PanelPrincipal {
 		generarGrafica();
 	}
 	
+	
+	//Método que genera una gráfica a partir de los datos que se hayan recogido de la evolución del AG
+	// y lo añade a la ventana para su visualización
 	private static void generarGrafica() {
 		//Generamos una grafica que contenga los datos del mejor hasta la fecha, el mejor de la generacion y la media de la generacion
 		//a medida que van pasando las generaciones

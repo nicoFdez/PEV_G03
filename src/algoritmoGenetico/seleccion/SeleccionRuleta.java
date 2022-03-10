@@ -3,12 +3,14 @@ package algoritmoGenetico.seleccion;
 import java.util.Random;
 import algoritmoGenetico.individuos.Individuo;
 
+//Clase encargada de realizar la operación de selección por el método de ruleta
 public class SeleccionRuleta implements Seleccion{
 
+	//Constructora
+	public SeleccionRuleta() {}
 	
-	public void SeleccionRuleta() {}
-	
-	@Override
+	//Metodo que recibe una poblacion y realica una selección de individuos por el método de ruleta
+@Override
 	public int[] seleccionar(Individuo[] poblacion, boolean minimization) {
 		
 		//Preparo las variables con las que voy a hacer esta clase de seleccion
@@ -16,7 +18,7 @@ public class SeleccionRuleta implements Seleccion{
 		int nIndividuos = poblacion.length;
 		double[] fitness = new double[nIndividuos];
 		
-		//Evitar fitness negativos
+		//Recorro toda la población analizando el fitness de cada individuo y quedandome con el valor máximo y mínimo
 		double max = poblacion[0].getFitness();
 		double min = poblacion[0].getFitness();	
 		for(int i=0; i<nIndividuos; i++) {
@@ -26,7 +28,7 @@ public class SeleccionRuleta implements Seleccion{
 			if(f < min) min = f;
 		}
 		
-		//Recorro toda la poblacion para hacerme tanto con sus fitness como con el total 
+		//Transformamos el fitness de cada individuo para que esté en un rango que nos interese y lo acumulamos para sacar el fitness total 
 		for(int i=0; i<nIndividuos; i++) {
 			double f;
 			if(minimization) f = max - fitness[i];
@@ -52,9 +54,11 @@ public class SeleccionRuleta implements Seleccion{
 			//Nuevo random
 			double r = rand.nextDouble();
 			int j=0;
+			
 			//Buscamos el individuo que lo representa en nuestro array
 			while(fitness[j] < r) 
 				j++;
+			
 			//Nos lo guardamos en la nueva poblacion
 			poblacionSeleccionada[i] = j;
 		}

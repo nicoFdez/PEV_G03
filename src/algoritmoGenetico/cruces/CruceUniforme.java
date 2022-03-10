@@ -5,11 +5,16 @@ import java.util.Random;
 
 import algoritmoGenetico.individuos.Individuo;
 
+
+//Clase que implementa el cruce entre individuos mediante el método monopunto
 public class CruceUniforme<T> implements Cruce {
 
+	//Constructora
+	public CruceUniforme() {}
 	
-	public void CruceUniforme() {}
 	
+	//Método que toma un apoblación y una probabilidad a partir de la que analiza los individuos
+	//y los cruza haciendo uso del método uniforme
 	@Override
 	public Individuo[] cruzar(Individuo[] poblacion, double probCruce) 
 	{
@@ -29,7 +34,7 @@ public class CruceUniforme<T> implements Cruce {
 		if(individuosCruzar.size() % 2 != 0) 
 			individuosCruzar.remove(0);
 		
-		//Recorremos los individuos por parejas y hacemos que se crucen de forma uniforme
+		//Recorremos los individuos por parejas y hacemos que se crucen
 		for(int i=0; i<individuosCruzar.size(); i+=2 ) 	
 			cruceUniforme(individuosCruzar.get(i), individuosCruzar.get(i+1));
 		
@@ -38,6 +43,7 @@ public class CruceUniforme<T> implements Cruce {
 	}
 	
 	
+	//Método que toma 2 individuos y realiza el cruce uniforme sobre estos
 	private void cruceUniforme(Individuo a, Individuo b) {
 		//Nos preparamos un random y preguntamos por los cromosomas de ambos individuos que tenemos que cruzar
 		Random rand = new Random();

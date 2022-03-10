@@ -10,13 +10,15 @@ import algoritmoGenetico.individuos.ComparadorMax;
 import algoritmoGenetico.individuos.ComparadorMin;
 import algoritmoGenetico.individuos.Individuo;
 
+//Clase encargada de realizar la operación de selección por el método de truncamiento
 public class SeleccionTruncamiento implements Seleccion{
 
-	
-	public  SeleccionTruncamiento() {}
+	//Constructoras
+	public  SeleccionTruncamiento() {this.valorTruncamiento = 0.5;}
 	public  SeleccionTruncamiento(double valTrunc) {this.valorTruncamiento = valTrunc;}
 
 	
+	//Metodo que recibe una poblacion y realica una selección de individuos por el método de truncamiento
 	@Override
 	public int[] seleccionar(Individuo[] poblacion, boolean minimization) {
 		
@@ -28,8 +30,8 @@ public class SeleccionTruncamiento implements Seleccion{
 		//Me hago con todos los individuos ordenados 
 		Individuo[] individuosOrdenados = competirTorneo(poblacion, minimization);
 		
-		//Para sacar cada individuo de la seleccion final los obtengo de una forma u otra
-		//dependiendo del valor de truncamiento
+		//Para sacar cada individuo de la seleccion final los obtengo haciendo
+		//más o menos copias de los mejores según el valor del truncamiento
 		for(int i=0; i<nIndividuos; i++) {
 			poblacionSeleccionada[i] = poblacionListada.indexOf(individuosOrdenados[(int)(i* this.valorTruncamiento)]) ;
 		}
@@ -40,10 +42,8 @@ public class SeleccionTruncamiento implements Seleccion{
 	//Metodo que toma una serie de individuos  y los orden según lo requiera el AG, haciendo maximizacion o minimizacion
 	private Individuo[] competirTorneo(Individuo[] participantes, boolean minimization) {
 		Comparator comp;
-		if(minimization)
-			comp = new ComparadorMin();
-		else 
-			comp = new ComparadorMax();
+		if(minimization)		comp = new ComparadorMin();
+		else 					comp = new ComparadorMax();
 		
 		Arrays.sort(participantes, comp);
 		return participantes;

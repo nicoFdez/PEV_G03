@@ -3,8 +3,11 @@ package algoritmoGenetico.individuos;
 import java.util.Arrays;
 import java.util.Random;
 
+
+//clase que representa un individuo preparado para realizar una evolución sobre la funcion1
 public class IndividuoF1 extends IndividuoBoolean {
 	
+	//Constructoras
 	public IndividuoF1(Individuo other) {
 		super(other);
 	}

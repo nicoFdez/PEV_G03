@@ -2,6 +2,8 @@ package algoritmoGenetico.individuos;
 
 import java.util.Comparator;
 
+
+//Clase que se encarga de recibir una pareja de infividuos y determinar si uno es mayor que otro
 public class ComparadorMax implements Comparator<Individuo> {
 
 	@Override

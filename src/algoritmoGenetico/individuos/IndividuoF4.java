@@ -3,12 +3,14 @@ package algoritmoGenetico.individuos;
 import java.util.Arrays;
 import java.util.Random;
 
+
+//clase que representa un individuo preparado para realizar una evolución sobre la funcion4
 public class IndividuoF4 extends IndividuoBoolean {
 	
+	//Constructoras
 	public IndividuoF4(Individuo other) {
 		super(other);
 	}
-	
 	public IndividuoF4(double precision, int nParams){
 		this.rand = new Random();
 		
@@ -35,7 +37,7 @@ public class IndividuoF4 extends IndividuoBoolean {
 	}
 	
 	
-	//Metod que aplica la funcion 1 y devuelvel el valor
+	//Metod que aplica la funcion 4 y devuelvel el valor
 	public double getValor() {
 		double[] genes = new double[this.nGenes];
 		for(int i = 0; i< this.nGenes; i++) {

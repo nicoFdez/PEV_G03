@@ -3,8 +3,11 @@ package algoritmoGenetico.individuos;
 import java.util.Arrays;
 import java.util.Random;
 
+
+//clase que representa un individuo preparado para realizar una evolución sobre la funcion5
 public class IndividuoF5 extends Individuo<Double> {
 	
+	//Constructoras
 	public IndividuoF5(Individuo other) {
 		this.nGenes = other.nGenes;
 		
@@ -29,7 +32,6 @@ public class IndividuoF5 extends Individuo<Double> {
 		for(int i=0; i<this.cromosoma.length; i++)
 			this.cromosoma[i] = (Double)other.cromosoma[i];
 	}
-	
 	public IndividuoF5(int nParams){
 		this.rand = new Random();
 		
@@ -60,7 +62,7 @@ public class IndividuoF5 extends Individuo<Double> {
 		return this.getValor();
 	}
 	
-	//Metod que aplica la funcion 1 y devuelvel el valor
+	//Metod que aplica la funcion 5 y devuelvel el valor
 	public double getValor() {
 		double[] genes = new double[this.nGenes];
 		for(int i = 0; i< this.nGenes; i++) {

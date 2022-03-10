@@ -5,13 +5,20 @@ import java.util.Random;
 
 import algoritmoGenetico.individuos.Individuo;
 
+
+//Clase que implementa el cruce entre individuos mediante el método BLXAlpha
 public class CruceBLXAlpha<T> implements Cruce {
 
-	
+	//Constructoras
+	public CruceBLXAlpha() {
+		this.alpha = 0.6;
+	}
 	public CruceBLXAlpha(double alpha) {
 		this.alpha = alpha;
 	}
 	
+	//Método que toma un apoblación y una probabilidad a partir de la que analiza los individuos
+	//y los cruza haciendo uso del método BLXAlpha
 	@Override
 	public Individuo[] cruzar(Individuo[] poblacion, double probCruce) 
 	{
@@ -31,7 +38,7 @@ public class CruceBLXAlpha<T> implements Cruce {
 		if(individuosCruzar.size() % 2 != 0) 
 			individuosCruzar.remove(0);
 		
-		//Recorremos los individuos por parejas y hacemos que se crucen de forma uniforme
+		//Recorremos los individuos por parejas y hacemos que se crucen 
 		for(int i=0; i<individuosCruzar.size(); i+=2 ) 	
 			cruceBLXAlpha(individuosCruzar.get(i), individuosCruzar.get(i+1));
 		
@@ -39,7 +46,7 @@ public class CruceBLXAlpha<T> implements Cruce {
 		return poblacion;
 	}
 	
-	
+	//Método que realiza el cruce monpunto sobre 2 individuos que tengan cromosomas con tipos reales
 	private void cruceBLXAlpha(Individuo a, Individuo b) {
 		//Nos preparamos un random y preguntamos por los cromosomas de ambos individuos que tenemos que cruzar
 		Random rand = new Random();

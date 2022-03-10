@@ -3,11 +3,15 @@ package algoritmoGenetico.seleccion;
 import java.util.Random;
 import algoritmoGenetico.individuos.Individuo;
 
+
+//Clase encargada de realizar la operación de selección por el método de restos
 public class SeleccionRestos implements Seleccion{
 
+	//Constructora
+	public SeleccionRestos() {}
 	
-	public void SeleccionRestos() {}
 	
+	//Metodo que recibe una poblacion y realica una selección de individuos por el método de restos
 	@Override
 	public int[] seleccionar(Individuo[] poblacion, boolean minimization) {
 		
@@ -16,7 +20,7 @@ public class SeleccionRestos implements Seleccion{
 		int nIndividuos = poblacion.length;
 		double[] fitness = new double[nIndividuos];
 		
-		//Evitar fitness negativos
+		//Recorro toda la población analizando el fitness de cada individuo y quedandome con el valor máximo y mínimo
 		double max = poblacion[0].getFitness();
 		double min = poblacion[0].getFitness();	
 		for(int i=0; i<nIndividuos; i++) {
@@ -26,7 +30,7 @@ public class SeleccionRestos implements Seleccion{
 			if(f < min) min = f;
 		}
 		
-		//Recorro toda la poblacion para hacerme tanto con sus fitness como con el total 
+		//Transformamos el fitness de cada individuo para que esté en un rango que nos interese y lo acumulamos para sacar el fitness total 
 		for(int i=0; i<nIndividuos; i++) {
 			double f;
 			if(minimization) f = max - fitness[i];
@@ -36,17 +40,19 @@ public class SeleccionRestos implements Seleccion{
 		}
 		
 		//Paso los fitness de cada individuo a sus probabilidades de seleccion
-		for(int i=0; i<nIndividuos; i++) {
+		for(int i=0; i<nIndividuos; i++) 
 			fitness[i] /= fitnessTotal;
-		}
 		
 		//Parte de seleccion por restos
 		int[] poblacionSeleccionada = new int[nIndividuos];
 		int indicePoblacionSeleccionada=0;
+		
 		//Recorro todos los individuos de la poblacion inicial para analizar si tengo que incluirlos o no
 		for(int i=0; i<nIndividuos; i++) {
+			
 			//Saco el numero de copias que le corresponden al individuo actual
-			int numCopias = (int)fitness[i]*nIndividuos;
+			int numCopias = (int)Math.round(fitness[i]*nIndividuos);
+			
 			//Meto tantas copias en la poblacion final
 			for(int j = 0; j<numCopias; j++) {
 				poblacionSeleccionada[indicePoblacionSeleccionada] = i;
@@ -54,10 +60,9 @@ public class SeleccionRestos implements Seleccion{
 			}
 		}
 		
-		Random rand = new Random();
 		//La seleccion por restos necesita ser completada con "cualquier otro metodo de seleccion" 
 		//la seleccion restante se hace utilizando selección por ruleta
-		
+		Random rand = new Random();
 		for(int i = indicePoblacionSeleccionada; i< nIndividuos; i++)
 		{
 			//------------RULETA-------------------					

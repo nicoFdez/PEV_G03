@@ -16,17 +16,20 @@ import algoritmoGenetico.individuos.IndividuoF5;
 import algoritmoGenetico.mutaciones.Mutacion;
 import algoritmoGenetico.seleccion.*;
 
-
+//Clase que implementa el esqueleto de un algoritmo genetico y proporciona las funciones necesarias
+//para realizar un evolucion sobre un grupo de individuos
 public class AlgoritmoGenetico {
 	
-	
+	//Constructora
 	public AlgoritmoGenetico() {
 		
 	}
 	
+	//Metodo que realiza la operacion de seleccion sobre la poblacion
 	public void Seleccion() {	
 		int[] pobSeleccionada;
 		pobSeleccionada = this.selector.seleccionar(this.poblacion, !this.maximize);
+		//Dependiendo del tipo de funcion que estemos analizando vamos a hacer una seleccion u otra
 		switch(this.tipoPoblacion) {
 		case Funcion1:
 			this.poblacion = seleccion1(pobSeleccionada);
@@ -46,6 +49,7 @@ public class AlgoritmoGenetico {
 		}
 	}
 	
+	///////////////////////Métodos de selección específicos de cada función////////////////////////////////////
 	private Individuo[] seleccion1(int[] pobSelec) {
 		Individuo[] pob = new Individuo[this.tamPoblacion];
 		
@@ -86,17 +90,22 @@ public class AlgoritmoGenetico {
 		}
 		return pob;
 	}
+	///////////////////////Métodos de selección específicos de cada función////////////////////////////////////
+
 	
-	
+	//Metodo encargado de realizar la operación de cruce sobre la población 
 	public void Cruce() {
 		this.poblacion = this.cruzador.cruzar(this.poblacion, this.probCruce);
 	}
 	
+	//Metodo encargado de realizar la operación de mutacion sobre la población 
 	public void Mutacion() {
 		this.mutador.mutar(this.poblacion, this.probMutacion);
 	}
 	
-	
+	//Método que evalua la población de la generación en la que nos encontremos y con esto se almacena
+	//datos como e mejor de la población, la media, etc para después de realizar la evolución por 
+	//completo, poder mostrar dichos datos en una gráfica
 	public void Evaluar(int nGeneracion) {
 		this.aptitudAcumulada=0;
 		this.aptitudMedia=0;
@@ -113,8 +122,6 @@ public class AlgoritmoGenetico {
 				(!this.maximize &&  this.fitness[i] < this.fitness[this.pos_mejor])	) {
 				this.pos_mejor = i;
 			}
-
-			//En caso de que sea intereante nos lo quedamos
 		}
 		
 		//Si estamos maximizando y este es mejor, o si estamos minimizando y este es mas bajo
@@ -130,11 +137,14 @@ public class AlgoritmoGenetico {
 		System.out.println("Media poblacion: " + aptitudMedia);
 		System.out.println("------------------");
 		
+		//Almacenamos estos datos para la futua gráfica
 		this.mediasGeneracion[nGeneracion] = this.aptitudMedia;
 		this.mejoresGeneracion[nGeneracion] = this.poblacion[this.pos_mejor].getFitness();
 		this.mejorAbsoluto[nGeneracion] = this.elMejor.getFitness();
 	}
 	
+	//Método que inicializa la pobalción sobre la que vamos a realizar la evolución 
+	//Dependiendo de los parámetros que nos lleguen los individuos  serán de un tipo u otro
 	public void inicializarPoblacion(TiposFuncion tipo, int tam, int nParamsf4) {
 		
 		this.tipoPoblacion = tipo;
@@ -163,7 +173,7 @@ public class AlgoritmoGenetico {
 		}
 	}
 	
-	
+	////////////////////Métodos encargados de inicializar la población de una forma u otra dependiendo de la función que vayamos a analizar////////////////////////////
 	public void inicializarPoblacion1(int tam, double precision) {
 		this.poblacion = new Individuo[tam];
 		this.tamPoblacion = tam;
@@ -303,7 +313,10 @@ public class AlgoritmoGenetico {
 		this.comp = new ComparadorMin();
 		this.maximize = false;
 	}
+	////////////////////Métodos encargados de inicializar la población de una forma u otra dependiendo de la función que vayamos a analizar////////////////////////////
+
 	
+	//Metodo que se encarga de salvar los mejores individuos de esta generación en caso de que estemos haciendo la evolución usando elitismo
 	public void saveElites() {	
 		if(this.elitism) {
 			Arrays.sort(this.poblacion, comp);			
@@ -314,6 +327,7 @@ public class AlgoritmoGenetico {
 		}
 	}
 	
+	//Metodo que se encarga de incluir los mejores individuos de esta generación a la población en caso de que estemos haciendo la evolución usando elitismo
 	public void recoverSavedElites() {
 		if(this.elitism) {
 			Arrays.sort(this.poblacion, comp);
@@ -324,6 +338,7 @@ public class AlgoritmoGenetico {
 		}
 	}
 	
+	//Setters encargados de configurar parámetros que alterarán la manera en la que se realiza la evolución de la población////////////////////////////////
 	public void setElitism(double proportion) {
 		this.elitism = proportion > 0;
 		this.porcElitismo = proportion;
@@ -348,7 +363,10 @@ public class AlgoritmoGenetico {
 	public void setMutacion(Mutacion mut) {
 		mutador = mut;
 	}
+	//Setters encargados de configurar parámetros que alterarán la manera en la que se realiza la evolución de la población////////////////////////////////
+
 	
+	//Getters que informan sobre los parámetros que alterarán la manera en la que se realiza la evolución de la población////////////////////////////////
 	public Individuo[] getPoblacion() {
 		return this.poblacion;
 	}
@@ -383,7 +401,9 @@ public class AlgoritmoGenetico {
 	
 	public double[] getMejoresGeneraciones() {
 		return this.mejoresGeneracion;
-	}
+	}	
+	//Getters que informan sobre los parámetros que alterarán la manera en la que se realiza la evolución de la población////////////////////////////////
+
 	
 	private Seleccion selector;
 	private Cruce cruzador;

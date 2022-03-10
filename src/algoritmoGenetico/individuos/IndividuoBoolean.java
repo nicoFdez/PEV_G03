@@ -6,11 +6,15 @@ package algoritmoGenetico.individuos;
 import java.util.Arrays;
 import java.util.Random;
 
+//Clase abstracta que complementa las caracteristicas de la clase Individuo y se ajusta para tratar con cromosomas que sean de tipo boolean (binarios)
 public abstract class IndividuoBoolean extends Individuo<Boolean> {
+	//Constructora por defecto
 	public IndividuoBoolean(){
 		
 	}
 	
+	//Constructora por copia
+	//Toma un individuo que debe de ser del mimso tipo y analiza sus variables para igualar sus valores
 	public IndividuoBoolean(Individuo other) {
 		this.nGenes = other.nGenes;
 		
@@ -50,13 +54,12 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 		return 0;
 	}
 	
-	//Como en esta funcion el objetivo es llegar a un maximo el fitness lo podemos ver como el mismo valor de aplicar nuestras 
-	//x a la funcion 1
 	@Override
 	public double getFitness() {
 		return this.getValor();
 	}
 	
+	//Metodo que toma un índice y devuelve el gen que se encuentre en dicha posicion dentro del cromosoma en una representación no binaria
 	public double getFenotipo(int val) {
 		double result=0;
 		int inicio =0;
@@ -70,6 +73,7 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 		return value;
 	}
 	
+	//Metodo que recibe un individuo del mismo tipo y copia su cromosoma
 	@Override
 	public void copyFromAnother(Individuo<Boolean> other) {
 		//Tomamos el cromosoma del individuo que es mejor que nosotros y lo copiamos
@@ -101,6 +105,7 @@ public abstract class IndividuoBoolean extends Individuo<Boolean> {
 		}
 	}
 	
+	//Metodo que devuelve una copia exacta del cromosoma de este individuo
 	@Override
 	public Boolean[] getCromosoma() {
 		Boolean[] result = new Boolean[this.cromosoma.length];
