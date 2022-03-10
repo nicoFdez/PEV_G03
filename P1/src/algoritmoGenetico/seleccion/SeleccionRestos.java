@@ -51,7 +51,7 @@ public class SeleccionRestos implements Seleccion{
 		for(int i=0; i<nIndividuos; i++) {
 			
 			//Saco el numero de copias que le corresponden al individuo actual
-			int numCopias = (int)Math.round(fitness[i]*nIndividuos);
+			int numCopias = (int)fitness[i]*nIndividuos;
 			
 			//Meto tantas copias en la poblacion final
 			for(int j = 0; j<numCopias; j++) {
