@@ -32,66 +32,32 @@ public class AlgoritmoGenetico {
 		//Dependiendo del tipo de funcion que estemos analizando vamos a hacer una seleccion u otra
 		switch(this.tipoPoblacion) {
 		case Funcion1:
-			this.poblacion = seleccion1(pobSeleccionada);
+			for(int i=0; i<this.tamPoblacion; i++) {
+				this.poblacion[i] = new IndividuoF1(this.poblacion[pobSeleccionada[i]]);
+			}
 			break;
 		case Funcion2:
-			this.poblacion = seleccion2(pobSeleccionada);
+			for(int i=0; i<this.tamPoblacion; i++) {
+				this.poblacion[i] = new IndividuoF2(this.poblacion[pobSeleccionada[i]]);
+			}
 			break;
 		case Funcion3:
-			this.poblacion = seleccion3(pobSeleccionada);
+			for(int i=0; i<this.tamPoblacion; i++) {
+				this.poblacion[i] = new IndividuoF3(this.poblacion[pobSeleccionada[i]]);
+			}
 			break;
 		case Funcion4:
-			this.poblacion = seleccion4(pobSeleccionada);
+			for(int i=0; i<this.tamPoblacion; i++) {
+				this.poblacion[i] = new IndividuoF4(this.poblacion[pobSeleccionada[i]]);
+			}
 			break;
 		case Funcion5:
-			this.poblacion = seleccion5(pobSeleccionada);
+			for(int i=0; i<this.tamPoblacion; i++) {
+				this.poblacion[i] = new IndividuoF5(this.poblacion[pobSeleccionada[i]]);
+			}
 			break;
 		}
 	}
-	
-	///////////////////////Métodos de selección específicos de cada función////////////////////////////////////
-	private Individuo[] seleccion1(int[] pobSelec) {
-		Individuo[] pob = new Individuo[this.tamPoblacion];
-		
-		for(int i=0; i<this.tamPoblacion; i++) {
-			pob[i] = new IndividuoF1(this.poblacion[pobSelec[i]]);
-		}
-		return pob;
-	}
-	
-	private Individuo[] seleccion2(int[] pobSelec) {
-		Individuo[] pob = new Individuo[this.tamPoblacion];
-		for(int i=0; i<this.tamPoblacion; i++) {
-			pob[i] = new IndividuoF2(this.poblacion[pobSelec[i]]);
-		}
-		return pob;
-	}
-	
-	private Individuo[] seleccion3(int[] pobSelec) {
-		Individuo[] pob = new Individuo[this.tamPoblacion];
-		for(int i=0; i<this.tamPoblacion; i++) {
-			pob[i] = new IndividuoF3(this.poblacion[pobSelec[i]]);
-		}
-		return pob;
-	}
-	
-	private Individuo[] seleccion4(int[] pobSelec) {
-		Individuo[] pob = new Individuo[this.tamPoblacion];
-		for(int i=0; i<this.tamPoblacion; i++) {
-			pob[i] = new IndividuoF4(this.poblacion[pobSelec[i]]);
-		}
-		return pob;
-	}
-	
-	private Individuo[] seleccion5(int[] pobSelec) {
-		Individuo[] pob = new Individuo[this.tamPoblacion];
-		for(int i=0; i<this.tamPoblacion; i++) {
-			pob[i] = new IndividuoF5(this.poblacion[pobSelec[i]]);
-		}
-		return pob;
-	}
-	///////////////////////Métodos de selección específicos de cada función////////////////////////////////////
-
 	
 	//Metodo encargado de realizar la operación de cruce sobre la población 
 	public void Cruce() {
@@ -153,173 +119,83 @@ public class AlgoritmoGenetico {
 		this.mejorAbsoluto= new double[this.maxGeneraciones];
 		this.mediasGeneracion= new double[this.maxGeneraciones];
 		this.mejoresGeneracion = new double[this.maxGeneraciones];
+		double precision = 0.0001;
+		
+		this.poblacion = new Individuo[tam];
+		this.tamPoblacion = tam;
+		this.fitness = new double[tamPoblacion];
+		//Preparamos huecos para los elites
+		int numElites = (int)((double)tam*this.porcElitismo);
+		elites = new Individuo[numElites];
+		eliteValues = new double[numElites];
+		
 		switch(tipo) {
-		case Funcion1:
-			inicializarPoblacion1(tam, 0.0001);
+		case Funcion1:	
+			for(int i=0; i<this.tamPoblacion; i++)
+				this.poblacion[i] = new IndividuoF1(precision);
+			this.elMejor = new IndividuoF1(precision);
+			for(int i = 0; i< numElites; i++)
+				elites[i] = new IndividuoF1(precision);
 			comp = new ComparadorMax();
+			this.maximize = true;
 			break;
+			
 		case Funcion2:
-			inicializarPoblacion2(tam, 0.0001);
+			for(int i=0; i<this.tamPoblacion; i++)
+				this.poblacion[i] = new IndividuoF2(precision);
+			this.elMejor = new IndividuoF2(precision);
+			for(int i = 0; i< numElites; i++)
+				elites[i] = new IndividuoF2(precision);
+			this.comp = new ComparadorMin();
+			this.maximize = false;
 			break;
+			
 		case Funcion3:
-			inicializarPoblacion3(tam, 0.0001);
+			for(int i=0; i<this.tamPoblacion; i++)
+				this.poblacion[i] = new IndividuoF3(precision);
+			this.elMejor = new IndividuoF3(precision);
+			for(int i = 0; i< numElites; i++)
+				elites[i] = new IndividuoF3(precision);
+			this.comp = new ComparadorMin();
+			this.maximize = false;
 			break;
+			
 		case Funcion4:
-			inicializarPoblacion4(tam, 0.0001);
+			for(int i=0; i<this.tamPoblacion; i++)
+				this.poblacion[i] = new IndividuoF4(precision, this.nParamsf4);
+			this.elMejor = new IndividuoF4(precision, this.nParamsf4);
+			for(int i = 0; i< numElites; i++)
+				elites[i] = new IndividuoF4(precision, this.nParamsf4);
+			this.comp = new ComparadorMin();
+			this.maximize = false;
 			break;
+			
 		case Funcion5:
-			inicializarPoblacion5(tam);
+			for(int i=0; i<this.tamPoblacion; i++)
+				this.poblacion[i] = new IndividuoF5(this.nParamsf4);
+			this.elMejor = new IndividuoF5(this.nParamsf4);
+			for(int i = 0; i< numElites; i++)
+				elites[i] = new IndividuoF5(this.nParamsf4);
+			this.comp = new ComparadorMin();
+			this.maximize = false;
 			break;
 		}
-	}
-	
-	////////////////////Métodos encargados de inicializar la población de una forma u otra dependiendo de la función que vayamos a analizar////////////////////////////
-	public void inicializarPoblacion1(int tam, double precision) {
-		this.poblacion = new Individuo[tam];
-		this.tamPoblacion = tam;
 		
-		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoF1(precision);
+		//Inicialización común a todas las funciones
+		for(int i=0; i<this.tamPoblacion; i++)
 			this.poblacion[i].initialize();
-		}
-		
-		this.fitness = new double[tamPoblacion];
-		this.elMejor = new IndividuoF1(precision);
 		this.elMejor.initialize();
 		
-		//Preparamos huecos para los elites
-		int numElites = (int)((double)tam*this.porcElitismo);
-		elites = new Individuo[numElites];
-		eliteValues = new double[numElites];
-		//Inicializamos
-		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoF1(precision);
+		for(int i = 0; i< numElites; i++){
 			elites[i].initialize();
 			eliteValues[i] = 0;
 		}
-		
-		this.comp = new ComparadorMax();
-		this.maximize = true;
 	}
-	
-	public void inicializarPoblacion2(int tam, double precision) {
-		this.poblacion = new Individuo[tam];
-		this.tamPoblacion = tam;
-		
-		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoF2(precision);
-			this.poblacion[i].initialize();
-		}
-		
-		this.fitness = new double[tamPoblacion];
-		this.elMejor = new IndividuoF2(precision);
-		this.elMejor.initialize();
-		
-		//Preparamos huecos para los elites
-		int numElites = (int)((double)tam*this.porcElitismo);
-		elites = new Individuo[numElites];
-		eliteValues = new double[numElites];
-		//Inicializamos
-		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoF2(precision);
-			elites[i].initialize();
-			eliteValues[i] = 0;
-		}
-		
-		this.comp = new ComparadorMin();
-		this.maximize = false;
-	}
-
-	public void inicializarPoblacion3(int tam, double precision) {
-		this.poblacion = new Individuo[tam];
-		this.tamPoblacion = tam;
-		
-		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoF3(precision);
-			this.poblacion[i].initialize();
-		}
-		
-		this.fitness = new double[tamPoblacion];
-		this.elMejor = new IndividuoF3(precision);
-		this.elMejor.initialize();
-		
-		//Preparamos huecos para los elites
-		int numElites = (int)((double)tam*this.porcElitismo);
-		elites = new Individuo[numElites];
-		eliteValues = new double[numElites];
-		//Inicializamos
-		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoF3(precision);
-			elites[i].initialize();
-			eliteValues[i] = 0;
-		}
-		
-		this.comp = new ComparadorMin();
-		this.maximize = false;
-	}
-	
-	public void inicializarPoblacion5(int tam) {
-		this.poblacion = new Individuo[tam];
-		this.tamPoblacion = tam;
-		
-		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoF5(this.nParamsf4);
-			this.poblacion[i].initialize();
-		}
-		
-		this.fitness = new double[tamPoblacion];
-		this.elMejor = new IndividuoF5(this.nParamsf4);
-		this.elMejor.initialize();
-		
-		//Preparamos huecos para los elites
-		int numElites = (int)((double)tam*this.porcElitismo);
-		elites = new Individuo[numElites];
-		eliteValues = new double[numElites];
-		//Inicializamos
-		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoF5(this.nParamsf4);
-			elites[i].initialize();
-			eliteValues[i] = 0;
-		}
-		
-		this.comp = new ComparadorMin();
-		this.maximize = false;
-	}
-	
-	public void inicializarPoblacion4(int tam, double precision) {
-		this.poblacion = new Individuo[tam];
-		this.tamPoblacion = tam;
-		
-		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoF4(precision, this.nParamsf4);
-			this.poblacion[i].initialize();
-		}
-		
-		this.fitness = new double[tamPoblacion];
-		this.elMejor = new IndividuoF4(precision, this.nParamsf4);
-		this.elMejor.initialize();
-		
-		//Preparamos huecos para los elites
-		int numElites = (int)((double)tam*this.porcElitismo);
-		elites = new Individuo[numElites];
-		eliteValues = new double[numElites];
-		//Inicializamos
-		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoF4(precision, this.nParamsf4);
-			elites[i].initialize();
-			eliteValues[i] = 0;
-		}
-		
-		this.comp = new ComparadorMin();
-		this.maximize = false;
-	}
-	////////////////////Métodos encargados de inicializar la población de una forma u otra dependiendo de la función que vayamos a analizar////////////////////////////
-
 	
 	//Metodo que se encarga de salvar los mejores individuos de esta generación en caso de que estemos haciendo la evolución usando elitismo
 	public void saveElites() {	
 		if(this.elitism) {
-			Arrays.sort(this.poblacion, comp);			
+			Arrays.sort(this.poblacion, comp);
 			int nElites = this.elites.length;		
 			for(int i = 0; i < nElites; i++) {
 				this.elites[i].copyFromAnother(this.poblacion[i]);

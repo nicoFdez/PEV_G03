@@ -182,7 +182,7 @@ public class PanelPrincipal {
 	 */
 	private void initialize() {
 		frmGrupoPrctica = new JFrame();
-		frmGrupoPrctica.setTitle("Grupo3 Pr\u00E1ctica1");
+		frmGrupoPrctica.setTitle("Grupo3 Pr\u00E1ctica 2");
 		frmGrupoPrctica.setBounds(100, 100, 968, 611);
 		frmGrupoPrctica.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmGrupoPrctica.getContentPane().setLayout(null);
