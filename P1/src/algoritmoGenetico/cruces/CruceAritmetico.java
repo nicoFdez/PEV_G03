@@ -62,8 +62,8 @@ public class CruceAritmetico<T> implements Cruce {
 		for(int i=0; i<l; i++) {
 			Double x = (Double)cromo1[i];
 			Double y = (Double)cromo2[i];			
-			h1[i] = (x + y) / 2.0;
-			h2[i] = (this.alpha * x) +((1-this.alpha) *y);
+			h1[i] = ((1-this.alpha) * x) + (this.alpha *y);
+			h2[i] = (this.alpha * x) + ((1-this.alpha) *y);
 		}
 		a.setCromosoma(h1);
 		b.setCromosoma(h2);
