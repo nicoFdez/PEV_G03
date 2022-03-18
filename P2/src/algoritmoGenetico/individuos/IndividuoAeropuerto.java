@@ -5,10 +5,10 @@ import java.util.Random;
 
 
 //clase que representa un individuo preparado para realizar una evolución sobre la funcion5
-public class IndividuoF5 extends Individuo<Double> {
+public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	//Constructoras
-	public IndividuoF5(Individuo other) {
+	public IndividuoAeropuerto(Individuo other) {
 		this.nGenes = other.nGenes;
 		
 		this.min = new double[this.nGenes];
@@ -27,22 +27,23 @@ public class IndividuoF5 extends Individuo<Double> {
 		for(int i=0; i<this.nGenes; i++)
 			this.tamTotal += this.tamGenes[i];
 		
-		this.cromosoma = new Double[tamTotal];
+		this.cromosoma = new Integer[tamTotal];
 		
 		for(int i=0; i<this.cromosoma.length; i++)
-			this.cromosoma[i] = (Double)other.cromosoma[i];
+			this.cromosoma[i] = (Integer)other.cromosoma[i];
 	}
-	public IndividuoF5(int nParams){
+	
+	public IndividuoAeropuerto(int nVuelos, int nPistas){
 		this.rand = new Random();
 		
-		this.nGenes = nParams;
+		this.nGenes = nVuelos;
 		
 		//Limites que puede alcanzar el individuo
 		this.min = new double[this.nGenes];
 		this.max = new double[this.nGenes];
 		for(int i = 0; i<this.nGenes;i++) {
-			this.min[i] = 0;
-			this.max[i] = Math.PI;
+			this.min[i] = 1;
+			this.max[i] = nVuelos;
 		}
 		
 		//tamaño del array de "bits" que tiene cada uno de los genes
@@ -54,7 +55,7 @@ public class IndividuoF5 extends Individuo<Double> {
 		}
 		
 		//Tamaño total de individuo en bits
-		this.cromosoma = new Double[tamTotal];
+		this.cromosoma = new Integer[tamTotal];
 	}
 	
 	@Override
@@ -89,38 +90,32 @@ public class IndividuoF5 extends Individuo<Double> {
 	@Override
 	public void initialize() {
 		for(int i = 0; i < this.tamTotal; i++) {
-			Double r = this.min[i] + (this.rand.nextDouble() * (this.max[i] - this.min[i]));
+			Integer r = 1 + this.rand.nextInt((int)this.max[i]);
 			this.cromosoma[i] = r;
 		}
 	}
 	
 	@Override
-	public void copyFromAnother(Individuo<Double> other) {
+	public void copyFromAnother(Individuo<Integer> other) {
 		//Tomamos el cromosoma del individuo que es mejor que nosotros y lo copiamos
-		Double[] otherCromo = other.getCromosoma();
+		Integer[] otherCromo = other.getCromosoma();
 		for(int i = 0; i<otherCromo.length; i++) 
-			this.cromosoma[i] = otherCromo[i].doubleValue();
+			this.cromosoma[i] = otherCromo[i].intValue();
 	}
 	
 	//Metodo que toma una probabilidad de mutacion y con ella se aplica a su propio cromosoma una mutacion basica 
 	//donde por cada uno de los genes del cromosoma prueba a ver si es necesario realizar una mutacion
 	@Override
 	public void mutacionBasica(double probMutacion) {
-		Random rand = new Random();
-		for(int i=0; i<this.cromosoma.length; i++) {
-			double r = rand.nextDouble();
-			if(r <= probMutacion) {
-				cromosoma[i] = this.min[i] + (r * (this.max[i] - this.min[i]));
-			}
-		}
+		System.out.println("Mutacion sin hacer");
 	}
 	
 	@Override
-	public Double[] getCromosoma() {
-		Double[] result = new Double[this.cromosoma.length];
+	public Integer[] getCromosoma() {
+		Integer[] result = new Integer[this.cromosoma.length];
 		
 		for(int i=0; i<this.cromosoma.length; i++)
-			result[i] = this.cromosoma[i].doubleValue();
+			result[i] = this.cromosoma[i].intValue();
 		
 		return result;
 	}

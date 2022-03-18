@@ -1,6 +1,5 @@
 package algoritmoGenetico;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -8,13 +7,9 @@ import algoritmoGenetico.cruces.Cruce;
 import algoritmoGenetico.individuos.ComparadorMax;
 import algoritmoGenetico.individuos.ComparadorMin;
 import algoritmoGenetico.individuos.Individuo;
-import algoritmoGenetico.individuos.IndividuoF1;
-import algoritmoGenetico.individuos.IndividuoF2;
-import algoritmoGenetico.individuos.IndividuoF3;
-import algoritmoGenetico.individuos.IndividuoF4;
-import algoritmoGenetico.individuos.IndividuoF5;
+import algoritmoGenetico.individuos.IndividuoAeropuerto;
 import algoritmoGenetico.mutaciones.Mutacion;
-import algoritmoGenetico.seleccion.*;
+import algoritmoGenetico.seleccion.Seleccion;
 
 //Clase que implementa el esqueleto de un algoritmo genetico y proporciona las funciones necesarias
 //para realizar un evolucion sobre un grupo de individuos
@@ -29,33 +24,9 @@ public class AlgoritmoGenetico {
 	public void Seleccion() {	
 		int[] pobSeleccionada;
 		pobSeleccionada = this.selector.seleccionar(this.poblacion, !this.maximize);
-		//Dependiendo del tipo de funcion que estemos analizando vamos a hacer una seleccion u otra
-		switch(this.tipoPoblacion) {
-		case Funcion1:
-			for(int i=0; i<this.tamPoblacion; i++) {
-				this.poblacion[i] = new IndividuoF1(this.poblacion[pobSeleccionada[i]]);
-			}
-			break;
-		case Funcion2:
-			for(int i=0; i<this.tamPoblacion; i++) {
-				this.poblacion[i] = new IndividuoF2(this.poblacion[pobSeleccionada[i]]);
-			}
-			break;
-		case Funcion3:
-			for(int i=0; i<this.tamPoblacion; i++) {
-				this.poblacion[i] = new IndividuoF3(this.poblacion[pobSeleccionada[i]]);
-			}
-			break;
-		case Funcion4:
-			for(int i=0; i<this.tamPoblacion; i++) {
-				this.poblacion[i] = new IndividuoF4(this.poblacion[pobSeleccionada[i]]);
-			}
-			break;
-		case Funcion5:
-			for(int i=0; i<this.tamPoblacion; i++) {
-				this.poblacion[i] = new IndividuoF5(this.poblacion[pobSeleccionada[i]]);
-			}
-			break;
+		
+		for(int i=0; i<this.tamPoblacion; i++) {
+			this.poblacion[i] = new IndividuoAeropuerto(this.poblacion[pobSeleccionada[i]]);
 		}
 	}
 	
@@ -111,11 +82,7 @@ public class AlgoritmoGenetico {
 	
 	//Método que inicializa la pobalción sobre la que vamos a realizar la evolución 
 	//Dependiendo de los parámetros que nos lleguen los individuos  serán de un tipo u otro
-	public void inicializarPoblacion(TiposFuncion tipo, int tam, int nParamsf4) {
-		
-		this.tipoPoblacion = tipo;
-		this.nParamsf4 = nParamsf4;
-		
+	public void inicializarPoblacion(int tam, int nVuelos, int nPistas) {		
 		this.mejorAbsoluto= new double[this.maxGeneraciones];
 		this.mediasGeneracion= new double[this.maxGeneraciones];
 		this.mejoresGeneracion = new double[this.maxGeneraciones];
@@ -129,67 +96,19 @@ public class AlgoritmoGenetico {
 		elites = new Individuo[numElites];
 		eliteValues = new double[numElites];
 		
-		switch(tipo) {
-		case Funcion1:	
-			for(int i=0; i<this.tamPoblacion; i++)
-				this.poblacion[i] = new IndividuoF1(precision);
-			this.elMejor = new IndividuoF1(precision);
-			for(int i = 0; i< numElites; i++)
-				elites[i] = new IndividuoF1(precision);
-			comp = new ComparadorMax();
-			this.maximize = true;
-			break;
-			
-		case Funcion2:
-			for(int i=0; i<this.tamPoblacion; i++)
-				this.poblacion[i] = new IndividuoF2(precision);
-			this.elMejor = new IndividuoF2(precision);
-			for(int i = 0; i< numElites; i++)
-				elites[i] = new IndividuoF2(precision);
-			this.comp = new ComparadorMin();
-			this.maximize = false;
-			break;
-			
-		case Funcion3:
-			for(int i=0; i<this.tamPoblacion; i++)
-				this.poblacion[i] = new IndividuoF3(precision);
-			this.elMejor = new IndividuoF3(precision);
-			for(int i = 0; i< numElites; i++)
-				elites[i] = new IndividuoF3(precision);
-			this.comp = new ComparadorMin();
-			this.maximize = false;
-			break;
-			
-		case Funcion4:
-			for(int i=0; i<this.tamPoblacion; i++)
-				this.poblacion[i] = new IndividuoF4(precision, this.nParamsf4);
-			this.elMejor = new IndividuoF4(precision, this.nParamsf4);
-			for(int i = 0; i< numElites; i++)
-				elites[i] = new IndividuoF4(precision, this.nParamsf4);
-			this.comp = new ComparadorMin();
-			this.maximize = false;
-			break;
-			
-		case Funcion5:
-			for(int i=0; i<this.tamPoblacion; i++)
-				this.poblacion[i] = new IndividuoF5(this.nParamsf4);
-			this.elMejor = new IndividuoF5(this.nParamsf4);
-			for(int i = 0; i< numElites; i++)
-				elites[i] = new IndividuoF5(this.nParamsf4);
-			this.comp = new ComparadorMin();
-			this.maximize = false;
-			break;
-		}
-		
-		//Inicialización común a todas las funciones
-		for(int i=0; i<this.tamPoblacion; i++)
+		for(int i=0; i<this.tamPoblacion; i++) {
+			this.poblacion[i] = new IndividuoAeropuerto(nVuelos, nPistas);
 			this.poblacion[i].initialize();
+		}
+		this.elMejor = new IndividuoAeropuerto(nVuelos, nPistas);
 		this.elMejor.initialize();
-		
-		for(int i = 0; i< numElites; i++){
+		for(int i = 0; i< numElites; i++) {
+			elites[i] = new IndividuoAeropuerto(nVuelos, nPistas);
 			elites[i].initialize();
 			eliteValues[i] = 0;
 		}
+		comp = new ComparadorMin();
+		this.maximize = false;
 	}
 	
 	//Metodo que se encarga de salvar los mejores individuos de esta generación en caso de que estemos haciendo la evolución usando elitismo
@@ -310,8 +229,4 @@ public class AlgoritmoGenetico {
 	private double[] mejoresGeneracion;
 	private double[] mediasGeneracion;
 	private double[] mejorAbsoluto;
-	
-	private TiposFuncion tipoPoblacion;
-	
-	private int nParamsf4;
 }

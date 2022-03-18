@@ -6,5 +6,6 @@ public enum TiposSeleccion {
 	Restos,
 	TorneoDeterminista,
 	TorneoProbabilistico,
-	Truncamiento
+	Truncamiento,
+	Ranking
 }

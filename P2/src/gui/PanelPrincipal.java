@@ -19,13 +19,8 @@ import org.math.plot.Plot2DPanel;
 
 import algoritmoGenetico.AlgoritmoGenetico;
 import algoritmoGenetico.TiposCruce;
-import algoritmoGenetico.TiposFuncion;
 import algoritmoGenetico.TiposMutacion;
 import algoritmoGenetico.TiposSeleccion;
-import algoritmoGenetico.cruces.CruceAritmetico;
-import algoritmoGenetico.cruces.CruceBLXAlpha;
-import algoritmoGenetico.cruces.CruceMonopunto;
-import algoritmoGenetico.cruces.CruceUniforme;
 import algoritmoGenetico.mutaciones.MutacionBasica;
 import algoritmoGenetico.seleccion.SeleccionEstocasticoUniversal;
 import algoritmoGenetico.seleccion.SeleccionRestos;
@@ -42,13 +37,11 @@ public class PanelPrincipal {
 	private static JTextField textFieldProbCruce;
 	private static JTextField textFieldProbMutacion;
 	private static JTextField textFieldPorcElitismo;
-	private static JTextField textFieldPrecision;
 	private static JLabel TextoMejorIndividuo;
 
 	private static AlgoritmoGenetico ag;
 	private JTextField textFieldProbTorneo;
 	private JTextField textFieldValorTruncamiento;
-	private JTextField textFieldAlpha;
 
 	
 	/**
@@ -77,15 +70,15 @@ public class PanelPrincipal {
 	//Método que recibe los parámetros configurados en la ventana de la aplicación y los utliiza para configurar el algoritmo genético
 	private static void inicializarAG(int maxgeneraciones, int nIndividuos,
 			double probCruce, double probMutacion, double porcElitismo,
-			TiposSeleccion s, TiposCruce c, TiposMutacion m, TiposFuncion f,
-			int tamTorneo, double probTorneo, double valorTruncamiento, int nParamsf4, double alpha) {
+			TiposSeleccion s, TiposCruce c, TiposMutacion m,
+			int tamTorneo, double probTorneo, double valorTruncamiento) {
 		//Creo y el algoritmo genético y configuro los parámetros más generales
 		ag = new AlgoritmoGenetico();
 		ag.setProbCruce(probCruce);
 		ag.setProbMutacion(probMutacion);
 		ag.setElitism(porcElitismo);
 		ag.setMaxGeneraciones(maxgeneraciones);
-		ag.inicializarPoblacion(f, nIndividuos, nParamsf4);
+		ag.inicializarPoblacion(nIndividuos, 3, 12);
 		
 		//Preparo un operador de selección u otro dependiendo de lo que me haya dicho la ventana
 		switch(s) {
@@ -107,23 +100,24 @@ public class PanelPrincipal {
 		case TorneoDeterminista:
 			ag.setSeleccion(new SeleccionTorneoDeterminista(tamTorneo));
 			break;
+		case Ranking:
+			System.out.println("Sin hacer");
+			break;
 		}
 		
 		//Preparo un operador de cruce u otro dependiendo de lo que me haya dicho la ventana
 		switch(c) {
-		case Uniforme:
-			ag.setCruce(new CruceUniforme());
+		case CO:
+			System.out.println("Sin hacer");
 			break;
-		case Monopunto:
-			ag.setCruce(new CruceMonopunto());
+		case CX:
+			System.out.println("Sin hacer");
 			break;
-		case AritmeticoF5:
-			if(f == TiposFuncion.Funcion5) ag.setCruce(new CruceAritmetico(alpha));
-			else ag.setCruce(new CruceMonopunto());
+		case OX:
+			System.out.println("Sin hacer");
 			break;
-		case BLXAlphaF5:
-			if(f == TiposFuncion.Funcion5) ag.setCruce(new CruceBLXAlpha(alpha));
-			else ag.setCruce(new CruceMonopunto());
+		case PMX:
+			System.out.println("Sin hacer");
 			break;
 		}
 		
@@ -181,6 +175,7 @@ public class PanelPrincipal {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
 		frmGrupoPrctica = new JFrame();
 		frmGrupoPrctica.setTitle("Grupo3 Pr\u00E1ctica 2");
 		frmGrupoPrctica.setBounds(100, 100, 968, 611);
@@ -235,16 +230,6 @@ public class PanelPrincipal {
 		textFieldPorcElitismo.setBounds(10, 266, 86, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldPorcElitismo);
 		
-		JLabel lblPrecisinej = new JLabel("Precisi\u00F3n:");
-		lblPrecisinej.setBounds(10, 292, 188, 29);
-		frmGrupoPrctica.getContentPane().add(lblPrecisinej);
-		
-		textFieldPrecision = new JTextField();
-		textFieldPrecision.setText("0.0001");
-		textFieldPrecision.setColumns(10);
-		textFieldPrecision.setBounds(10, 317, 86, 20);
-		frmGrupoPrctica.getContentPane().add(textFieldPrecision);
-		
 		JLabel lblMetodoSeleccion = new JLabel("Metodo Selecci\u00F3n:");
 		lblMetodoSeleccion.setBounds(10, 345, 188, 29);
 		frmGrupoPrctica.getContentPane().add(lblMetodoSeleccion);
@@ -280,15 +265,6 @@ public class PanelPrincipal {
 		panel.setBounds(215, 56, 681, 449);
 		frmGrupoPrctica.getContentPane().add(panel);
 		
-		JComboBox comboBoxFuncion = new JComboBox();
-		comboBoxFuncion.setModel(new DefaultComboBoxModel(TiposFuncion.values()));
-		comboBoxFuncion.setBounds(260, 14, 123, 22);
-		frmGrupoPrctica.getContentPane().add(comboBoxFuncion);
-		
-		JLabel lblFuncin = new JLabel("Funci\u00F3n:");
-		lblFuncin.setBounds(208, 11, 54, 29);
-		frmGrupoPrctica.getContentPane().add(lblFuncin);
-		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
 		TextoMejorIndividuo.setBounds(403, 20, 235, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
@@ -322,25 +298,6 @@ public class PanelPrincipal {
 		textFieldValorTruncamiento.setBounds(546, 536, 48, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldValorTruncamiento);
 		
-		JLabel lblParmetrosfuncin = new JLabel("Par\u00E1metros(Funci\u00F3n 4 y 5):");
-		lblParmetrosfuncin.setBounds(604, 532, 156, 29);
-		frmGrupoPrctica.getContentPane().add(lblParmetrosfuncin);
-		
-		JSpinner spinnerNParams = new JSpinner();
-		spinnerNParams.setModel(new SpinnerNumberModel(3, 1, 7, 1));
-		spinnerNParams.setBounds(763, 536, 42, 20);
-		frmGrupoPrctica.getContentPane().add(spinnerNParams);
-		
-		JLabel lblAlpha = new JLabel("Alpha:");
-		lblAlpha.setBounds(825, 535, 54, 22);
-		frmGrupoPrctica.getContentPane().add(lblAlpha);
-		
-		textFieldAlpha = new JTextField();
-		textFieldAlpha.setText("0.6");
-		textFieldAlpha.setColumns(10);
-		textFieldAlpha.setBounds(866, 536, 42, 20);
-		frmGrupoPrctica.getContentPane().add(textFieldAlpha);
-		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {
 			@Override
@@ -348,9 +305,8 @@ public class PanelPrincipal {
 				inicializarAG((int)spinnerNGeneraciones.getValue(), (int)spinnerTamPoblacion.getValue(),
 						Double.parseDouble(textFieldProbCruce.getText()), Double.parseDouble(textFieldProbMutacion.getText()), Double.parseDouble(textFieldPorcElitismo.getText()),
 						TiposSeleccion.values()[comboBoxMetodoSeleccion.getSelectedIndex()] , TiposCruce.values()[comboBoxMetodoCruce.getSelectedIndex()],
-						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()], TiposFuncion.values()[comboBoxFuncion.getSelectedIndex()],
-						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()), (int)spinnerNParams.getValue(),
-						Double.parseDouble(textFieldAlpha.getText()));
+						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()],
+						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()));
 				bucleAG();
 			}
 
