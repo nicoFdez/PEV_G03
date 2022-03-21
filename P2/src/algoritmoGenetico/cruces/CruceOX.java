@@ -9,10 +9,10 @@ import algoritmoGenetico.individuos.Individuo;
 
 
 //Clase que implementa el cruce entre individuos mediante el método monopunto
-public class CrucePMX<T> implements Cruce {
+public class CruceOX<T> implements Cruce {
 
 	//Constructora
-	public CrucePMX() {}
+	public CruceOX() {}
 	
 	
 	//Método que toma un apoblación y una probabilidad a partir de la que analiza los individuos
@@ -38,15 +38,15 @@ public class CrucePMX<T> implements Cruce {
 		
 		//Recorremos los individuos por parejas y hacemos que se crucen
 		for(int i=0; i<individuosCruzar.size(); i+=2 ) 	
-			crucePMX(individuosCruzar.get(i), individuosCruzar.get(i+1));
+			cruceOX(individuosCruzar.get(i), individuosCruzar.get(i+1));
 		
 		
 		return poblacion;
 	}
 	
 	
-	//Método que toma 2 individuos y realiza el cruce PMX sobre estos
-	private void crucePMX(Individuo a, Individuo b) {
+	//Método que toma 2 individuos y realiza el cruce OX sobre estos
+	private void cruceOX(Individuo a, Individuo b) {
 		//Nos preparamos un random y preguntamos por los cromosomas de ambos individuos que tenemos que cruzar
 		Random rand = new Random();
 		Object[] cromo1 = a.getCromosoma();
@@ -82,44 +82,70 @@ public class CrucePMX<T> implements Cruce {
 		
 		//-----------------Cromosoma 1
 		//Vamos intetandocolocar los valores de fuera
-		int i=limit2;
+		int indiceHijo=limit2;
+		int indicePadre = limit2;
+		int indiceComprobador = limit1;
 		//Voy a recorrer todos los elementos que se encuentran fuera de la zona central
-		while(i!=limit1) {
+		while(indiceHijo!=limit1) {
+			
 			boolean repetido = false;
+			indiceComprobador = limit1;
 			//Vemos si esta repetido con algun elemento dentro de la zona central
-			int j=limit1;
-			while(j!=limit2 && !repetido) {
+			while(indiceComprobador!=indiceHijo && !repetido) {
 				//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
-				if(cromo1[j] == cromoA[i]) {
+				if(cromoA[indicePadre] == cromo1[indiceComprobador]) {
 					repetido = true;
 					break;
 				}
-				j++;
+				indiceComprobador = (indiceComprobador+1)%l;
 			}
-			if(!repetido) cromo1[i] = cromoA[i];
-			else cromo1[i] = cromoB[j];
 			
-			i = (i+1)%l; 
+			//Si despues de analizar lo que ya tiene el hijo vemos que se ha repetido con lo que ofrece el padre en dicha posicion 
+			//nos vamos a comprobar la siguiente posicion del padre
+			if(repetido) { 
+				indicePadre = (indicePadre+1)%l;
+				continue;
+			}
+			//Si lo que da el padre nos e encuentra en el hijo aun nos lo quedamos y avanzamos en los indices
+			else {
+				cromo1[indiceHijo] = cromoA[indicePadre];
+				indicePadre = (indicePadre+1)%l;
+				indiceHijo = (indiceHijo+1)%l; 
+			}	
 		}
 		
 		//-----------------Cromosoma 2
-		//Vamos intetandocolocar los valores de fuera
-		i = limit2;
-		while(i!=limit1) {
+		//repetimos el proceso pero con el segundo hijo
+		indiceHijo=limit2;
+		indicePadre = limit2;
+		indiceComprobador = limit1;		
+		//Voy a recorrer todos los elementos que se encuentran fuera de la zona central
+		while(indiceHijo!=limit1) {
+			
 			boolean repetido = false;
-			//Vemos si esta repetido
-			int j = limit1;
-			while(j!=limit2 && !repetido) {
-				if(cromo2[j] == cromoB[i]) {
+			indiceComprobador = limit1;
+			//Vemos si esta repetido con algun elemento dentro de la zona central
+			while(indiceComprobador!=indiceHijo && !repetido) {
+				//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
+				if(cromoB[indicePadre] == cromo2[indiceComprobador]) {
 					repetido = true;
 					break;
 				}
-				j++;
+				indiceComprobador = (indiceComprobador+1)%l;
 			}
-			if(!repetido) cromo2[i] = cromoB[i];
-			else cromo2[i] = cromoA[j];
 			
-			i = (i+1)%l; 
+			//Si despues de analizar lo que ya tiene el hijo vemos que se ha repetido con lo que ofrece el padre en dicha posicion 
+			//nos vamos a comprobar la siguiente posicion del padre
+			if(repetido) { 
+				indicePadre = (indicePadre+1)%l;
+				continue;
+			}
+			//Si lo que da el padre nos e encuentra en el hijo aun nos lo quedamos y avanzamos en los indices
+			else {
+				cromo2[indiceHijo] = cromoB[indicePadre];
+				indicePadre = (indicePadre+1)%l;
+				indiceHijo = (indiceHijo+1)%l; 
+			}	
 		}
 		
 		a.setCromosoma(cromo1);
