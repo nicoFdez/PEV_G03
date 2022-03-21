@@ -80,6 +80,14 @@ public class CrucePMX<T> implements Cruce {
 			}
 		}
 		
+		cromo1 = operacionesPMX(limit1, limit2, cromo1, cromoA, cromoB);
+		cromo2 = operacionesPMX(limit1, limit2, cromo2, cromoB, cromoA);
+		a.setCromosoma(cromo1);
+		b.setCromosoma(cromo2);
+	}
+	
+	private Object[] operacionesPMX(int limit1, int limit2, Object[] cromoHijo, Object[] cromoPadre, Object[] cromoMadre) {
+		int l = cromoPadre.length;
 		//-----------------Cromosoma 1
 		//Vamos intetandocolocar los valores de fuera
 		int i=limit2;
@@ -90,39 +98,19 @@ public class CrucePMX<T> implements Cruce {
 			int j=limit1;
 			while(j!=limit2 && !repetido) {
 				//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
-				if(cromo1[j] == cromoA[i]) {
+				if(cromoHijo[j] == cromoPadre[i]) {
 					repetido = true;
 					break;
 				}
 				j++;
 			}
-			if(!repetido) cromo1[i] = cromoA[i];
-			else cromo1[i] = cromoB[j];
+			if(!repetido) cromoHijo[i] = cromoPadre[i];
+			else cromoHijo[i] = cromoMadre[j];
 			
 			i = (i+1)%l; 
 		}
-		
-		//-----------------Cromosoma 2
-		//Vamos intetandocolocar los valores de fuera
-		i = limit2;
-		while(i!=limit1) {
-			boolean repetido = false;
-			//Vemos si esta repetido
-			int j = limit1;
-			while(j!=limit2 && !repetido) {
-				if(cromo2[j] == cromoB[i]) {
-					repetido = true;
-					break;
-				}
-				j++;
-			}
-			if(!repetido) cromo2[i] = cromoB[i];
-			else cromo2[i] = cromoA[j];
-			
-			i = (i+1)%l; 
-		}
-		
-		a.setCromosoma(cromo1);
-		b.setCromosoma(cromo2);
+				
+		return cromoHijo;
 	}
+	
 }

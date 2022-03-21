@@ -80,6 +80,14 @@ public class CruceOX<T> implements Cruce {
 			}
 		}
 		
+		cromo1 = operacionesOX(limit1,limit2, cromo1, cromoA);
+		cromo2 = operacionesOX(limit1,limit2, cromo2, cromoB);
+		a.setCromosoma(cromo1);
+		b.setCromosoma(cromo2);
+	}
+	
+	private Object[] operacionesOX(int limit1, int limit2, Object[] cromoHijo, Object[] cromoPadre) {
+		int l = cromoPadre.length;
 		//-----------------Cromosoma 1
 		//Vamos intetandocolocar los valores de fuera
 		int indiceHijo=limit2;
@@ -93,7 +101,7 @@ public class CruceOX<T> implements Cruce {
 			//Vemos si esta repetido con algun elemento dentro de la zona central
 			while(indiceComprobador!=indiceHijo && !repetido) {
 				//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
-				if(cromoA[indicePadre] == cromo1[indiceComprobador]) {
+				if(cromoPadre[indicePadre] == cromoHijo[indiceComprobador]) {
 					repetido = true;
 					break;
 				}
@@ -104,51 +112,16 @@ public class CruceOX<T> implements Cruce {
 			//nos vamos a comprobar la siguiente posicion del padre
 			if(repetido) { 
 				indicePadre = (indicePadre+1)%l;
-				continue;
 			}
 			//Si lo que da el padre nos e encuentra en el hijo aun nos lo quedamos y avanzamos en los indices
 			else {
-				cromo1[indiceHijo] = cromoA[indicePadre];
+				cromoHijo[indiceHijo] = cromoPadre[indicePadre];
 				indicePadre = (indicePadre+1)%l;
 				indiceHijo = (indiceHijo+1)%l; 
 			}	
 		}
 		
-		//-----------------Cromosoma 2
-		//repetimos el proceso pero con el segundo hijo
-		indiceHijo=limit2;
-		indicePadre = limit2;
-		indiceComprobador = limit1;		
-		//Voy a recorrer todos los elementos que se encuentran fuera de la zona central
-		while(indiceHijo!=limit1) {
-			
-			boolean repetido = false;
-			indiceComprobador = limit1;
-			//Vemos si esta repetido con algun elemento dentro de la zona central
-			while(indiceComprobador!=indiceHijo && !repetido) {
-				//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
-				if(cromoB[indicePadre] == cromo2[indiceComprobador]) {
-					repetido = true;
-					break;
-				}
-				indiceComprobador = (indiceComprobador+1)%l;
-			}
-			
-			//Si despues de analizar lo que ya tiene el hijo vemos que se ha repetido con lo que ofrece el padre en dicha posicion 
-			//nos vamos a comprobar la siguiente posicion del padre
-			if(repetido) { 
-				indicePadre = (indicePadre+1)%l;
-				continue;
-			}
-			//Si lo que da el padre nos e encuentra en el hijo aun nos lo quedamos y avanzamos en los indices
-			else {
-				cromo2[indiceHijo] = cromoB[indicePadre];
-				indicePadre = (indicePadre+1)%l;
-				indiceHijo = (indiceHijo+1)%l; 
-			}	
-		}
-		
-		a.setCromosoma(cromo1);
-		b.setCromosoma(cromo2);
+		return cromoHijo;
 	}
+	
 }
