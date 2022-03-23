@@ -21,8 +21,17 @@ import algoritmoGenetico.AlgoritmoGenetico;
 import algoritmoGenetico.TiposCruce;
 import algoritmoGenetico.TiposMutacion;
 import algoritmoGenetico.TiposSeleccion;
-import algoritmoGenetico.mutaciones.MutacionBasica;
+import algoritmoGenetico.cruces.CruceCO;
+import algoritmoGenetico.cruces.CruceCX;
+import algoritmoGenetico.cruces.CruceOX;
+import algoritmoGenetico.cruces.CruceOXPP;
+import algoritmoGenetico.cruces.CrucePMX;
+import algoritmoGenetico.mutaciones.MutacionHeuristica;
+import algoritmoGenetico.mutaciones.MutacionInsercion;
+import algoritmoGenetico.mutaciones.MutacionIntercambio;
+import algoritmoGenetico.mutaciones.MutacionInversion;
 import algoritmoGenetico.seleccion.SeleccionEstocasticoUniversal;
+import algoritmoGenetico.seleccion.SeleccionRanking;
 import algoritmoGenetico.seleccion.SeleccionRestos;
 import algoritmoGenetico.seleccion.SeleccionRuleta;
 import algoritmoGenetico.seleccion.SeleccionTorneoDeterminista;
@@ -101,30 +110,42 @@ public class PanelPrincipal {
 			ag.setSeleccion(new SeleccionTorneoDeterminista(tamTorneo));
 			break;
 		case Ranking:
-			System.out.println("Sin hacer");
+			ag.setSeleccion(new SeleccionRanking(1.5));
 			break;
 		}
 		
 		//Preparo un operador de cruce u otro dependiendo de lo que me haya dicho la ventana
 		switch(c) {
 		case CO:
-			System.out.println("Sin hacer");
+			ag.setCruce(new CruceCO());
 			break;
 		case CX:
-			System.out.println("Sin hacer");
+			ag.setCruce(new CruceCX());
 			break;
 		case OX:
-			System.out.println("Sin hacer");
+			ag.setCruce(new CruceOX());
+			break;
+		case OXPP:
+			ag.setCruce(new CruceOXPP());
 			break;
 		case PMX:
-			System.out.println("Sin hacer");
+			ag.setCruce(new CrucePMX());
 			break;
 		}
 		
 		//Preparo un operador de mutación u otro dependiendo de lo que me haya dicho la ventana
 		switch(m) {
-		case Basica:
-			ag.setMutacion(new MutacionBasica());
+		case Heuristica:
+			ag.setMutacion(new MutacionHeuristica());
+			break;
+		case Insercion:
+			ag.setMutacion(new MutacionInsercion());
+			break;
+		case Intercambio:
+			ag.setMutacion(new MutacionIntercambio());
+			break;
+		case Inversion:
+			ag.setMutacion(new MutacionInversion());
 			break;
 		}
 	}

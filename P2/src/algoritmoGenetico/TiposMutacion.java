@@ -1,5 +1,8 @@
 package algoritmoGenetico;
 
 public enum TiposMutacion {
-	Basica
+	Insercion, 
+	Intercambio, 
+	Inversion,
+	Heuristica
 }

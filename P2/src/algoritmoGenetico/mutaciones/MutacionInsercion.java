@@ -3,10 +3,10 @@ package algoritmoGenetico.mutaciones;
 import algoritmoGenetico.individuos.Individuo;
 
 //Clase encargada de realizar la operación de mutación básicas sobre una población
-public class MutacionBasica implements Mutacion {
+public class MutacionInsercion implements Mutacion {
 
 	//Constructora
-	public MutacionBasica() {}
+	public MutacionInsercion() {}
 	
 	//Método que recorre toda la población de individuos y les pide que se muten indicando la probabilidad de que
 	//esta operación ocurra
@@ -15,7 +15,7 @@ public class MutacionBasica implements Mutacion {
 		
 		//Recorremos la poblacion y la indicamos que se mute con el metodo que representamos
 		for(int i=0; i<poblacion.length; i++) {
-			poblacion[i].mutacionBasica(probMutacion);
+			poblacion[i].mutacionInsercion(probMutacion);
 		}
 	}
 

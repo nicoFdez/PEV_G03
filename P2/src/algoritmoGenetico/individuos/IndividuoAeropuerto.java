@@ -66,7 +66,27 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	}
 	
 	//Metod que aplica la funcion 5 y devuelvel el valor
-	public double getValor() {
+	private double getValor() {
+		double[] genes = new double[this.nGenes];
+		for(int i = 0; i< this.nGenes; i++) {
+			genes[i] = this.getFenotipo(i);
+		}
+		
+		double result =0;
+		for(int i = 0; i< this.nGenes ; i++) {
+			double actualStep=0;
+			actualStep = Math.sin(genes[i])* Math.pow(
+									Math.sin(((i+1)*Math.pow(genes[i], 2))/Math.PI)
+									, 20);
+			
+			result += actualStep;
+		}
+		result = -result;
+		return result;
+	}
+	
+	//Metod que aplica la funcion 5 y devuelvel el valor
+	private double getValor(Integer[] cromo) {
 		double[] genes = new double[this.nGenes];
 		for(int i = 0; i< this.nGenes; i++) {
 			genes[i] = this.getFenotipo(i);
@@ -105,15 +125,9 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 			this.cromosoma[i] = otherCromo[i].intValue();
 	}
 	
-	//Metodo que toma una probabilidad de mutacion y con ella se aplica a su propio cromosoma una mutacion basica 
-	//donde por cada uno de los genes del cromosoma prueba a ver si es necesario realizar una mutacion
-	@Override
-	public void mutacionBasica(double probMutacion) {
-		System.out.println("Mutacion sin hacer");
-	}
-	
 	//Metodo que toma una probabilidad de mutacion y toma una serie de elementos del cromosoma (numInserciones)
 	//y los reinserta en nuevas posiciones sacadas aleatoriamente dentro del array
+	@Override
 	public void mutacionInsercion(double probMutacion) {
 		//Tomamos un elemento del cromosoma al azar y lo que hacemos es insertarlo en una nueva posición elegida al azar
 		Random rnd = new Random();
@@ -136,6 +150,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	
 	//Metodo que toma dos posiciones aleatorias dentro del cromosoma e intercambia el contenido de dichas posiciones
+	@Override
 	public void mutacionIntercambio(double probMutacion) {
 		//Tomo dos posiciones aleatorias dentro del array 
 		Random rnd = new Random();
@@ -153,6 +168,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	//Metodo toma dos posiciones aleatorias dentro del cromosoma e invierte el orden en el que aparecen los elementos
 	//que se encuentren dentro de este rango
+	@Override
 	public void mutacionInversion(double probMutacion) {
 		//Tomamos 2 posiciones al azar entre las que vamos a invertir el orden de los elementos
 		Random rnd = new Random();
@@ -179,6 +195,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	//Metodo que toma un número de posiciones aleatorias dentro del cromosoma y realiza todas las permutaciones posibles
 	//de los elementos en dichas posiciones quedandose con aquella que haya sido la mejor de cara al problema
+	@Override
 	public void mutacionHeuristica(double probMutacion) {
 		//Tomamos 2 posiciones al azar entre las que vamos a invertir el orden de los elementos
 		Random rnd = new Random();
@@ -206,7 +223,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	// en el orden original, tambien recibe el cromosoma original del individuo y el mejor cromosoma, el 
 	//cual al principio es el propio cromosoma del individuo
 	//por último recibe un indice que indica en qué posicion dentro de la lista estamos realizando cambios en nuestra permutación actual
-	void probarPermutaciones(List<Integer> permutacion, List<Integer> posiciones ,Integer[] originalCromo,Integer[] bestCromo, int permutationPos){    
+	private void probarPermutaciones(List<Integer> permutacion, List<Integer> posiciones ,Integer[] originalCromo,Integer[] bestCromo, int permutationPos){    
 		//Desde la permutationPos probamos a intercambiarnos con todas las posiciones por delante nuestra
 		//Cuando vuelva nos aseguramos de deshacer el swap que hicimos para que al volver a hacer otro el
 		//cromosoma no empiece a desordenarse 
@@ -222,7 +239,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
     		for(int i = 0; i< posiciones.size(); i++) 
     			copiedCromo[posiciones.get(i)] = originalCromo[permutacion.get(i)];
     		//En caso de que esta copia sea mejor que el mejor acual, actualizamos el mejor cromosoma
-    		if(true /*comprobar que el valor otorgado por el nuevo cromosoma es mejor o no al mejor actual*/)
+    		if(getValor(copiedCromo) < getValor(bestCromo))
     			bestCromo = copiedCromo;
         }
     }

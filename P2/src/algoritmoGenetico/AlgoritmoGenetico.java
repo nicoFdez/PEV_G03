@@ -25,8 +25,10 @@ public class AlgoritmoGenetico {
 		int[] pobSeleccionada;
 		pobSeleccionada = this.selector.seleccionar(this.poblacion, !this.maximize);
 		
+		Individuo[] aux = Arrays.copyOf(this.poblacion, this.poblacion.length);
+		
 		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoAeropuerto(this.poblacion[pobSeleccionada[i]]);
+			this.poblacion[i] = new IndividuoAeropuerto(aux[pobSeleccionada[i]]);
 		}
 	}
 	

@@ -22,9 +22,10 @@ public abstract class Individuo<T> {
 		return 0;
 	}
 	
-	public void mutacionBasica(double probMutacion) {
-		
-	}
+	public void mutacionHeuristica(double probMutacion) {}
+	public void mutacionInsercion(double probMutacion) {}
+	public void mutacionIntercambio(double probMutacion) {}
+	public void mutacionInversion(double probMutacion) {}
 	
 	public void copyFromAnother(Individuo<T> other) {
 		
