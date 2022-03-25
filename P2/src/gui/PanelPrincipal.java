@@ -87,7 +87,7 @@ public class PanelPrincipal {
 		ag.setProbMutacion(probMutacion);
 		ag.setElitism(porcElitismo);
 		ag.setMaxGeneraciones(maxgeneraciones);
-		ag.inicializarPoblacion(nIndividuos, 3, 12);
+		ag.inicializarPoblacion(nIndividuos, 12, 3);
 		
 		//Preparo un operador de selección u otro dependiendo de lo que me haya dicho la ventana
 		switch(s) {

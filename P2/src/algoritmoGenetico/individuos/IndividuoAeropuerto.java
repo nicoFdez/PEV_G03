@@ -1,9 +1,12 @@
 package algoritmoGenetico.individuos;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+import algoritmoGenetico.individuos.InfoVuelos.TiposVuelo;
 
 
 //clase que representa un individuo preparado para realizar una evolución sobre la funcion5
@@ -11,6 +14,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	//Constructoras
 	public IndividuoAeropuerto(Individuo other) {
+		this.rand = new Random();
 		this.nGenes = other.nGenes;
 		
 		this.min = new double[this.nGenes];
@@ -37,6 +41,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	public IndividuoAeropuerto(int nVuelos, int nPistas){
 		this.rand = new Random();
+		this.numPistas = nPistas;
 		
 		this.nGenes = nVuelos;
 		
@@ -67,42 +72,66 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	//Metod que aplica la funcion 5 y devuelvel el valor
 	private double getValor() {
-		double[] genes = new double[this.nGenes];
-		for(int i = 0; i< this.nGenes; i++) {
-			genes[i] = this.getFenotipo(i);
-		}
-		
-		double result =0;
-		for(int i = 0; i< this.nGenes ; i++) {
-			double actualStep=0;
-			actualStep = Math.sin(genes[i])* Math.pow(
-									Math.sin(((i+1)*Math.pow(genes[i], 2))/Math.PI)
-									, 20);
-			
-			result += actualStep;
-		}
-		result = -result;
-		return result;
+		return getValor(this.cromosoma);
 	}
 	
 	//Metod que aplica la funcion 5 y devuelvel el valor
 	private double getValor(Integer[] cromo) {
+		double fitnessTotal =0;
+		
 		double[] genes = new double[this.nGenes];
-		for(int i = 0; i< this.nGenes; i++) {
-			genes[i] = this.getFenotipo(i);
+		InfoVuelos info = InfoVuelos.getInstance();
+		
+		double[] TLAs = new double[this.numPistas];
+		ArrayList<Integer>[] pistas = new ArrayList[this.numPistas];
+		for(int i = 0; i< this.numPistas; i++) {
+			pistas[i] = new ArrayList<Integer>();
 		}
 		
-		double result =0;
-		for(int i = 0; i< this.nGenes ; i++) {
-			double actualStep=0;
-			actualStep = Math.sin(genes[i])* Math.pow(
-									Math.sin(((i+1)*Math.pow(genes[i], 2))/Math.PI)
-									, 20);
+		//Para cada elemento del cromosoma, cada vuelo que se vaya a producir
+		for(int i = 0;i<this.cromosoma.length; i++) {
 			
-			result += actualStep;
+			//Me apunto cual es el vuelo que toca ahora y su tipo
+			int idVuelo = this.cromosoma[i];
+			TiposVuelo tipoVueloActual = info.tipoVuelos[i];
+			
+			//Variables para saber donde acaba el vuelo y a que hora
+			int pistaAAterrizar =0;
+			double minHoraAterrizaje = Double.MAX_VALUE;
+			
+			//Recorro todas las pistas preguntando para quedarme con aquella que antes le permita aterrizar
+			for(int j = 0; j<this.numPistas; j++) {
+				
+				//Momento en el que puedo llegar a la pista (restamos 1 al id vuelo porque la representacion va de [1,numVuelos]
+				double miTEL = info.TEL[j][idVuelo-1];
+				//Tiempo extra que me tengo que esperar por el vuelo anterior en dicha pista
+				double tEspera = 0;
+				if(pistas[j].size() > 0) {
+					int idVueloAnterior = pistas[j].get(pistas[j].size()-1)-1;
+					TiposVuelo tipoVueloAnterior = info.tipoVuelos[idVueloAnterior];
+					tEspera = info.SEP[tipoVueloActual.ordinal()][tipoVueloAnterior.ordinal()];
+				}
+				
+				//Tiempo en el que la pista se queda libre
+				double horaLibre = TLAs[j]+ tEspera;
+				//Me quedo con el maximo de cuando puedo llegar y cuando la pista esta libre
+				double horaAterrizaje = Math.max(horaLibre, miTEL); 
+				//Me quedo con la pista a la que antes pueda aterrizar
+				if(horaAterrizaje < minHoraAterrizaje) {
+					minHoraAterrizaje =horaAterrizaje;
+					pistaAAterrizar = j;
+				}
+			}
+			
+			//Registro en la pista seleccionada tanto el vuelo que llega como la hora
+			pistas[pistaAAterrizar].add(idVuelo);
+			TLAs[pistaAAterrizar] = minHoraAterrizaje;
+
+			//Acumulo el cuadrado del retardo para el fitness
+			fitnessTotal +=(Math.pow((minHoraAterrizaje-info.TEL[pistaAAterrizar][idVuelo-1]), 2));
 		}
-		result = -result;
-		return result;
+		
+		return fitnessTotal;
 	}
 	
 	public double getFenotipo(int val) {
@@ -111,10 +140,21 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	@Override
 	public void initialize() {
+		/*boolean[] visited = new boolean[(int)this.max[0]];
 		for(int i = 0; i < this.tamTotal; i++) {
 			Integer r = 1 + this.rand.nextInt((int)this.max[i]);
-			this.cromosoma[i] = r;
+			while(visited[r-1]) 
+				r = 1 + this.rand.nextInt((int)this.max[i]);
+			
+			this.cromosoma[i] = r.intValue();
+			visited[r-1]=true;
+		}*/
+		for(int i = 0; i<this.cromosoma.length;i++) {
+			this.cromosoma[i] = i+1;
 		}
+		List<Integer> intList = Arrays.asList(this.cromosoma);
+		Collections.shuffle(intList);
+		intList.toArray(this.cromosoma);
 	}
 	
 	@Override
@@ -132,20 +172,32 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 		//Tomamos un elemento del cromosoma al azar y lo que hacemos es insertarlo en una nueva posición elegida al azar
 		Random rnd = new Random();
 		int numInserciones = 1;
-		List cromoListado = Arrays.asList(this.cromosoma);
+		List<Integer> cromoListado = new ArrayList<Integer>();
+		for(int i = 0; i<this.cromosoma.length;i++) {
+			cromoListado.add(this.cromosoma[i].intValue());
+		}
 		
 		//Voy a hacer la inserción tantas veces como se me pida
 		for(int i = 0; i<numInserciones; i++) {
 			//Decido quien es el que va a ser insertado y la nueva posición que va a ocupar
-			int elemToInsert = rnd.nextInt((int)this.max[0]);
+			int elemToInsert = 1+rnd.nextInt((int)this.max[0]);
 			int nuevaPos = rnd.nextInt(this.nGenes);
 			
 			//Lo saco de la lista y lo pongo en su nuevo lugar
-			cromoListado.remove(cromoListado.indexOf(elemToInsert));
+			int index = cromoListado.indexOf(elemToInsert);
+			//No se ha encontrado el elemento
+			if(index == -1) {	
+				int a =0;
+			}
+			cromoListado.remove(index);
 			cromoListado.add(nuevaPos, elemToInsert);
 		}
 		
-		this.cromosoma = (Integer[])cromoListado.toArray();
+		Integer[] result = new Integer[cromoListado.size()];
+		for(int i = 0; i<cromoListado.size(); i++) {
+			result[i] = (Integer)cromoListado.get(i);
+		}
+		this.cromosoma = result;
 	}
 	
 	
@@ -255,4 +307,6 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 		
 		return result;
 	}
+	
+	private int numPistas;
 }

@@ -27,13 +27,15 @@ public class AlgoritmoGenetico {
 	
 	//Metodo que realiza la operacion de seleccion sobre la poblacion
 	public void Seleccion() {	
+		Individuo[] nuevaPoblacion = new Individuo[this.tamPoblacion];
 		int[] pobSeleccionada;
 		pobSeleccionada = this.selector.seleccionar(this.poblacion, !this.maximize);
 		//Dependiendo del tipo de funcion que estemos analizando vamos a hacer una seleccion u otra
 		switch(this.tipoPoblacion) {
 		case Funcion1:
 			for(int i=0; i<this.tamPoblacion; i++) {
-				this.poblacion[i] = new IndividuoF1(this.poblacion[pobSeleccionada[i]]);
+				nuevaPoblacion[i] = new IndividuoF1(this.poblacion[pobSeleccionada[i]]);
+				
 			}
 			break;
 		case Funcion2:
@@ -57,6 +59,7 @@ public class AlgoritmoGenetico {
 			}
 			break;
 		}
+		this.poblacion = nuevaPoblacion;
 	}
 	
 	//Metodo encargado de realizar la operación de cruce sobre la población 
