@@ -105,7 +105,21 @@ public class CrucePMX<T> implements Cruce {
 				j++;
 			}
 			if(!repetido) cromoHijo[i] = cromoPadre[i];
-			else cromoHijo[i] = cromoPadre[j];
+			else {
+				Object intento = cromoPadre[j];
+				repetido = false;
+				
+				int k = limit1;
+				while(k!=limit2) {
+					if(cromoHijo[j] == intento) {
+						intento = cromoPadre[k];
+						k = limit1;
+						continue;
+					}
+					k++;
+				}
+				cromoHijo[i] = intento;
+			}
 			
 			i = (i+1)%l; 
 		}

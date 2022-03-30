@@ -79,13 +79,10 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	//Metod que aplica la funcion 5 y devuelvel el valor
 	private double getValor(Integer[] cromo) {
 		
-		cromo = new Integer[]{8, 9, 10, 11, 12, 7, 6, 5, 4, 3, 2, 1};
+		//cromo = new Integer[]{12, 11, 8, 5, 3, 7, 2, 9, 10, 6, 4, 1};
 		
 		double fitnessTotal =0;
-		
-		double[] genes = new double[this.nGenes];
 		InfoVuelos info = InfoVuelos.getInstance();
-		
 		double[] TLAs = new double[this.numPistas];
 		ArrayList<Integer>[] pistas = new ArrayList[this.numPistas];
 		for(int i = 0; i< this.numPistas; i++) {
@@ -97,7 +94,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 			
 			//Me apunto cual es el vuelo que toca ahora y su tipo
 			int idVuelo = cromo[i];
-			TiposVuelo tipoVueloActual = info.tipoVuelos[i];
+			TiposVuelo tipoVueloActual = info.tipoVuelos[idVuelo-1];
 			
 			//Variables para saber donde acaba el vuelo y a que hora
 			int pistaAAterrizar =0;
@@ -115,7 +112,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 				if(pistas[j].size() > 0) {
 					int idVueloAnterior = pistas[j].get(pistas[j].size()-1)-1;
 					TiposVuelo tipoVueloAnterior = info.tipoVuelos[idVueloAnterior];
-					tEspera = info.SEP[tipoVueloActual.ordinal()][tipoVueloAnterior.ordinal()];
+					tEspera = info.SEP[tipoVueloAnterior.ordinal()][tipoVueloActual.ordinal()];
 				}
 				
 				//Tiempo en el que la pista se queda libre
@@ -123,7 +120,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 				//Me quedo con el maximo de cuando puedo llegar y cuando la pista esta libre
 				double horaAterrizaje = Math.max(horaLibre, miTEL); 
 				//Me quedo con la pista a la que antes pueda aterrizar
-				if(horaAterrizaje < minHoraAterrizaje) {
+				if(horaAterrizaje <= minHoraAterrizaje) {
 					minHoraAterrizaje = horaAterrizaje;
 					pistaAAterrizar = j;
 				}
@@ -135,6 +132,8 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 
 			//Acumulo el cuadrado del retardo para el fitness
 			fitnessTotal +=(Math.pow((minHoraAterrizaje-minTEL), 2));
+			//Fitness del enunciado
+			//fitnessTotal +=(Math.pow((minHoraAterrizaje-info.TEL[pistaAAterrizar][idVuelo-1]), 2));
 		}
 		
 		return fitnessTotal;

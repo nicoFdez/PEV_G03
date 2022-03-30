@@ -26,6 +26,7 @@ import algoritmoGenetico.cruces.CruceCX;
 import algoritmoGenetico.cruces.CruceOX;
 import algoritmoGenetico.cruces.CruceOXPP;
 import algoritmoGenetico.cruces.CrucePMX;
+import algoritmoGenetico.individuos.Individuo;
 import algoritmoGenetico.mutaciones.MutacionHeuristica;
 import algoritmoGenetico.mutaciones.MutacionInsercion;
 import algoritmoGenetico.mutaciones.MutacionIntercambio;
@@ -163,7 +164,8 @@ public class PanelPrincipal {
 			ag.Evaluar(generacionActual);
 			generacionActual++;
 		}
-		System.out.println("El mejor resultado: "+ ag.getMejorIndividuo().getFitness());
+		Individuo a = ag.getMejorIndividuo();
+		System.out.println("El mejor resultado: "+ a.getFitness());
 		generarGrafica();
 	}
 	
