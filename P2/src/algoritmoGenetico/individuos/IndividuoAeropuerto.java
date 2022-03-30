@@ -16,6 +16,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	public IndividuoAeropuerto(Individuo other) {
 		this.rand = new Random();
 		this.nGenes = other.nGenes;
+		this.numPistas = ((IndividuoAeropuerto)(other)).numPistas;
 		
 		this.min = new double[this.nGenes];
 		this.max = new double[this.nGenes];
@@ -77,6 +78,9 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	//Metod que aplica la funcion 5 y devuelvel el valor
 	private double getValor(Integer[] cromo) {
+		
+		cromo = new Integer[]{8, 9, 10, 11, 12, 7, 6, 5, 4, 3, 2, 1};
+		
 		double fitnessTotal =0;
 		
 		double[] genes = new double[this.nGenes];
@@ -89,21 +93,23 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 		}
 		
 		//Para cada elemento del cromosoma, cada vuelo que se vaya a producir
-		for(int i = 0;i<this.cromosoma.length; i++) {
+		for(int i = 0;i<cromo.length; i++) {
 			
 			//Me apunto cual es el vuelo que toca ahora y su tipo
-			int idVuelo = this.cromosoma[i];
+			int idVuelo = cromo[i];
 			TiposVuelo tipoVueloActual = info.tipoVuelos[i];
 			
 			//Variables para saber donde acaba el vuelo y a que hora
 			int pistaAAterrizar =0;
 			double minHoraAterrizaje = Double.MAX_VALUE;
+			double minTEL = info.TEL[0][idVuelo-1];
 			
 			//Recorro todas las pistas preguntando para quedarme con aquella que antes le permita aterrizar
 			for(int j = 0; j<this.numPistas; j++) {
 				
 				//Momento en el que puedo llegar a la pista (restamos 1 al id vuelo porque la representacion va de [1,numVuelos]
 				double miTEL = info.TEL[j][idVuelo-1];
+				if(miTEL < minTEL) minTEL = miTEL;
 				//Tiempo extra que me tengo que esperar por el vuelo anterior en dicha pista
 				double tEspera = 0;
 				if(pistas[j].size() > 0) {
@@ -118,7 +124,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 				double horaAterrizaje = Math.max(horaLibre, miTEL); 
 				//Me quedo con la pista a la que antes pueda aterrizar
 				if(horaAterrizaje < minHoraAterrizaje) {
-					minHoraAterrizaje =horaAterrizaje;
+					minHoraAterrizaje = horaAterrizaje;
 					pistaAAterrizar = j;
 				}
 			}
@@ -128,7 +134,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 			TLAs[pistaAAterrizar] = minHoraAterrizaje;
 
 			//Acumulo el cuadrado del retardo para el fitness
-			fitnessTotal +=(Math.pow((minHoraAterrizaje-info.TEL[pistaAAterrizar][idVuelo-1]), 2));
+			fitnessTotal +=(Math.pow((minHoraAterrizaje-minTEL), 2));
 		}
 		
 		return fitnessTotal;

@@ -80,13 +80,13 @@ public class CrucePMX<T> implements Cruce {
 			}
 		}
 		
-		cromo1 = operacionesPMX(limit1, limit2, cromo1, cromoA, cromoB);
-		cromo2 = operacionesPMX(limit1, limit2, cromo2, cromoB, cromoA);
+		cromo1 = operacionesPMX(limit1, limit2, cromo1, cromoA);
+		cromo2 = operacionesPMX(limit1, limit2, cromo2, cromoB);
 		a.setCromosoma(cromo1);
 		b.setCromosoma(cromo2);
 	}
 	
-	private Object[] operacionesPMX(int limit1, int limit2, Object[] cromoHijo, Object[] cromoPadre, Object[] cromoMadre) {
+	private Object[] operacionesPMX(int limit1, int limit2, Object[] cromoHijo, Object[] cromoPadre) {
 		int l = cromoPadre.length;
 		//-----------------Cromosoma 1
 		//Vamos intetandocolocar los valores de fuera
@@ -105,7 +105,7 @@ public class CrucePMX<T> implements Cruce {
 				j++;
 			}
 			if(!repetido) cromoHijo[i] = cromoPadre[i];
-			else cromoHijo[i] = cromoMadre[j];
+			else cromoHijo[i] = cromoPadre[j];
 			
 			i = (i+1)%l; 
 		}
