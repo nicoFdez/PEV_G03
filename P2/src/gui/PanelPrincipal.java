@@ -27,6 +27,7 @@ import algoritmoGenetico.cruces.CruceOX;
 import algoritmoGenetico.cruces.CruceOXPP;
 import algoritmoGenetico.cruces.CrucePMX;
 import algoritmoGenetico.individuos.Individuo;
+import algoritmoGenetico.individuos.IndividuoAeropuerto;
 import algoritmoGenetico.mutaciones.MutacionHeuristica;
 import algoritmoGenetico.mutaciones.MutacionInsercion;
 import algoritmoGenetico.mutaciones.MutacionIntercambio;
@@ -187,10 +188,23 @@ public class PanelPrincipal {
 		//Añadimos un panel con la grafica al JFrame para que se pueda ver en pantalla la grafica
 		JPanel panelGrafica = new JPanel();
 		Plot2DPanel plt = grafica.getGraph();
-		plt.setPreferredSize(new Dimension(681, 449));
+		plt.setPreferredSize(new Dimension(448, 354));
 		panelGrafica.add(plt);
-		panelGrafica.setBounds(215, 56, 681, 449);
+		panelGrafica.setBounds(208, 101, 448, 354);
 		frmGrupoPrctica.getContentPane().add(panelGrafica);
+		
+		
+		JPanel panelTabla = new JPanel();
+		panelTabla.setBounds(722, 151, 198, 223);
+		TablePlot tablaVuelos = new TablePlot();
+		//tablaVuelos.prueba();
+		tablaVuelos.agregarDatos(((IndividuoAeropuerto)ag.getMejorIndividuo()).getVuelosPistas(), ((IndividuoAeropuerto)ag.getMejorIndividuo()).getTLAsPistas());
+		tablaVuelos.getTabla().setPreferredSize(new Dimension(198, 223));
+		panelTabla.add(tablaVuelos.getTabla());
+		frmGrupoPrctica.getContentPane().add(panelTabla);
+		
+		//panelGrafica.add(tablaVuelos.getTabla());
+		
 		frmGrupoPrctica.setVisible(true);
 	}
 	
@@ -285,7 +299,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(botonEvolucionar);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(215, 56, 681, 449);
+		panel.setBounds(208, 101, 483, 373);
 		frmGrupoPrctica.getContentPane().add(panel);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
@@ -320,6 +334,10 @@ public class PanelPrincipal {
 		textFieldValorTruncamiento.setColumns(10);
 		textFieldValorTruncamiento.setBounds(546, 536, 48, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldValorTruncamiento);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(722, 151, 198, 223);
+		frmGrupoPrctica.getContentPane().add(panel_1);
 		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {

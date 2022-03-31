@@ -71,6 +71,14 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 		return this.getValor();
 	}
 	
+	public ArrayList<Integer>[] getVuelosPistas(){
+		return this.pistas;
+	}
+	
+	public ArrayList<Double>[] getTLAsPistas(){
+		return this.TLAs;
+	}
+	
 	//Metod que aplica la funcion 5 y devuelvel el valor
 	private double getValor() {
 		return getValor(this.cromosoma);
@@ -83,10 +91,11 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 		
 		double fitnessTotal =0;
 		InfoVuelos info = InfoVuelos.getInstance();
-		double[] TLAs = new double[this.numPistas];
-		ArrayList<Integer>[] pistas = new ArrayList[this.numPistas];
+		TLAs = new ArrayList[this.numPistas];
+		pistas = new ArrayList[this.numPistas];
 		for(int i = 0; i< this.numPistas; i++) {
 			pistas[i] = new ArrayList<Integer>();
+			TLAs[i] = new ArrayList<Double>();
 		}
 		
 		//Para cada elemento del cromosoma, cada vuelo que se vaya a producir
@@ -116,7 +125,8 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 				}
 				
 				//Tiempo en el que la pista se queda libre
-				double horaLibre = TLAs[j]+ tEspera;
+				double ultimoTLA = TLAs[j].isEmpty() ? 0 : TLAs[j].get(TLAs[j].size()-1);
+				double horaLibre = ultimoTLA + tEspera;
 				//Me quedo con el maximo de cuando puedo llegar y cuando la pista esta libre
 				double horaAterrizaje = Math.max(horaLibre, miTEL); 
 				//Me quedo con la pista a la que antes pueda aterrizar
@@ -128,7 +138,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 			
 			//Registro en la pista seleccionada tanto el vuelo que llega como la hora
 			pistas[pistaAAterrizar].add(idVuelo);
-			TLAs[pistaAAterrizar] = minHoraAterrizaje;
+			TLAs[pistaAAterrizar].add( minHoraAterrizaje);
 
 			//Acumulo el cuadrado del retardo para el fitness
 			fitnessTotal +=(Math.pow((minHoraAterrizaje-minTEL), 2));
@@ -314,4 +324,6 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	}
 	
 	private int numPistas;
+	ArrayList<Integer>[] pistas;
+	ArrayList<Double>[] TLAs;
 }

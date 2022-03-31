@@ -1,11 +1,6 @@
 package gui;
 
-import javax.swing.*;
-
-import java.awt.Dimension;
-import java.util.ArrayList; // import the ArrayList class
-
-import org.math.plot.*;
+import org.math.plot.Plot2DPanel;
 
 
 //Clase encargada de generar una grafica que se pueda mostrar por pantalla

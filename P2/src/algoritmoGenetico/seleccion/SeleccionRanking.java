@@ -34,7 +34,7 @@ public class SeleccionRanking implements Seleccion{
 		Arrays.sort(poblacion, comp);
 		
 		for(int i=0; i<nIndividuos; i++) {
-			double prob = 1/nIndividuos * (this.beta-(2*(this.beta-1)*((i-1)/(nIndividuos-1))));
+			double prob = 1.0/(double)nIndividuos * (this.beta-(2.0*(this.beta-1.0)*(((double)i-1.0)/((double)nIndividuos-1.0))));
 			if(i!=0) acumProb[i] = prob + acumProb[i-1];
 			else acumProb[i] = prob;
 		}
