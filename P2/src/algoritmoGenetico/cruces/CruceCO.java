@@ -56,12 +56,12 @@ public class CruceCO<T> implements Cruce {
 			Integer[] cromo1 = new Integer[l];
 			Integer[] cromo2 = new Integer[l];
 			
-			cromo1 = codificar(cromo1);
-			cromo2 = codificar(cromo2);
+			cromo1 = codificar(cromoA);
+			cromo2 = codificar(cromoB);
 			
 			//Cruce monopunto
 			Random rand = new Random();
-			int cutPoint=rand.nextInt(l);
+			int cutPoint=rand.nextInt(l-1)+1;
 			for(int i = 0 ; i< cutPoint; i++) {
 				cromo1[i] = cromo2[i];
 			}
@@ -86,8 +86,8 @@ public class CruceCO<T> implements Cruce {
 			
 			for(int i = 0; i<l; i++) {
 				int pos =posiciones.indexOf(cromoHijo[i]);
-				cromoHijo[i] = pos;
 				posiciones.remove(cromoHijo[i]);
+				cromoHijo[i] = pos+1;
 			}
 			return cromoHijo;
 		}
@@ -99,9 +99,11 @@ public class CruceCO<T> implements Cruce {
 				posiciones.add(i);
 			}
 			
-			for(int i = 0; i<l; i++) {
-				cromoHijo[i] = posiciones.get(cromoHijo[i].intValue());
-				posiciones.remove(cromoHijo[i].intValue());
+			for(int i = 0; i<l; i++) {	
+				int posicionBorrar = cromoHijo[i].intValue()-1;
+				int aux = posiciones.get(posicionBorrar);
+				posiciones.remove(posicionBorrar);
+				cromoHijo[i] = aux;
 			}
 			return cromoHijo;
 		}

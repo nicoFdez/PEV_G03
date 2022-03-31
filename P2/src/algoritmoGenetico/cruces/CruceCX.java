@@ -54,8 +54,13 @@ public class CruceCX<T> implements Cruce {
 			//Nos hacemos con la longitud del cromosoma para recorrerlo entero
 			int l = cromoA.length;
 			
-			Object[] cromo1 = new Object[l];
-			Object[] cromo2 = new Object[l];
+			Object[] cromo1 = a.getCromosoma();
+			Object[] cromo2 = b.getCromosoma();
+			
+			for(int i = 0; i<l; i++) {
+				cromo1[i] = null;
+				cromo2[i] = null;
+			}
 			
 			cromo1 = operacionesCX(cromo1, cromoA, cromoB);
 			cromo2 = operacionesCX(cromo2, cromoB,cromoA);
@@ -71,7 +76,7 @@ public class CruceCX<T> implements Cruce {
 			while(cromoHijo[puntero] == null) {
 				cromoHijo[puntero] = cromoPadre[puntero];
 				int j = 0;
-				while(j<l && cromoMadre[j] != cromoPadre[puntero]) {
+				while(j<l && cromoMadre[puntero] != cromoPadre[j]) {
 					j++;
 				}
 				puntero = j;	

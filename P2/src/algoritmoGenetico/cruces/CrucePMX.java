@@ -51,8 +51,15 @@ public class CrucePMX<T> implements Cruce {
 		Random rand = new Random();
 		Object[] cromo1 = a.getCromosoma();
 		Object[] cromo2 = b.getCromosoma();
+		
+		//cromo1 = (Object[]) new Integer[] {1,2,4,3,5,8,9,7,6};
+		//cromo2 = (Object[]) new Integer[] {6,3,5,7,8,1,2,4,9};
+		
 		Object[] cromoA = a.getCromosoma();
 		Object[] cromoB = b.getCromosoma();
+
+		//cromoA = (Object[]) new Integer[] {1,2,4,3,5,8,9,7,6};
+		//cromoB = (Object[]) new Integer[] {6,3,5,7,8,1,2,4,9};
 		
 		//Nos hacemos con la longitud del cromosoma para recorrerlo entero
 		int l = cromo1.length;
@@ -60,6 +67,9 @@ public class CrucePMX<T> implements Cruce {
 		//Escogemos los límites
 		int limit1 = rand.nextInt(l);
 		int limit2 = rand.nextInt(l);
+		//limit1 = 3;
+		//limit2 = 6;
+		
 		while(limit2 == limit1)
 			limit2 = rand.nextInt(l);	
 		if(limit2 < limit1) {
@@ -93,38 +103,34 @@ public class CrucePMX<T> implements Cruce {
 		int i=limit2;
 		//Voy a recorrer todos los elementos que se encuentran fuera de la zona central
 		while(i!=limit1) {
-			boolean repetido = false;
-			//Vemos si esta repetido con algun elemento dentro de la zona central
-			int j=limit1;
-			while(j!=limit2 && !repetido) {
-				//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
-				if(cromoHijo[j] == cromoPadre[i]) {
-					repetido = true;
-					break;
-				}
-				j++;
-			}
-			if(!repetido) cromoHijo[i] = cromoPadre[i];
-			else {
-				Object intento = cromoPadre[j];
-				repetido = false;
-				
-				int k = limit1;
-				while(k!=limit2) {
-					if(cromoHijo[j] == intento) {
-						intento = cromoPadre[k];
-						k = limit1;
-						continue;
-					}
-					k++;
-				}
-				cromoHijo[i] = intento;
+			int indiceRepetido = estaRepetido(cromoHijo, cromoPadre[i], limit1, limit2);
+			int indiceACoger = i;
+			while(indiceRepetido != limit2) {
+				indiceACoger = indiceRepetido;
+				indiceRepetido = estaRepetido(cromoHijo, cromoPadre[indiceRepetido], limit1, limit2);
 			}
 			
+			cromoHijo[i] = cromoPadre[indiceACoger];			
 			i = (i+1)%l; 
 		}
 				
 		return cromoHijo;
 	}
+	
+	int estaRepetido(Object[] cromoHijo,  Object culpable, int limit1, int limit2) {
+		int indiceCulpable =limit1;
+		boolean repetido = false;
+		while(indiceCulpable!=limit2 && !repetido) {
+			//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
+			if(cromoHijo[indiceCulpable] == culpable) {
+				repetido = true;
+				break;
+			}
+			indiceCulpable++;
+		}
+		
+		return indiceCulpable;
+	}
+	
 	
 }

@@ -70,7 +70,7 @@ public class CruceOXPP<T> implements Cruce {
 			
 			//Intercambiamos la parte entre los limites 
 			for(int i=0; i<l; i++) {
-				if(i==limit1 && i==limit2) {
+				if(i==limit1 || i==limit2) {
 					cromo1[i] = cromoB[i];
 					cromo2[i] = cromoA[i];
 				}
@@ -93,37 +93,43 @@ public class CruceOXPP<T> implements Cruce {
 			int indiceHijo=(limit2+1)%l;
 			int indicePadre = (limit2+1)%l;
 			int indiceComprobador = limit1;
+			
 			//Voy a recorrer todos los elementos que se encuentran fuera de la zona central
 			while(indiceHijo!=limit2) {
 				//Si ya está relleno no nos interesa hacer nada
-				if(indiceHijo == limit1) continue;
-				
-				boolean repetido = false;
-				indiceComprobador = 0;
-				//Vemos si esta repetido con algun elemento dentro de la zona central
-				while(indiceComprobador<l && !repetido) {
-					//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
-					if(cromoPadre[indicePadre] == cromoHijo[indiceComprobador]) {
-						repetido = true;
-						break;
-					}
-					indiceComprobador++;
+				if(indiceHijo == limit1) {
+					indiceHijo++;
+					continue;
 				}
 				
-				//Si despues de analizar lo que ya tiene el hijo vemos que se ha repetido con lo que ofrece el padre en dicha posicion 
-				//nos vamos a comprobar la siguiente posicion del padre
-				if(repetido) { 
+				int indiceRepetido = estaRepetido(cromoHijo, cromoPadre[indicePadre]);
+				if(indiceRepetido != cromoHijo.length) 	{
 					indicePadre = (indicePadre+1)%l;
+					continue;
 				}
-				//Si lo que da el padre nos e encuentra en el hijo aun nos lo quedamos y avanzamos en los indices
 				else {
 					cromoHijo[indiceHijo] = cromoPadre[indicePadre];
 					indicePadre = (indicePadre+1)%l;
 					indiceHijo = (indiceHijo+1)%l; 
-				}	
+				}
 			}
 			
 			return cromoHijo;
+		}
+		
+		int estaRepetido(Object[] cromoHijo,  Object culpable) {
+			int indiceCulpable =0;
+			boolean repetido = false;
+			while(indiceCulpable < cromoHijo.length && !repetido) {
+				//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
+				if(cromoHijo[indiceCulpable] == culpable) {
+					repetido = true;
+					break;
+				}
+				indiceCulpable++;
+			}
+			
+			return indiceCulpable;
 		}
 	
 	
