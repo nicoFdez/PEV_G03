@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -28,6 +29,7 @@ import algoritmoGenetico.cruces.CruceOXPP;
 import algoritmoGenetico.cruces.CrucePMX;
 import algoritmoGenetico.individuos.Individuo;
 import algoritmoGenetico.individuos.IndividuoAeropuerto;
+import algoritmoGenetico.individuos.InfoVuelos;
 import algoritmoGenetico.mutaciones.MutacionHeuristica;
 import algoritmoGenetico.mutaciones.MutacionInsercion;
 import algoritmoGenetico.mutaciones.MutacionIntercambio;
@@ -49,6 +51,7 @@ public class PanelPrincipal {
 	private static JTextField textFieldProbMutacion;
 	private static JTextField textFieldPorcElitismo;
 	private static JLabel TextoMejorIndividuo;
+	private static JPanel panelTabla; 
 
 	private static AlgoritmoGenetico ag;
 	private JTextField textFieldProbTorneo;
@@ -82,14 +85,26 @@ public class PanelPrincipal {
 	private static void inicializarAG(int maxgeneraciones, int nIndividuos,
 			double probCruce, double probMutacion, double porcElitismo,
 			TiposSeleccion s, TiposCruce c, TiposMutacion m,
-			int tamTorneo, double probTorneo, double valorTruncamiento) {
+			int tamTorneo, double probTorneo, double valorTruncamiento, int casoAeropuerto) {
 		//Creo y el algoritmo genético y configuro los parámetros más generales
+		InfoVuelos.init(casoAeropuerto);
 		ag = new AlgoritmoGenetico();
 		ag.setProbCruce(probCruce);
 		ag.setProbMutacion(probMutacion);
 		ag.setElitism(porcElitismo);
 		ag.setMaxGeneraciones(maxgeneraciones);
-		ag.inicializarPoblacion(nIndividuos, 12, 3);
+		
+		switch(casoAeropuerto) {
+		case 1:
+			ag.inicializarPoblacion(nIndividuos, 12, 3);
+			break;
+		case 2:
+			ag.inicializarPoblacion(nIndividuos, 20, 3);
+			break;
+		case 3:
+			ag.inicializarPoblacion(nIndividuos, 20, 5);
+			break;
+		}
 		
 		//Preparo un operador de selección u otro dependiendo de lo que me haya dicho la ventana
 		switch(s) {
@@ -174,6 +189,7 @@ public class PanelPrincipal {
 	//Método que genera una gráfica a partir de los datos que se hayan recogido de la evolución del AG
 	// y lo añade a la ventana para su visualización
 	private static void generarGrafica() {
+		
 		//Generamos una grafica que contenga los datos del mejor hasta la fecha, el mejor de la generacion y la media de la generacion
 		//a medida que van pasando las generaciones
 		LinePlot grafica = new LinePlot();
@@ -188,22 +204,25 @@ public class PanelPrincipal {
 		//Añadimos un panel con la grafica al JFrame para que se pueda ver en pantalla la grafica
 		JPanel panelGrafica = new JPanel();
 		Plot2DPanel plt = grafica.getGraph();
-		plt.setPreferredSize(new Dimension(448, 354));
+		plt.setPreferredSize(new Dimension(483, 373));
 		panelGrafica.add(plt);
-		panelGrafica.setBounds(208, 101, 448, 354);
+		panelGrafica.setBounds(183, 75, 483, 373);
 		frmGrupoPrctica.getContentPane().add(panelGrafica);
 		
+		if(panelTabla != null) {
+			frmGrupoPrctica.getContentPane().remove(panelTabla);
+		}
 		
-		JPanel panelTabla = new JPanel();
-		panelTabla.setBounds(722, 151, 198, 223);
+		panelTabla = new JPanel();
+		panelTabla.setBounds(676, 98, 456, 223);
 		TablePlot tablaVuelos = new TablePlot();
 		//tablaVuelos.prueba();
 		tablaVuelos.agregarDatos(((IndividuoAeropuerto)ag.getMejorIndividuo()).getVuelosPistas(), ((IndividuoAeropuerto)ag.getMejorIndividuo()).getTLAsPistas());
-		tablaVuelos.getTabla().setPreferredSize(new Dimension(198, 223));
-		panelTabla.add(tablaVuelos.getTabla());
+		JScrollPane p = tablaVuelos.getTabla();
+		p.setPreferredSize(new Dimension(456, 223));
+		p.setBounds(676, 98, 456, 223);
+		panelTabla.add(p);
 		frmGrupoPrctica.getContentPane().add(panelTabla);
-		
-		//panelGrafica.add(tablaVuelos.getTabla());
 		
 		frmGrupoPrctica.setVisible(true);
 	}
@@ -215,7 +234,7 @@ public class PanelPrincipal {
 		
 		frmGrupoPrctica = new JFrame();
 		frmGrupoPrctica.setTitle("Grupo3 Pr\u00E1ctica 2");
-		frmGrupoPrctica.setBounds(100, 100, 968, 611);
+		frmGrupoPrctica.setBounds(100, 100, 1158, 567);
 		frmGrupoPrctica.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmGrupoPrctica.getContentPane().setLayout(null);
 		
@@ -295,49 +314,62 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(comboBoxMetodoMutacion);
 		
 		JButton botonEvolucionar = new JButton("Evolucionar");
-		botonEvolucionar.setBounds(763, 14, 127, 23);
+		botonEvolucionar.setBounds(1005, 11, 127, 23);
 		frmGrupoPrctica.getContentPane().add(botonEvolucionar);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(208, 101, 483, 373);
+		panel.setBounds(183, 75, 483, 373);
 		frmGrupoPrctica.getContentPane().add(panel);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
-		TextoMejorIndividuo.setBounds(403, 20, 235, 14);
+		TextoMejorIndividuo.setBounds(676, 73, 235, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
 		
 		JLabel lbLabelTamTorneo = new JLabel("Tama\u00F1o torneo:");
-		lbLabelTamTorneo.setBounds(10, 535, 102, 22);
+		lbLabelTamTorneo.setBounds(194, 483, 102, 22);
 		frmGrupoPrctica.getContentPane().add(lbLabelTamTorneo);
 		
 		JSpinner spinnerTamTorneo = new JSpinner();
 		spinnerTamTorneo.setModel(new SpinnerNumberModel(3, 2, 10, 1));
-		spinnerTamTorneo.setBounds(109, 536, 48, 20);
+		spinnerTamTorneo.setBounds(293, 484, 48, 20);
 		frmGrupoPrctica.getContentPane().add(spinnerTamTorneo);
 		
 		JLabel lbLabelProbTorneo = new JLabel("Probabilidad torneo [0.1,0.5]:");
-		lbLabelProbTorneo.setBounds(167, 534, 162, 22);
+		lbLabelProbTorneo.setBounds(351, 482, 162, 22);
 		frmGrupoPrctica.getContentPane().add(lbLabelProbTorneo);
 		
 		textFieldProbTorneo = new JTextField();
 		textFieldProbTorneo.setText("0.6");
 		textFieldProbTorneo.setColumns(10);
-		textFieldProbTorneo.setBounds(333, 536, 42, 20);
+		textFieldProbTorneo.setBounds(517, 484, 42, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldProbTorneo);
 		
 		JLabel lbLabelValorTruncamiento = new JLabel("Valor truncamiento [0.1,0.5]:");
-		lbLabelValorTruncamiento.setBounds(385, 535, 162, 22);
+		lbLabelValorTruncamiento.setBounds(569, 483, 162, 22);
 		frmGrupoPrctica.getContentPane().add(lbLabelValorTruncamiento);
 		
 		textFieldValorTruncamiento = new JTextField();
 		textFieldValorTruncamiento.setText("0.5\r\n");
 		textFieldValorTruncamiento.setColumns(10);
-		textFieldValorTruncamiento.setBounds(546, 536, 48, 20);
+		textFieldValorTruncamiento.setBounds(730, 484, 48, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldValorTruncamiento);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(722, 151, 198, 223);
+		panel_1.setBounds(676, 98, 456, 223);
 		frmGrupoPrctica.getContentPane().add(panel_1);
+		
+		JLabel lblCasoDeAeropuerto = new JLabel("Caso de aeropuerto:");
+		lblCasoDeAeropuerto.setBounds(676, 334, 188, 29);
+		frmGrupoPrctica.getContentPane().add(lblCasoDeAeropuerto);
+		
+		JComboBox comboBoxCasoAeropuerto = new JComboBox();
+		comboBoxCasoAeropuerto.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
+		comboBoxCasoAeropuerto.setBounds(676, 404, 76, 22);
+		frmGrupoPrctica.getContentPane().add(comboBoxCasoAeropuerto);
+		
+		JLabel lblPistas = new JLabel("1 (3 pistas, 12 vuelos), 2 (3 pistas, 20 vuelos), 3 (5 pistas, 20 vuelos)");
+		lblPistas.setBounds(676, 366, 456, 29);
+		frmGrupoPrctica.getContentPane().add(lblPistas);
 		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {
@@ -347,7 +379,7 @@ public class PanelPrincipal {
 						Double.parseDouble(textFieldProbCruce.getText()), Double.parseDouble(textFieldProbMutacion.getText()), Double.parseDouble(textFieldPorcElitismo.getText()),
 						TiposSeleccion.values()[comboBoxMetodoSeleccion.getSelectedIndex()] , TiposCruce.values()[comboBoxMetodoCruce.getSelectedIndex()],
 						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()],
-						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()));
+						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()), comboBoxCasoAeropuerto.getSelectedIndex()+1);
 				bucleAG();
 			}
 
