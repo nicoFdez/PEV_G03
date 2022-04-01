@@ -1,5 +1,7 @@
 package algoritmoGenetico.mutaciones;
 
+import java.util.Random;
+
 import algoritmoGenetico.individuos.Individuo;
 
 //Clase encargada de realizar la operación de mutación básicas sobre una población
@@ -12,10 +14,12 @@ public class MutacionInsercion implements Mutacion {
 	//esta operación ocurra
 	@Override
 	public void mutar(Individuo[] poblacion, double probMutacion) {
-		
+		Random rand = new Random();
 		//Recorremos la poblacion y la indicamos que se mute con el metodo que representamos
 		for(int i=0; i<poblacion.length; i++) {
-			poblacion[i].mutacionInsercion(probMutacion);
+			double r = rand.nextDouble();
+			if(r<probMutacion)
+				poblacion[i].mutacionInsercion(probMutacion);
 		}
 	}
 
