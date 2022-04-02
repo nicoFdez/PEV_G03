@@ -68,13 +68,17 @@ public class CruceCX<T> implements Cruce {
 			b.setCromosoma(cromo2);
 		}
 		
+		
+		//Metodo que realiza las operaciones del cruce CX sobre un individuo
 		private Object[] operacionesCX( Object[] cromoHijo, Object[] cromoPadre,Object[] cromoMadre) {
 			int l = cromoPadre.length;
 			int puntero = 0;
 			
 			//Me voy moviendo por los cromosomas hasta encontrar algo que no es null, lo cual significa que hemos completado un ciclo
 			while(cromoHijo[puntero] == null) {
+				//ME quedo con lo que el progenitor padre me diga que tiene que ir en la posicion puntero
 				cromoHijo[puntero] = cromoPadre[puntero];
+				//Busco donde se encuentra el elemento en la posicion puntero del progenitor madre en el cromosoma del progenitor padre
 				int j = 0;
 				while(j<l && cromoMadre[puntero] != cromoPadre[j]) {
 					j++;
@@ -82,7 +86,7 @@ public class CruceCX<T> implements Cruce {
 				puntero = j;	
 			}
 			
-			//Con un ciclo completo, lo que falta es rellenar los huecos
+			//Con un ciclo completo, lo que falta es rellenar los huecos vacios
 			for(int i = 0; i< l; i++) {
 				if(cromoHijo[i] == null) 
 					cromoHijo[i] = cromoMadre[i];

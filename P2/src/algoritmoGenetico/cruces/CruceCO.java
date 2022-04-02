@@ -45,17 +45,19 @@ public class CruceCO<T> implements Cruce {
 	}
 	
 	
-	//Método que toma 2 individuos y realiza el cruce OX sobre estos
+	//Método que toma 2 individuos y realiza el cruce CO sobre estos
 		private void cruceCO(Individuo<Integer> a, Individuo<Integer> b) {
 			//Nos preparamos un random y preguntamos por los cromosomas de ambos individuos que tenemos que cruzar
 			Integer[] cromoA = a.getCromosoma();
 			Integer[] cromoB = b.getCromosoma();
+			
 			//Nos hacemos con la longitud del cromosoma para recorrerlo entero
 			int l = cromoA.length;
 			
 			Integer[] cromo1 = new Integer[l];
 			Integer[] cromo2 = new Integer[l];
 			
+			//Codificamos los cromosomas
 			cromo1 = codificar(cromoA);
 			cromo2 = codificar(cromoB);
 			
@@ -77,13 +79,16 @@ public class CruceCO<T> implements Cruce {
 			b.setCromosoma(cromo2);
 		}
 		
+		//Método que toma un cromosoma y lo codifica según el orden en el que se encuentren sus elementos
 		private Integer[] codificar( Integer[] cromoHijo) {
+			//Preparo la lista d elas posiciones
 			int l = cromoHijo.length;
 			ArrayList<Integer> posiciones = new ArrayList(l); 
 			for(int i = 1; i<=l; i++) {
 				posiciones.add(i);
 			}
 			
+			//Por cada elemento del cromosoma, intercambio su valor por la posicion en la que se encuentre dentro de la lista
 			for(int i = 0; i<l; i++) {
 				int pos =posiciones.indexOf(cromoHijo[i]);
 				posiciones.remove(cromoHijo[i]);
@@ -92,13 +97,16 @@ public class CruceCO<T> implements Cruce {
 			return cromoHijo;
 		}
 		
+		//Método que toma una lista de posiciones y transforma los valores almacenados en valores con sentidop para el cromosoma
 		private Integer[] decodificar( Integer[] cromoHijo) {
+			//Preparo la lista de las posiciones
 			int l = cromoHijo.length;
 			ArrayList<Integer> posiciones = new ArrayList(l); 
 			for(int i = 1; i<=l; i++) {
 				posiciones.add(i);
 			}
 			
+			//Por cada elemento de la lista, intercambio su valor por el valor almacenado en la posicion que me especifique cada elemento del cromosoma
 			for(int i = 0; i<l; i++) {	
 				int posicionBorrar = cromoHijo[i].intValue()-1;
 				int aux = posiciones.get(posicionBorrar);

@@ -209,21 +209,28 @@ public class PanelPrincipal {
 		panelGrafica.setBounds(183, 75, 483, 373);
 		frmGrupoPrctica.getContentPane().add(panelGrafica);
 		
+		//Si ya existía una tabla en pantalla la quitamos porque en caso de mantenerla, a pesar de que la nueva se ponga por encima de la anterior
+		//van a haber problemas a la hora de tomar el input para utilizar las barras de scroll vertical y horizontal
 		if(panelTabla != null) {
 			frmGrupoPrctica.getContentPane().remove(panelTabla);
 		}
 		
+		//Creamos un nuevo panel en el que vamos a meter la tabla de los vuelos
 		panelTabla = new JPanel();
 		panelTabla.setBounds(676, 98, 456, 223);
+		
+		//Creamos la tabla y le añadimos los datos obtenidos en el problema
 		TablePlot tablaVuelos = new TablePlot();
-		//tablaVuelos.prueba();
 		tablaVuelos.agregarDatos(((IndividuoAeropuerto)ag.getMejorIndividuo()).getVuelosPistas(), ((IndividuoAeropuerto)ag.getMejorIndividuo()).getTLAsPistas());
+		
+		//Metemos la tabla en un ScrollPane 
 		JScrollPane p = tablaVuelos.getTabla();
 		p.setPreferredSize(new Dimension(456, 223));
 		p.setBounds(676, 98, 456, 223);
+		
+		//Metemos la tabla en la pantalla
 		panelTabla.add(p);
 		frmGrupoPrctica.getContentPane().add(panelTabla);
-		
 		frmGrupoPrctica.setVisible(true);
 	}
 	

@@ -105,6 +105,10 @@ public class CrucePMX<T> implements Cruce {
 		while(i!=limit1) {
 			int indiceRepetido = estaRepetido(cromoHijo, cromoPadre[i], limit1, limit2);
 			int indiceACoger = i;
+			
+			//Mientras esté repetido sigo buscando aquel elemento que no se encuentre dentro de la zona central
+			//La condicion es que no sea el limite derecho porque eso significa que el elemento se ha encontrado el
+			//elemento que se está buscando dentro de la zona central, por lo que ya está repetido
 			while(indiceRepetido != limit2) {
 				indiceACoger = indiceRepetido;
 				indiceRepetido = estaRepetido(cromoHijo, cromoPadre[indiceRepetido], limit1, limit2);
@@ -117,6 +121,9 @@ public class CrucePMX<T> implements Cruce {
 		return cromoHijo;
 	}
 	
+	
+	//Metodo que toma un cromosoma y un valor, recorre el cromosoma buscando dicho valor y devuelve el indice en el que se encuentra dicho valor 
+	//o en caso de no existir devuelve un indice fuera del array
 	int estaRepetido(Object[] cromoHijo,  Object culpable, int limit1, int limit2) {
 		int indiceCulpable =limit1;
 		boolean repetido = false;

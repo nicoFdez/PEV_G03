@@ -30,7 +30,6 @@ public class TablePlot {
         	this.modelo.addColumn("P"+ (i+1) +" Vuelos:", vuelosPistas[i].toArray());
         	this.modelo.addColumn("TLAs:", tlasVuelos[i].toArray());
         }
-		
     }
 	
 	public JScrollPane getTabla() {

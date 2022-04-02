@@ -68,7 +68,7 @@ public class CruceOX<T> implements Cruce {
 			limit2 = aux;
 		}
 		
-		//Intercambiamos la parte entre los limites 
+		//Intercambiamos la parte entre los limites y el resto lo dejamos a null
 		for(int i=0; i<l; i++) {
 			if(i>=limit1 && i<limit2) {
 				cromo1[i] = cromoB[i];
@@ -87,18 +87,20 @@ public class CruceOX<T> implements Cruce {
 	}
 	
 	private Object[] operacionesOX(int limit1, int limit2, Object[] cromoHijo, Object[] cromoPadre) {
+		
 		int l = cromoPadre.length;
-		//-----------------Cromosoma 1
 		//Vamos intetandocolocar los valores de fuera
 		int indiceHijo=limit2;
 		int indicePadre = limit2;
 		int indiceComprobador = limit1;
+		
 		//Voy a recorrer todos los elementos que se encuentran fuera de la zona central
+		//Comenzamos en el limite derecho y vamos avanzando circularmente
 		while(indiceHijo!=limit1) {
-			
 			boolean repetido = false;
 			indiceComprobador = limit1;
-			//Vemos si esta repetido con algun elemento dentro de la zona central
+			
+			//Vemos si esta repetido con algun elemento dentro de la zona que ya hemos rellenado
 			while(indiceComprobador!=indiceHijo && !repetido) {
 				//Si se ha repetido paramos porque nos interesa saber el lugar en el que se encuentra el repetido para saber su homólogo
 				if(cromoPadre[indicePadre] == cromoHijo[indiceComprobador]) {

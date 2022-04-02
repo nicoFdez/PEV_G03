@@ -8,7 +8,7 @@ import algoritmoGenetico.individuos.ComparadorMax;
 import algoritmoGenetico.individuos.ComparadorMin;
 import algoritmoGenetico.individuos.Individuo;
 
-//Clase encargada de realizar la operación de selección por el método de ruleta
+//Clase encargada de realizar la operación de selección por el método de ranking
 public class SeleccionRanking implements Seleccion{
 
 	//Constructora
@@ -28,11 +28,14 @@ public class SeleccionRanking implements Seleccion{
 		int nIndividuos = poblacion.length;
 		double[] acumProb = new double[nIndividuos];
 		
+		
+		//Saco un comparador y ordeno la poblacion en sentido creciente o decreciente dependiendo del algoritmo que estemos ejecutando
 		Comparator comp;
 		if(minimization)	comp = new ComparadorMin();
 		else 				comp = new ComparadorMax();		
 		Arrays.sort(poblacion, comp);
 		
+		//Le asigno a cada individuo una aptitud basada en el puesto que tienen en el array que acabamos de ordenar
 		for(int i=0; i<nIndividuos; i++) {
 			double prob = 1.0/(double)nIndividuos * (this.beta-(2.0*(this.beta-1.0)*(((double)i-1.0)/((double)nIndividuos-1.0))));
 			if(i!=0) acumProb[i] = prob + acumProb[i-1];

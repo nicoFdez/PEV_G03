@@ -71,10 +71,12 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 		return this.getValor();
 	}
 	
+	//Getter que permite obtener el resultado final de los vuelos que han de ser asignados a cada una de las pistas del aeropuerto
 	public ArrayList<Integer>[] getVuelosPistas(){
 		return this.pistas;
 	}
 	
+	//Getter que permite obtener los tiempos de ocupación de cada una de las pistas según los vuelos que les hayan tocado
 	public ArrayList<Double>[] getTLAsPistas(){
 		return this.TLAs;
 	}
@@ -84,13 +86,14 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 		return getValor(this.cromosoma);
 	}
 	
-	//Metod que aplica la funcion 5 y devuelvel el valor
+	//Metod que hace la asignación de vuelos a las pistas del aeropuerto
 	private double getValor(Integer[] cromo) {
 		
 		//cromo = new Integer[]{12, 11, 8, 5, 3, 7, 2, 9, 10, 6, 4, 1};
-		
-		double fitnessTotal =0;
+
+		//Preparo las variables que me haran falta para sacar el fitness
 		InfoVuelos info = InfoVuelos.getInstance();
+		double fitnessTotal =0;
 		TLAs = new ArrayList[this.numPistas];
 		pistas = new ArrayList[this.numPistas];
 		for(int i = 0; i< this.numPistas; i++) {
@@ -116,6 +119,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 				//Momento en el que puedo llegar a la pista (restamos 1 al id vuelo porque la representacion va de [1,numVuelos]
 				double miTEL = info.TEL[j][idVuelo-1];
 				if(miTEL < minTEL) minTEL = miTEL;
+				
 				//Tiempo extra que me tengo que esperar por el vuelo anterior en dicha pista
 				double tEspera = 0;
 				if(pistas[j].size() > 0) {
@@ -127,8 +131,12 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 				//Tiempo en el que la pista se queda libre
 				double ultimoTLA = TLAs[j].isEmpty() ? 0 : TLAs[j].get(TLAs[j].size()-1);
 				double horaLibre = ultimoTLA + tEspera;
+				
 				//Me quedo con el maximo de cuando puedo llegar y cuando la pista esta libre
+				//Porque si el máximo es mi hora de llegada, antes no puedo llegar
+				//Y si el máximo es cuando la pista se libera, me tengo que esperar a que esté libre
 				double horaAterrizaje = Math.max(horaLibre, miTEL); 
+				
 				//Me quedo con la pista a la que antes pueda aterrizar
 				if(horaAterrizaje <= minHoraAterrizaje) {
 					minHoraAterrizaje = horaAterrizaje;
@@ -138,7 +146,7 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 			
 			//Registro en la pista seleccionada tanto el vuelo que llega como la hora
 			pistas[pistaAAterrizar].add(idVuelo);
-			TLAs[pistaAAterrizar].add( minHoraAterrizaje);
+			TLAs[pistaAAterrizar].add(minHoraAterrizaje);
 
 			//Acumulo el cuadrado del retardo para el fitness
 			fitnessTotal +=(Math.pow((minHoraAterrizaje-minTEL), 2));
@@ -155,18 +163,13 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	@Override
 	public void initialize() {
-		/*boolean[] visited = new boolean[(int)this.max[0]];
-		for(int i = 0; i < this.tamTotal; i++) {
-			Integer r = 1 + this.rand.nextInt((int)this.max[i]);
-			while(visited[r-1]) 
-				r = 1 + this.rand.nextInt((int)this.max[i]);
-			
-			this.cromosoma[i] = r.intValue();
-			visited[r-1]=true;
-		}*/
+	
+		//Inicializo la lista con números del 1 al NPistas
 		for(int i = 0; i<this.cromosoma.length;i++) {
 			this.cromosoma[i] = i+1;
 		}
+		
+		//Altero el orden de la lista obtenido de forma aleatoria para sacar un cromosoma "random"
 		List<Integer> intList = Arrays.asList(this.cromosoma);
 		Collections.shuffle(intList);
 		intList.toArray(this.cromosoma);
@@ -187,6 +190,8 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 		//Tomamos un elemento del cromosoma al azar y lo que hacemos es insertarlo en una nueva posición elegida al azar
 		Random rnd = new Random();
 		int numInserciones = 1;
+		
+		//Preparamos nuestro cromosoma en forma de lista para obtener facilidades a la hora de eliminar elementos e insertarlos
 		List<Integer> cromoListado = new ArrayList<Integer>();
 		for(int i = 0; i<this.cromosoma.length;i++) {
 			cromoListado.add(this.cromosoma[i].intValue());
@@ -200,14 +205,11 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 			
 			//Lo saco de la lista y lo pongo en su nuevo lugar
 			int index = cromoListado.indexOf(elemToInsert);
-			//No se ha encontrado el elemento
-			if(index == -1) {	
-				int a =0;
-			}
 			cromoListado.remove(index);
 			cromoListado.add(nuevaPos, elemToInsert);
 		}
 		
+		//Devuelvo los valores de la lista al cromosoma del individuo para guardarme los cambios
 		Integer[] result = new Integer[cromoListado.size()];
 		for(int i = 0; i<cromoListado.size(); i++) {
 			result[i] = (Integer)cromoListado.get(i);

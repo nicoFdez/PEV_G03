@@ -1,13 +1,17 @@
 package algoritmoGenetico.individuos;
 
-//Class 1
-//Helper class
+
+
+//Singleton que vamos a utilizar para contener los datos de nuestro algoritmo 
+//Va a almacenar todos los datos del problema: vuelos, tipos de vuelo, horas de llegada, número de pistas etc
 public class InfoVuelos {
 	
  // Static variable reference of single_instance
  // of type Singleton
  private static InfoVuelos single_instance = null;
 
+ 
+ //Set de datos por defecto de la practica
  private static void init1()
  {   
 	 TEL = new int[3][12];
@@ -23,6 +27,7 @@ public class InfoVuelos {
     		 						TiposVuelo.P,TiposVuelo.W,TiposVuelo.G};
  }
  
+ //Set de datos de ejemplo con más vuelos 
  private static void init2()
  {   
 	 TEL = new int[3][20];
@@ -38,6 +43,7 @@ public class InfoVuelos {
     		 						TiposVuelo.W,TiposVuelo.G,TiposVuelo.G,TiposVuelo.W,TiposVuelo.P};
  }
  
+ //Set de datos de ejemplo con más vuelos y más pistas
  private static void init3()
  {   
 	 TEL = new int[5][20];
@@ -55,15 +61,20 @@ public class InfoVuelos {
 									TiposVuelo.W,TiposVuelo.G,TiposVuelo.W,TiposVuelo.W,TiposVuelo.P};
  }
 
+ 
+ //Metodo utilizado para inicializar el singleton
+ //Recibe un entero que especifica el ejemplo de datos que queremos utilizar para ejecutar el algoritmo
  public static void init(int example) {
-	 
+	 //Instancia del singleton
 	 single_instance = new InfoVuelos();
 	 
+	 //Tiempos de espera entre diferentes tipos de vuelos
 	 SEP = new double [3][3];
 	 SEP[0] = new double[] {1,1.5,2};
      SEP[1] = new double[] {1,1.5,1.5};
      SEP[2] = new double[] {1,1,1};
 	 
+     //Inicializamos de una forma u otra dependiendo de lo que nos hayan dicho
 	 switch(example) {
 	 case 1:
 		 init1();

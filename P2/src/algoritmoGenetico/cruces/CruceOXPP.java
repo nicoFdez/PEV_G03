@@ -95,6 +95,8 @@ public class CruceOXPP<T> implements Cruce {
 			int indiceComprobador = limit1;
 			
 			//Voy a recorrer todos los elementos que se encuentran fuera de la zona central
+			//Este bucle comienza en el elemento inmediatamente a la derecha del limite derecho y avanza circularmente hasta
+			//llegar de nuevo a dicho limite derecho, lo cual significa que hemos terminado
 			while(indiceHijo!=limit2) {
 				//Si ya está relleno no nos interesa hacer nada
 				if(indiceHijo == limit1) {
@@ -102,11 +104,15 @@ public class CruceOXPP<T> implements Cruce {
 					continue;
 				}
 				
+				//Preguntamos si el elemento que estamos analizando se encuentra ya repetido en el hijo
 				int indiceRepetido = estaRepetido(cromoHijo, cromoPadre[indicePadre]);
+				
+				//Si se ha repetido avanzamos el indice del padre para seguir analizando con nuevos elementos
 				if(indiceRepetido != cromoHijo.length) 	{
 					indicePadre = (indicePadre+1)%l;
 					continue;
 				}
+				//Si no está repetido nos lo quedamos y avanzamos los indices
 				else {
 					cromoHijo[indiceHijo] = cromoPadre[indicePadre];
 					indicePadre = (indicePadre+1)%l;
@@ -117,6 +123,8 @@ public class CruceOXPP<T> implements Cruce {
 			return cromoHijo;
 		}
 		
+		//Metodo que toma un cromosoma y un valor, recorre el cromosoma buscando dicho valor y devuelve el indice en el que se encuentra dicho valor 
+		//o en caso de no existir devuelve un indice fuera del array
 		int estaRepetido(Object[] cromoHijo,  Object culpable) {
 			int indiceCulpable =0;
 			boolean repetido = false;
