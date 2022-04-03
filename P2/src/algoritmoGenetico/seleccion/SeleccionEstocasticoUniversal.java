@@ -58,8 +58,10 @@ public class SeleccionEstocasticoUniversal implements Seleccion{
 			//Sacamos un punto dentro del rango [0,1] y buscamos el individuo que lo representa
 			double spot = start + (step*i);
 			int j=0;
-			while(!(fitness[j] > spot)) 
+			while(j<fitness.length && !(fitness[j] > spot)) 
 				j++;
+			
+			if(j>= fitness.length) j= fitness.length-1;
 			
 			//Nos lo guardamos en la nueva poblacion
 			poblacionSeleccionada[i] = j;

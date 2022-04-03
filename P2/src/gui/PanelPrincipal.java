@@ -348,7 +348,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(panel);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
-		TextoMejorIndividuo.setBounds(676, 73, 323, 14);
+		TextoMejorIndividuo.setBounds(676, 73, 456, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
 		
 		JLabel lbLabelTamTorneo = new JLabel("Tama\u00F1o torneo:");
