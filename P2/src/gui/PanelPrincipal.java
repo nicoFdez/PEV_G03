@@ -198,8 +198,18 @@ public class PanelPrincipal {
 		grafica.addArrayOfPoints("Media de generaciones", ag.getMediasGeneraciones());
 		grafica.plot();
 		
+		
 		//Cambiamos el texto de arriba de la gráfica para que muestre el mejor individuo de la evolucion 
-		TextoMejorIndividuo.setText("Mejor individuo: "+ag.getMejorIndividuo().getFitness());
+		Object[] cromo = ag.getMejorIndividuo().getCromosoma();
+		String bestCromo = "[";
+		for(int i = 0; i<cromo.length;i++) {
+			bestCromo = bestCromo +cromo[i];
+			if(i <cromo.length-1)
+				bestCromo = bestCromo +",";
+
+		}
+		bestCromo = bestCromo +"]";
+		TextoMejorIndividuo.setText("Mejor individuo: "+ag.getMejorIndividuo().getFitness() +"   "+bestCromo);
 		
 		//Añadimos un panel con la grafica al JFrame para que se pueda ver en pantalla la grafica
 		JPanel panelGrafica = new JPanel();
@@ -329,7 +339,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(panel);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
-		TextoMejorIndividuo.setBounds(676, 73, 235, 14);
+		TextoMejorIndividuo.setBounds(676, 73, 456, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
 		
 		JLabel lbLabelTamTorneo = new JLabel("Tama\u00F1o torneo:");

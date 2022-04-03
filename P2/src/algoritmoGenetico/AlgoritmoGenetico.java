@@ -1,7 +1,9 @@
 package algoritmoGenetico;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import algoritmoGenetico.cruces.Cruce;
 import algoritmoGenetico.individuos.ComparadorMax;
@@ -132,6 +134,10 @@ public class AlgoritmoGenetico {
 			for(int i = this.tamPoblacion - nElites; i < this.tamPoblacion; i++) {
 				this.poblacion[i].copyFromAnother(this.elites[i-(this.tamPoblacion - nElites)]);
 			}
+			
+			//Desordenamos la poblacion
+			List<Individuo> poblacionListada = Arrays.asList(this.poblacion);
+			Collections.shuffle(poblacionListada);
 		}
 	}
 	
