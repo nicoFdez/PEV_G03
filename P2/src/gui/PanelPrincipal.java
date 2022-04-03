@@ -41,6 +41,7 @@ import algoritmoGenetico.seleccion.SeleccionRuleta;
 import algoritmoGenetico.seleccion.SeleccionTorneoDeterminista;
 import algoritmoGenetico.seleccion.SeleccionTorneoProbabilistico;
 import algoritmoGenetico.seleccion.SeleccionTruncamiento;
+import javax.swing.SwingConstants;
 
 
 //Clase que implementa el punto de entrada de la ejecución del programa y que sostiene tanto la ventana como el bucle principal
@@ -51,6 +52,10 @@ public class PanelPrincipal {
 	private static JTextField textFieldProbMutacion;
 	private static JTextField textFieldPorcElitismo;
 	private static JLabel TextoMejorIndividuo;
+	private static JLabel TextoPeorIndividuo;
+	private static JLabel TextoMediaPoblacion;
+	private static JLabel TextoNCruces;
+	private static JLabel TextoNMutaciones;
 	private static JPanel panelTabla; 
 
 	private static AlgoritmoGenetico ag;
@@ -209,7 +214,11 @@ public class PanelPrincipal {
 
 		}
 		bestCromo = bestCromo +"]";
-		TextoMejorIndividuo.setText("Mejor individuo: "+ag.getMejorIndividuo().getFitness() +"   "+bestCromo);
+		TextoMejorIndividuo.setText("Mejor individuo: "+ ag.getMejorIndividuo().getFitness() +"   "+ bestCromo);
+		TextoPeorIndividuo.setText("Peor individuo: "+ ag.getPeorFitness());
+		TextoMediaPoblacion.setText("Media población: "+ ag.getMediaPoblacion());
+		TextoNCruces.setText("Número de cruces: " + ag.getNCruces());
+		TextoNMutaciones.setText("Número de mutaciones: " + ag.getNMutaciones());
 		
 		//Añadimos un panel con la grafica al JFrame para que se pueda ver en pantalla la grafica
 		JPanel panelGrafica = new JPanel();
@@ -288,7 +297,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(lblProbabilidadDeMutacin);
 		
 		textFieldProbMutacion = new JTextField();
-		textFieldProbMutacion.setText("0.85");
+		textFieldProbMutacion.setText("0.05");
 		textFieldProbMutacion.setColumns(10);
 		textFieldProbMutacion.setBounds(10, 217, 86, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldProbMutacion);
@@ -339,7 +348,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(panel);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
-		TextoMejorIndividuo.setBounds(676, 73, 456, 14);
+		TextoMejorIndividuo.setBounds(676, 73, 323, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
 		
 		JLabel lbLabelTamTorneo = new JLabel("Tama\u00F1o torneo:");
@@ -396,6 +405,24 @@ public class PanelPrincipal {
 		comboBoxTipoFitness.setModel(new DefaultComboBoxModel(new String[] {"Diferencia pista asignada", "Diferencia pista m\u00EDnima"}));
 		comboBoxTipoFitness.setBounds(917, 405, 203, 22);
 		frmGrupoPrctica.getContentPane().add(comboBoxTipoFitness);
+		
+		TextoMediaPoblacion = new JLabel("Media poblaci\u00F3n: ");
+		TextoMediaPoblacion.setBounds(676, 48, 323, 14);
+		frmGrupoPrctica.getContentPane().add(TextoMediaPoblacion);
+		
+		TextoPeorIndividuo = new JLabel("Peor Individuo: ");
+		TextoPeorIndividuo.setBounds(676, 23, 323, 14);
+		frmGrupoPrctica.getContentPane().add(TextoPeorIndividuo);
+		
+		TextoNCruces = new JLabel("N\u00FAmero de cruces:");
+		TextoNCruces.setHorizontalAlignment(SwingConstants.LEFT);
+		TextoNCruces.setBounds(183, 48, 203, 14);
+		frmGrupoPrctica.getContentPane().add(TextoNCruces);
+		
+		TextoNMutaciones = new JLabel("N\u00FAmero de mutaciones:");
+		TextoNMutaciones.setHorizontalAlignment(SwingConstants.LEFT);
+		TextoNMutaciones.setBounds(427, 48, 203, 14);
+		frmGrupoPrctica.getContentPane().add(TextoNMutaciones);
 		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {

@@ -18,9 +18,17 @@ public class MutacionInversion implements Mutacion {
 		//Recorremos la poblacion y la indicamos que se mute con el metodo que representamos
 		for(int i=0; i<poblacion.length; i++) {
 			double r = rand.nextDouble();
-			if(r<probMutacion)
+			if(r<probMutacion) {
 				poblacion[i].mutacionInversion(probMutacion);
+				nMutaciones++;
+			}
 		}
 	}
 
+	@Override
+	public int getNMutaciones() {
+		return this.nMutaciones;
+	}
+
+	private int nMutaciones;
 }

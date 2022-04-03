@@ -90,7 +90,6 @@ public class AlgoritmoGenetico {
 		this.mejorAbsoluto= new double[this.maxGeneraciones];
 		this.mediasGeneracion= new double[this.maxGeneraciones];
 		this.mejoresGeneracion = new double[this.maxGeneraciones];
-		double precision = 0.0001;
 		
 		this.poblacion = new Individuo[tam];
 		this.tamPoblacion = tam;
@@ -202,11 +201,31 @@ public class AlgoritmoGenetico {
 		return this.mediasGeneracion;
 	}
 	
+	public double getPeorFitness(){
+		double peorFitness = this.poblacion[0].getFitness();
+		for(int i=1; i<this.poblacion.length; ++i) {
+			double f = this.poblacion[i].getFitness();
+			if((this.maximize && f < peorFitness) || (!this.maximize && f > peorFitness)) 
+				peorFitness = f;
+		}
+		return peorFitness;
+	}
+	
+	public double getMediaPoblacion() {
+		return this.mediasGeneracion[this.mediasGeneracion.length-1];
+	}
+	
 	public double[] getMejoresGeneraciones() {
 		return this.mejoresGeneracion;
 	}	
-	//Getters que informan sobre los parámetros que alterarán la manera en la que se realiza la evolución de la población////////////////////////////////
 
+	public int getNMutaciones() {
+		return this.mutador.getNMutaciones();
+	}
+
+	public int getNCruces() {
+		return this.cruzador.getNCruces();
+	}
 	
 	private Seleccion selector;
 	private Cruce cruzador;

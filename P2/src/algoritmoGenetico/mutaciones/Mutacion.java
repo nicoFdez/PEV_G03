@@ -6,4 +6,6 @@ import algoritmoGenetico.individuos.Individuo;
 public interface Mutacion {
 	
 	public void mutar(Individuo[] poblacion, double probMutacion);
+	
+	public int getNMutaciones();
 }

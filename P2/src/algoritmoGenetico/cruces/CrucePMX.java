@@ -37,9 +37,10 @@ public class CrucePMX<T> implements Cruce {
 			individuosCruzar.remove(0);
 		
 		//Recorremos los individuos por parejas y hacemos que se crucen
-		for(int i=0; i<individuosCruzar.size(); i+=2 ) 	
+		for(int i=0; i<individuosCruzar.size(); i+=2 ) {
 			crucePMX(individuosCruzar.get(i), individuosCruzar.get(i+1));
-		
+			nCruces++;
+		}
 		
 		return poblacion;
 	}
@@ -133,5 +134,10 @@ public class CrucePMX<T> implements Cruce {
 		return indiceCulpable;
 	}
 	
-	
+	@Override
+	public int getNCruces() {
+		return this.nCruces;
+	}
+		
+	private int nCruces;
 }
