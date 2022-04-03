@@ -64,9 +64,11 @@ public class InfoVuelos {
  
  //Metodo utilizado para inicializar el singleton
  //Recibe un entero que especifica el ejemplo de datos que queremos utilizar para ejecutar el algoritmo
- public static void init(int example) {
+ public static void init(int example, int fitness) {
 	 //Instancia del singleton
 	 single_instance = new InfoVuelos();
+	 
+	 tipoFitness = fitness;
 	 
 	 //Tiempos de espera entre diferentes tipos de vuelos
 	 SEP = new double [3][3];
@@ -100,4 +102,5 @@ public class InfoVuelos {
  public static int[][] TEL;
  public static double[][] SEP;
  public static TiposVuelo[] tipoVuelos;
+ public static int tipoFitness;
 }

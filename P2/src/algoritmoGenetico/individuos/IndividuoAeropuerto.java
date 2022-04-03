@@ -88,8 +88,6 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 	
 	//Metod que hace la asignación de vuelos a las pistas del aeropuerto
 	private double getValor(Integer[] cromo) {
-		
-		//cromo = new Integer[]{12, 11, 8, 5, 3, 7, 2, 9, 10, 6, 4, 1};
 
 		//Preparo las variables que me haran falta para sacar el fitness
 		InfoVuelos info = InfoVuelos.getInstance();
@@ -149,9 +147,9 @@ public class IndividuoAeropuerto extends Individuo<Integer> {
 			TLAs[pistaAAterrizar].add(minHoraAterrizaje);
 
 			//Acumulo el cuadrado del retardo para el fitness
-			fitnessTotal +=(Math.pow((minHoraAterrizaje-minTEL), 2));
+			if(InfoVuelos.tipoFitness == 2)fitnessTotal +=(Math.pow((minHoraAterrizaje-minTEL), 2));
 			//Fitness del enunciado
-			//fitnessTotal +=(Math.pow((minHoraAterrizaje-info.TEL[pistaAAterrizar][idVuelo-1]), 2));
+			else fitnessTotal +=(Math.pow((minHoraAterrizaje-info.TEL[pistaAAterrizar][idVuelo-1]), 2));
 		}
 		
 		return fitnessTotal;

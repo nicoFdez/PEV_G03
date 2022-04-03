@@ -52,14 +52,8 @@ public class CrucePMX<T> implements Cruce {
 		Object[] cromo1 = a.getCromosoma();
 		Object[] cromo2 = b.getCromosoma();
 		
-		//cromo1 = (Object[]) new Integer[] {1,2,4,3,5,8,9,7,6};
-		//cromo2 = (Object[]) new Integer[] {6,3,5,7,8,1,2,4,9};
-		
 		Object[] cromoA = a.getCromosoma();
 		Object[] cromoB = b.getCromosoma();
-
-		//cromoA = (Object[]) new Integer[] {1,2,4,3,5,8,9,7,6};
-		//cromoB = (Object[]) new Integer[] {6,3,5,7,8,1,2,4,9};
 		
 		//Nos hacemos con la longitud del cromosoma para recorrerlo entero
 		int l = cromo1.length;

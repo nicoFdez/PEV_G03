@@ -85,9 +85,9 @@ public class PanelPrincipal {
 	private static void inicializarAG(int maxgeneraciones, int nIndividuos,
 			double probCruce, double probMutacion, double porcElitismo,
 			TiposSeleccion s, TiposCruce c, TiposMutacion m,
-			int tamTorneo, double probTorneo, double valorTruncamiento, int casoAeropuerto) {
+			int tamTorneo, double probTorneo, double valorTruncamiento, int casoAeropuerto, int tipoFitness) {
 		//Creo y el algoritmo genético y configuro los parámetros más generales
-		InfoVuelos.init(casoAeropuerto);
+		InfoVuelos.init(casoAeropuerto, tipoFitness);
 		ag = new AlgoritmoGenetico();
 		ag.setProbCruce(probCruce);
 		ag.setProbMutacion(probMutacion);
@@ -288,7 +288,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(lblProbabilidadDeMutacin);
 		
 		textFieldProbMutacion = new JTextField();
-		textFieldProbMutacion.setText("0.05");
+		textFieldProbMutacion.setText("0.85");
 		textFieldProbMutacion.setColumns(10);
 		textFieldProbMutacion.setBounds(10, 217, 86, 20);
 		frmGrupoPrctica.getContentPane().add(textFieldProbMutacion);
@@ -388,6 +388,15 @@ public class PanelPrincipal {
 		lblPistas.setBounds(676, 366, 456, 29);
 		frmGrupoPrctica.getContentPane().add(lblPistas);
 		
+		JLabel lblMtodoParaFitness = new JLabel("M\u00E9todo para fitness:");
+		lblMtodoParaFitness.setBounds(786, 402, 170, 29);
+		frmGrupoPrctica.getContentPane().add(lblMtodoParaFitness);
+		
+		JComboBox comboBoxTipoFitness = new JComboBox();
+		comboBoxTipoFitness.setModel(new DefaultComboBoxModel(new String[] {"Diferencia pista asignada", "Diferencia pista m\u00EDnima"}));
+		comboBoxTipoFitness.setBounds(917, 405, 203, 22);
+		frmGrupoPrctica.getContentPane().add(comboBoxTipoFitness);
+		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {
 			@Override
@@ -396,7 +405,8 @@ public class PanelPrincipal {
 						Double.parseDouble(textFieldProbCruce.getText()), Double.parseDouble(textFieldProbMutacion.getText()), Double.parseDouble(textFieldPorcElitismo.getText()),
 						TiposSeleccion.values()[comboBoxMetodoSeleccion.getSelectedIndex()] , TiposCruce.values()[comboBoxMetodoCruce.getSelectedIndex()],
 						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()],
-						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()), comboBoxCasoAeropuerto.getSelectedIndex()+1);
+						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()), comboBoxCasoAeropuerto.getSelectedIndex()+1,
+						comboBoxTipoFitness.getSelectedIndex()+1);
 				bucleAG();
 			}
 
