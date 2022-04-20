@@ -6,7 +6,7 @@ import java.util.Random;
 import algoritmoGenetico.individuos.Individuo;
 import algoritmoGenetico.individuos.IndividuoMultiplexor;
 import algoritmoGenetico.individuos.InfoMultiplexor;
-import algoritmoGenetico.individuos.InfoMultiplexor.TiposFunciones;
+import algoritmoGenetico.individuos.InfoMultiplexor.ValoresNodos6;
 import algoritmoGenetico.individuos.MyTree;
 
 
@@ -53,10 +53,10 @@ public class CruceArboles<T> implements Cruce {
 		operacionesArboles(((IndividuoMultiplexor)a).getArbol(), ((IndividuoMultiplexor)b).getArbol());
 	}
 	
-	private void operacionesArboles( MyTree<InfoMultiplexor.TiposFunciones> cromoPadre, MyTree<InfoMultiplexor.TiposFunciones> cromoMadre) {
+	private void operacionesArboles( MyTree<InfoMultiplexor.ValoresNodos6> cromoPadre, MyTree<InfoMultiplexor.ValoresNodos6> cromoMadre) {
 		//Obtenemos todos los nodos de los arboles ordenados en modo preorden
-		ArrayList<MyTree<InfoMultiplexor.TiposFunciones>> listaPadre =  (ArrayList<MyTree<TiposFunciones>>) cromoPadre.getPreOrden();
-		ArrayList<MyTree<InfoMultiplexor.TiposFunciones>> listaMadre =  (ArrayList<MyTree<TiposFunciones>>) cromoMadre.getPreOrden();
+		ArrayList<MyTree<InfoMultiplexor.ValoresNodos6>> listaPadre =  (ArrayList<MyTree<ValoresNodos6>>) cromoPadre.getPreOrden();
+		ArrayList<MyTree<InfoMultiplexor.ValoresNodos6>> listaMadre =  (ArrayList<MyTree<ValoresNodos6>>) cromoMadre.getPreOrden();
 		
 		
 		Random rand = new Random();
@@ -89,8 +89,8 @@ public class CruceArboles<T> implements Cruce {
 		}
 		
 		//Sacamos los padres de los involucrados
-		MyTree<InfoMultiplexor.TiposFunciones> padrePrimerNodo = listaPadre.get(posPrimerNodo).getParent();
-		MyTree<InfoMultiplexor.TiposFunciones> padreSegundoNodo = listaMadre.get(posSegundoNodo).getParent() ;
+		MyTree<InfoMultiplexor.ValoresNodos6> padrePrimerNodo = listaPadre.get(posPrimerNodo).getParent();
+		MyTree<InfoMultiplexor.ValoresNodos6> padreSegundoNodo = listaMadre.get(posSegundoNodo).getParent() ;
 		
 		//Intercambiamos el subarbol del padre por el que nos da la madre
 		int indice= padrePrimerNodo.getChildren().indexOf(listaPadre.get(posPrimerNodo));

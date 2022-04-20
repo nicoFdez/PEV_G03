@@ -1,6 +1,6 @@
 package algoritmoGenetico.individuos;
 
-
+import java.util.Arrays;
 
 //Singleton que vamos a utilizar para contener los datos de nuestro algoritmo 
 //Va a almacenar todos los datos del problema: vuelos, tipos de vuelo, horas de llegada, número de pistas etc
@@ -10,8 +10,7 @@ public class InfoMultiplexor {
  // of type Singleton
  private static InfoMultiplexor single_instance = null;
 
- public enum TiposFunciones {A0,A1,D0,D1,D2,D3,AND,OR,NOT,IF
-	}
+ public enum ValoresNodos6 {A0,A1,D0,D1,D2,D3,AND,OR,NOT,IF}
  
  public static int numTerminales=6;
  
@@ -20,19 +19,32 @@ public class InfoMultiplexor {
  public static void init(int example, int fitness) {
 	 //Instancia del singleton
 	 single_instance = new InfoMultiplexor();
+	 entrada = new int[64][6];
+	 selectSize = 2;
 	 
-	 tipoFitness = fitness;
-	 
-	 //Tiempos de espera entre diferentes tipos de vuelos
-	 SEP = new double [3][3];
-	 SEP[0] = new double[] {1,1.5,2};
-     SEP[1] = new double[] {1,1.5,1.5};
-     SEP[2] = new double[] {1,1,1};
-	 
-     //Inicializamos de una forma u otra dependiendo de lo que nos hayan dicho
-
+	 for(int i=0; i<64; i++) {
+		 entrada[i] = toBinary(i, 6);
+	 }
+	
  }
+
+ public static int[] toBinary(int number, int base) {
+	    final int[] ret = new int[base];
+	    for (int i = 0; i < base; i++) {
+	        ret[base - 1 - i] = (1 << i & number);
+	    }
+	    return ret;
+}
  
+public static int getSalida(int e) {
+	int[] caso = entrada[e];
+	int[] select = Arrays.copyOfRange(caso, 0, selectSize);
+	int[] entradas = Arrays.copyOfRange(caso, selectSize, caso.length);
+	
+	int pos = Integer.parseInt(select.toString());
+	return entradas[pos];
+}
+
  // Static method
  // Static method to create instance of Singleton class
  public static InfoMultiplexor getInstance()
@@ -40,10 +52,8 @@ public class InfoMultiplexor {
      return single_instance;
  }
  
- public enum TiposVuelo {W,G,P};
  
- public static int[][] TEL;
- public static double[][] SEP;
- public static TiposVuelo[] tipoVuelos;
- public static int tipoFitness;
+ public static int[][] entrada;
+ private static int selectSize;
+ 
 }
