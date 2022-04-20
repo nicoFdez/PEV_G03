@@ -26,7 +26,8 @@ public abstract class Individuo<T> {
 	public void mutacionInsercion(double probMutacion) {}
 	public void mutacionIntercambio(double probMutacion) {}
 	public void mutacionInversion(double probMutacion) {}
-	
+	public void mutacionTerminal(double probMutacion) {}
+
 	public void copyFromAnother(Individuo<T> other) {
 		
 	}
@@ -38,6 +39,7 @@ public abstract class Individuo<T> {
 	public T[] getCromosoma() {
 		return this.cromosoma;
 	}
+	
 
 	public void setCromosoma(T[] cromosoma) {
 		this.cromosoma = cromosoma;
