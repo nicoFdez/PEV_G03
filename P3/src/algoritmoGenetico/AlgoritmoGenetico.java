@@ -9,7 +9,7 @@ import algoritmoGenetico.cruces.Cruce;
 import algoritmoGenetico.individuos.ComparadorMax;
 import algoritmoGenetico.individuos.ComparadorMin;
 import algoritmoGenetico.individuos.Individuo;
-import algoritmoGenetico.individuos.IndividuoAeropuerto;
+import algoritmoGenetico.individuos.IndividuoMultiplexor6;
 import algoritmoGenetico.mutaciones.Mutacion;
 import algoritmoGenetico.seleccion.Seleccion;
 
@@ -30,23 +30,23 @@ public class AlgoritmoGenetico {
 		Individuo[] aux = Arrays.copyOf(this.poblacion, this.poblacion.length);
 		
 		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoAeropuerto(aux[pobSeleccionada[i]]);
+			this.poblacion[i] = new IndividuoMultiplexor6(aux[pobSeleccionada[i]]);
 		}
 	}
 	
-	//Metodo encargado de realizar la operaci髇 de cruce sobre la poblaci髇 
+	//Metodo encargado de realizar la operaci贸n de cruce sobre la poblaci贸n 
 	public void Cruce() {
 		this.poblacion = this.cruzador.cruzar(this.poblacion, this.probCruce);
 	}
 	
-	//Metodo encargado de realizar la operaci髇 de mutacion sobre la poblaci髇 
+	//Metodo encargado de realizar la operaci贸n de mutacion sobre la poblaci贸n 
 	public void Mutacion() {
 		this.mutador.mutar(this.poblacion, this.probMutacion);
 	}
 	
-	//M閠odo que evalua la poblaci髇 de la generaci髇 en la que nos encontremos y con esto se almacena
-	//datos como e mejor de la poblaci髇, la media, etc para despu閟 de realizar la evoluci髇 por 
-	//completo, poder mostrar dichos datos en una gr醘ica
+	//M茅todo que evalua la poblaci贸n de la generaci贸n en la que nos encontremos y con esto se almacena
+	//datos como e mejor de la poblaci贸n, la media, etc para despu茅s de realizar la evoluci贸n por 
+	//completo, poder mostrar dichos datos en una gr谩fica
 	public void Evaluar(int nGeneracion) {
 		this.aptitudAcumulada=0;
 		this.aptitudMedia=0;
@@ -78,15 +78,15 @@ public class AlgoritmoGenetico {
 		System.out.println("Media poblacion: " + aptitudMedia);
 		System.out.println("------------------");
 		
-		//Almacenamos estos datos para la futua gr醘ica
+		//Almacenamos estos datos para la futua gr谩fica
 		this.mediasGeneracion[nGeneracion] = this.aptitudMedia;
 		this.mejoresGeneracion[nGeneracion] = this.poblacion[this.pos_mejor].getFitness();
 		this.mejorAbsoluto[nGeneracion] = this.elMejor.getFitness();
 	}
 	
-	//M閠odo que inicializa la pobalci髇 sobre la que vamos a realizar la evoluci髇 
-	//Dependiendo de los par醡etros que nos lleguen los individuos  ser醤 de un tipo u otro
-	public void inicializarPoblacion(int tam, int nVuelos, int nPistas) {		
+	//M锟絫odo que inicializa la pobalci锟絥 sobre la que vamos a realizar la evoluci锟絥 
+	//Dependiendo de los par锟絤etros que nos lleguen los individuos  ser锟絥 de un tipo u otro
+	public void inicializarPoblacion(int tam,int profundidadMaxima, TiposInicializacion tipoInicializacion) {		
 		this.mejorAbsoluto= new double[this.maxGeneraciones];
 		this.mediasGeneracion= new double[this.maxGeneraciones];
 		this.mejoresGeneracion = new double[this.maxGeneraciones];
@@ -99,22 +99,81 @@ public class AlgoritmoGenetico {
 		elites = new Individuo[numElites];
 		eliteValues = new double[numElites];
 		
-		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoAeropuerto(nVuelos, nPistas);
-			this.poblacion[i].initialize();
-		}
-		this.elMejor = new IndividuoAeropuerto(nVuelos, nPistas);
-		this.elMejor.initialize();
-		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoAeropuerto(nVuelos, nPistas);
-			elites[i].initialize();
-			eliteValues[i] = 0;
+		
+		switch(tipoInicializacion) {
+		case Completa:
+			for(int i=0; i<this.tamPoblacion; i++) {
+				this.poblacion[i] = new IndividuoMultiplexor6();
+				((IndividuoMultiplexor6) this.poblacion[i]).initializeCompleta(profundidadMaxima, profundidadMaxima);
+			}
+			this.elMejor = new IndividuoMultiplexor6();
+			this.elMejor.initialize();
+			for(int i = 0; i< numElites; i++) {
+				elites[i] = new IndividuoMultiplexor6();
+				((IndividuoMultiplexor6) elites[i]).initializeCompleta(profundidadMaxima,profundidadMaxima);
+				eliteValues[i] = 0;
+			}
+			break;
+		case Creciente:
+			for(int i=0; i<this.tamPoblacion; i++) {
+				this.poblacion[i] = new IndividuoMultiplexor6();
+				((IndividuoMultiplexor6) this.poblacion[i]).initializeCreciente(profundidadMaxima,profundidadMaxima);
+			}
+			this.elMejor = new IndividuoMultiplexor6();
+			this.elMejor.initialize();
+			for(int i = 0; i< numElites; i++) {
+				elites[i] = new IndividuoMultiplexor6();
+				((IndividuoMultiplexor6) elites[i]).initializeCreciente(profundidadMaxima,profundidadMaxima);
+				eliteValues[i] = 0;
+			}
+			break;
+		case RampedAndHalf:
+			inicializarRampedAndHalf(tam,profundidadMaxima);
+			break;
 		}
 		comp = new ComparadorMin();
 		this.maximize = false;
 	}
 	
-	//Metodo que se encarga de salvar los mejores individuos de esta generaci髇 en caso de que estemos haciendo la evoluci髇 usando elitismo
+	
+	private void inicializarRampedAndHalf(int tam,int profundidadMaxima) {
+		int numGrupos = profundidadMaxima-1;
+		int tamGrupo = tam/numGrupos;
+		//Hacemos tantos grupos como nos toque segunla profundidad
+		for(int j = 0;j<numGrupos;j++) {
+			int profundidadGrupo = profundidadMaxima-j;
+			int tamMitad = tamGrupo /2;
+			
+			//La primera mitad del grupo se inicializa de forma completa
+			for(int i=j*tamGrupo; i<((j*tamGrupo)+tamMitad); i++) {
+				this.poblacion[i] = new IndividuoMultiplexor6();
+				((IndividuoMultiplexor6) this.poblacion[i]).initializeCompleta(0,profundidadGrupo);
+			}
+			//La primera mitad del grupo se inicializa de forma creciente
+			for(int i=((j*tamGrupo)+tamMitad); i<((j+1)*tamGrupo); i++) {
+				this.poblacion[i] = new IndividuoMultiplexor6();
+				((IndividuoMultiplexor6) this.poblacion[i]).initializeCreciente(0,profundidadGrupo);
+			}
+		}
+		
+		//Nos hacemos cargo de los individuos que se hayan quedado sin inicializar porque los grupos no son exactos
+		int indiceFinalInicializado = tam%tamGrupo;
+		for(int i=indiceFinalInicializado; i<tam; i++) {
+			this.poblacion[i] = new IndividuoMultiplexor6();
+			((IndividuoMultiplexor6) this.poblacion[i]).initializeCompleta(0,profundidadMaxima);
+		}
+		
+		//Elites inicializados por defecto
+		int numElites = (int)((double)tam*this.porcElitismo);
+		this.elMejor = new IndividuoMultiplexor6();
+		((IndividuoMultiplexor6) this.elMejor).initializeCreciente(profundidadMaxima,profundidadMaxima);
+		for(int i = 0; i< numElites; i++) {
+			elites[i] = new IndividuoMultiplexor6();
+			((IndividuoMultiplexor6) elites[i]).initializeCreciente(profundidadMaxima,profundidadMaxima);
+			eliteValues[i] = 0;
+		}
+	}
+	//Metodo que se encarga de salvar los mejores individuos de esta generaci贸n en caso de que estemos haciendo la evoluci贸n usando elitismo
 	public void saveElites() {	
 		if(this.elitism) {
 			Arrays.sort(this.poblacion, comp);
@@ -125,7 +184,7 @@ public class AlgoritmoGenetico {
 		}
 	}
 	
-	//Metodo que se encarga de incluir los mejores individuos de esta generaci髇 a la poblaci髇 en caso de que estemos haciendo la evoluci髇 usando elitismo
+	//Metodo que se encarga de incluir los mejores individuos de esta generaci贸n a la poblaci贸n en caso de que estemos haciendo la evoluci贸n usando elitismo
 	public void recoverSavedElites() {
 		if(this.elitism) {
 			Arrays.sort(this.poblacion, comp);
@@ -140,7 +199,7 @@ public class AlgoritmoGenetico {
 		}
 	}
 	
-	//Setters encargados de configurar par醡etros que alterar醤 la manera en la que se realiza la evoluci髇 de la poblaci髇////////////////////////////////
+	//Setters encargados de configurar par谩metros que alterar谩n la manera en la que se realiza la evoluci贸n de la poblaci贸n////////////////////////////////
 	public void setElitism(double proportion) {
 		this.elitism = proportion > 0;
 		this.porcElitismo = proportion;
@@ -165,10 +224,10 @@ public class AlgoritmoGenetico {
 	public void setMutacion(Mutacion mut) {
 		mutador = mut;
 	}
-	//Setters encargados de configurar par醡etros que alterar醤 la manera en la que se realiza la evoluci髇 de la poblaci髇////////////////////////////////
+	//Setters encargados de configurar par谩metros que alterar谩n la manera en la que se realiza la evoluci贸n de la poblaci贸n////////////////////////////////
 
 	
-	//Getters que informan sobre los par醡etros que alterar醤 la manera en la que se realiza la evoluci髇 de la poblaci髇////////////////////////////////
+	//Getters que informan sobre los par谩metros que alterar谩n la manera en la que se realiza la evoluci贸n de la poblaci贸n////////////////////////////////
 	public Individuo[] getPoblacion() {
 		return this.poblacion;
 	}

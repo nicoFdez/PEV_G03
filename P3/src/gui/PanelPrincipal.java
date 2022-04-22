@@ -20,20 +20,10 @@ import org.math.plot.Plot2DPanel;
 
 import algoritmoGenetico.AlgoritmoGenetico;
 import algoritmoGenetico.TiposCruce;
+import algoritmoGenetico.TiposInicializacion;
 import algoritmoGenetico.TiposMutacion;
 import algoritmoGenetico.TiposSeleccion;
-import algoritmoGenetico.cruces.CruceCO;
-import algoritmoGenetico.cruces.CruceCX;
-import algoritmoGenetico.cruces.CruceOX;
-import algoritmoGenetico.cruces.CruceOXPP;
-import algoritmoGenetico.cruces.CrucePMX;
 import algoritmoGenetico.individuos.Individuo;
-import algoritmoGenetico.individuos.IndividuoAeropuerto;
-import algoritmoGenetico.individuos.InfoVuelos;
-import algoritmoGenetico.mutaciones.MutacionHeuristica;
-import algoritmoGenetico.mutaciones.MutacionInsercion;
-import algoritmoGenetico.mutaciones.MutacionIntercambio;
-import algoritmoGenetico.mutaciones.MutacionInversion;
 import algoritmoGenetico.seleccion.SeleccionEstocasticoUniversal;
 import algoritmoGenetico.seleccion.SeleccionRanking;
 import algoritmoGenetico.seleccion.SeleccionRestos;
@@ -92,7 +82,8 @@ public class PanelPrincipal {
 			TiposSeleccion s, TiposCruce c, TiposMutacion m,
 			int tamTorneo, double probTorneo, double valorTruncamiento, int casoAeropuerto, int tipoFitness) {
 		//Creo y el algoritmo genético y configuro los parámetros más generales
-		InfoVuelos.init(casoAeropuerto, tipoFitness);
+		
+		//InfoVuelos.init(casoAeropuerto, tipoFitness);
 		ag = new AlgoritmoGenetico();
 		ag.setProbCruce(probCruce);
 		ag.setProbMutacion(probMutacion);
@@ -101,13 +92,7 @@ public class PanelPrincipal {
 		
 		switch(casoAeropuerto) {
 		case 1:
-			ag.inicializarPoblacion(nIndividuos, 12, 3);
-			break;
-		case 2:
-			ag.inicializarPoblacion(nIndividuos, 20, 3);
-			break;
-		case 3:
-			ag.inicializarPoblacion(nIndividuos, 20, 5);
+			ag.inicializarPoblacion(nIndividuos, 5, TiposInicializacion.Completa);
 			break;
 		}
 		
@@ -138,36 +123,13 @@ public class PanelPrincipal {
 		
 		//Preparo un operador de cruce u otro dependiendo de lo que me haya dicho la ventana
 		switch(c) {
-		case CO:
-			ag.setCruce(new CruceCO());
-			break;
-		case CX:
-			ag.setCruce(new CruceCX());
-			break;
-		case OX:
-			ag.setCruce(new CruceOX());
-			break;
-		case OXPP:
-			ag.setCruce(new CruceOXPP());
-			break;
-		case PMX:
-			ag.setCruce(new CrucePMX());
+		case Arbol:
 			break;
 		}
 		
 		//Preparo un operador de mutación u otro dependiendo de lo que me haya dicho la ventana
-		switch(m) {
-		case Heuristica:
-			ag.setMutacion(new MutacionHeuristica());
-			break;
-		case Insercion:
-			ag.setMutacion(new MutacionInsercion());
-			break;
-		case Intercambio:
-			ag.setMutacion(new MutacionIntercambio());
-			break;
-		case Inversion:
-			ag.setMutacion(new MutacionInversion());
+		switch(m) {		
+		case Terminal:
 			break;
 		}
 	}
@@ -204,17 +166,8 @@ public class PanelPrincipal {
 		grafica.plot();
 		
 		
-		//Cambiamos el texto de arriba de la gráfica para que muestre el mejor individuo de la evolucion 
-		Object[] cromo = ag.getMejorIndividuo().getCromosoma();
-		String bestCromo = "[";
-		for(int i = 0; i<cromo.length;i++) {
-			bestCromo = bestCromo +cromo[i];
-			if(i <cromo.length-1)
-				bestCromo = bestCromo +",";
-
-		}
-		bestCromo = bestCromo +"]";
-		TextoMejorIndividuo.setText("Mejor individuo: "+ ag.getMejorIndividuo().getFitness() +"   "+ bestCromo);
+		
+		TextoMejorIndividuo.setText("Mejor individuo: "+ ag.getMejorIndividuo().getFitness() +"   ");
 		TextoPeorIndividuo.setText("Peor individuo: "+ ag.getPeorFitness());
 		TextoMediaPoblacion.setText("Media población: "+ ag.getMediaPoblacion());
 		TextoNCruces.setText("Número de cruces: " + ag.getNCruces());
@@ -238,17 +191,7 @@ public class PanelPrincipal {
 		panelTabla = new JPanel();
 		panelTabla.setBounds(676, 98, 456, 223);
 		
-		//Creamos la tabla y le añadimos los datos obtenidos en el problema
-		TablePlot tablaVuelos = new TablePlot();
-		tablaVuelos.agregarDatos(((IndividuoAeropuerto)ag.getMejorIndividuo()).getVuelosPistas(), ((IndividuoAeropuerto)ag.getMejorIndividuo()).getTLAsPistas());
 		
-		//Metemos la tabla en un ScrollPane 
-		JScrollPane p = tablaVuelos.getTabla();
-		p.setPreferredSize(new Dimension(456, 223));
-		p.setBounds(676, 98, 456, 223);
-		
-		//Metemos la tabla en la pantalla
-		panelTabla.add(p);
 		frmGrupoPrctica.getContentPane().add(panelTabla);
 		frmGrupoPrctica.setVisible(true);
 	}
