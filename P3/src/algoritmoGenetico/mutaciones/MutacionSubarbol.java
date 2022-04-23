@@ -5,10 +5,10 @@ import java.util.Random;
 import algoritmoGenetico.individuos.Individuo;
 
 //Clase encargada de realizar la operación de mutación básicas sobre una población
-public class MutacionTerminal implements Mutacion {
+public class MutacionSubarbol implements Mutacion {
 
 	//Constructora
-	public MutacionTerminal() {}
+	public MutacionSubarbol() {}
 	
 	//Método que recorre toda la población de individuos y les pide que se muten indicando la probabilidad de que
 	//esta operación ocurra
@@ -19,7 +19,7 @@ public class MutacionTerminal implements Mutacion {
 		for(int i=0; i<poblacion.length; i++) {
 			double r = rand.nextDouble();
 			if(r<probMutacion) {
-				poblacion[i].mutacionTerminal();
+				poblacion[i].mutacionSubarbol();
 				nMutaciones++;
 			}
 		}

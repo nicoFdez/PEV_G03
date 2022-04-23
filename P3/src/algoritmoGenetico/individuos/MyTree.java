@@ -9,18 +9,16 @@ public class MyTree {
     private List<MyTree> children = new ArrayList<MyTree>();
     private MyTree parent = null;
     private OperadorArbol data = null;
-    private OperadorArbol myOperator;
 
     public MyTree() {
     	data = new OperadorArbol();
-
     }
     
     public MyTree(MyTree other, MyTree myParent) {
     	//Me pongo como padre a quien me han dicho
     	parent = myParent;
     	//Operador por copia del operador
-    	myOperator = new OperadorArbol(other.getOperator());
+    	data = new OperadorArbol(other.getOperator());
     	
     	//Recorro los hijos del qu eme estoy copiando ypor cada uno repito este proceso
     	List<MyTree> otherChildren = other.getChildren();
@@ -62,11 +60,10 @@ public class MyTree {
     
     
     public OperadorArbol getOperator() {
-    	return myOperator;
+    	return data;
     }
 
     public void setParent(MyTree parent) {
-        parent.addChild(this);
         this.parent = parent;
     }
     

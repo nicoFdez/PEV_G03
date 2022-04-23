@@ -11,18 +11,33 @@ public abstract class Individuo<T> {
 		return 0;
 	}
 	
-	public void mutacionTerminal(double probMutacion) {}
+	public void mutacionTerminal() {}
+	public void mutacionFuncional() {}
+	public void mutacionSubarbol() {}
 	
-	public void initialize() {
-		
-	}
-	
-	public MyTree getCromosoma() {
-		return this.cromosoma;
-	}
+	public MyTree initializeCompleta(int profundidadActual, int profundidadMaxima) {return null;}
+	public MyTree initializeCreciente(int profundidadActual, int profundidadMaxima) {return null;}
 	
 	public void  copyFromAnother(Individuo<T> other){
 		this.cromosoma = new MyTree(other.cromosoma, null);
 	}
 
+	public int getMaxDepth() {
+		return maxDepth.intValue();
+	}
+	
+	public void setMaxDepth(int depth) {
+		this.maxDepth = depth;
+	}
+	
+	public MyTree getArbol(){
+		return this.cromosoma;
+	}
+	
+	public void setArbol(MyTree tree){
+		this.cromosoma = tree;
+	}
+
+	Random rand = new Random();
+	Integer maxDepth;
 }

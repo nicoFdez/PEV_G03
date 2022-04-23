@@ -16,7 +16,7 @@ public class InfoMultiplexor {
  
  //Metodo utilizado para inicializar el singleton
  //Recibe un entero que especifica el ejemplo de datos que queremos utilizar para ejecutar el algoritmo
- public static void init(int example, int fitness) {
+ public static void init() {
 	 //Instancia del singleton
 	 single_instance = new InfoMultiplexor();
 	 entrada = new int[64][6];
@@ -36,12 +36,20 @@ public class InfoMultiplexor {
 	    return ret;
 }
  
+private static int binToDec(int[] bin) {
+	int sum = 0;
+	for(int i=0; i<bin.length; i++) {
+		if(bin[i] == 1) sum += Math.pow(2, i);
+	}
+	return sum;
+}
+ 
 public static int getSalida(int e) {
 	int[] caso = entrada[e];
 	int[] select = Arrays.copyOfRange(caso, 0, selectSize);
 	int[] entradas = Arrays.copyOfRange(caso, selectSize, caso.length);
 	
-	int pos = Integer.parseInt(select.toString());
+	int pos = binToDec(select);
 	return entradas[pos];
 }
 

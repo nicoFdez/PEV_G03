@@ -46,41 +46,18 @@ public class IndividuoMultiplexor6 extends Individuo  {
 			int valorTruth = InfoMultiplexor.getSalida(i);
 			
 			int[] bin = InfoMultiplexor.toBinary(i, 6);
-			this.cromosoma.getData().evaluar(bin, cromo);
+			int valorArbol = this.cromosoma.getData().evaluar(bin, cromo);
+			
+			if(valorTruth == valorArbol) nAciertos++;
 		}
 		
-		return 0;
-	}
-	
-	public static int AND(int a, int b) {
-		if(a==0 || b==0) return 0;
-		else return 1;
-	}
-	
-	public static int OR(int a, int b) {
-		if(a==1 || b==1) return 1;
-		else return 0;
-	}
-	
-	public static int NOT(int a) {
-		if(a==1) return 0;
-		else return 1;
-	}
-	
-	public static int IF(int a, int b, int c) {
-		if(a==1) return b;
-		else return c;
+		return nAciertos;
 	}
 	
 	@Override
-	public void initialize() {
-	
-		
-	}
-	
 	public MyTree  initializeCreciente(int profundidadActual, int profundidadMaxima) {
 		MyTree  newNode = null;
-		if(profundidadActual < maxDepth) {
+		if(profundidadActual < profundidadMaxima) {
 			//Sacas el tipo que le toca dentro de los operadores
 			int low = 0;
 			int high = InfoMultiplexor.ValoresNodos6.values().length;
@@ -113,16 +90,15 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		return newNode;
 	}
 	
-	public MyTree  initializeCompleta(int profundidadActual, int profundidadMaxima) {
-		MyTree  newNode = null;
-		if(profundidadActual < maxDepth) {
+	@Override
+	public MyTree initializeCompleta(int profundidadActual, int profundidadMaxima) {
+		MyTree newNode = null;
+		if(profundidadActual < profundidadMaxima) {
 			//Sacas el tipo que le toca dentro de los operadores
 			int low = InfoMultiplexor.numTerminales;
 			int high = InfoMultiplexor.ValoresNodos6.values().length;
 			int result = rand.nextInt(high-low) + low;
 			
-			//Dependiendo del tipo se crean X hijos
-			OperadorArbol tipoResultante = newNode.getData();
 			int numHijos=0;
 			switch (InfoMultiplexor.ValoresNodos6.values()[result]) {
 				case AND:	numHijos = 2; newNode = new MyTree(new OperadorAnd(result)); 					break;
@@ -149,7 +125,7 @@ public class IndividuoMultiplexor6 extends Individuo  {
 	
 	//Metodo que toma dos posiciones aleatorias dentro del cromosoma e intercambia el contenido de dichas posiciones
 	@Override
-	public void mutacionTerminal(double probMutacion) {
+	public void mutacionTerminal() {
 		MyTree tree = this.cromosoma;
 		Random rnd = new Random();
 		while(!tree.isLeaf()) {
@@ -168,20 +144,55 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		tree.setData(new OperadorTerminal(nuevoTipo.ordinal()));
 	}
 	
+	//Metodo que toma dos posiciones aleatorias dentro del cromosoma e intercambia el contenido de dichas posiciones
 	@Override
-	public MyTree getCromosoma() {	
-		return null;
+	public void mutacionFuncional() {
+		MyTree tree = this.cromosoma;
+		Random rnd = new Random();
+		List<MyTree> nodos =  tree.getPreOrden();
+		
+		int orIndex = InfoMultiplexor.ValoresNodos6.OR.ordinal();
+		int andIndex = InfoMultiplexor.ValoresNodos6.AND.ordinal();
+		
+		int index = rnd.nextInt(nodos.size());
+		while(nodos.get(index).getData().getIndice() != orIndex &&
+			nodos.get(index).getData().getIndice() != andIndex ) {
+			index = rnd.nextInt(nodos.size());
+		}
+		 
+		if(nodos.get(index).getData().getIndice() == orIndex) {
+			nodos.get(index).setData(new OperadorAnd(andIndex));
+		}
+		else {
+			nodos.get(index).setData(new OperadorAnd(orIndex));
+		}
 	}
 	
-	public MyTree getArbol(){
-		return this.cromosoma;
+	@Override
+	public void mutacionSubarbol() {
+		Random rnd = new Random();
+		int prof = rnd.nextInt(this.maxDepth);
+		int p = 0;
+		
+		MyTree tree = this.cromosoma;
+		while(!tree.isLeaf() || p<prof) {
+			List<MyTree> children =  tree.getChildren();
+			tree = children.get(rnd.nextInt(children.size()));
+			p++;
+		}
+		
+		if(tree.isLeaf()) {
+			tree = tree.getParent();
+			p--;
+		}
+		
+		int tipoInicializacion = rnd.nextInt(2);
+		if(tipoInicializacion == 0) {
+			tree = initializeCompleta(p, this.maxDepth);
+		}
+		else {
+			tree = initializeCreciente(p, this.maxDepth);
+		}
 	}
-	
-	public int getMaxDepth() {
-		return maxDepth.intValue();
-	}
-
-	Integer maxDepth;
-	Random rand = new Random();
 	
 }

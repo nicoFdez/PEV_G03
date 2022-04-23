@@ -104,26 +104,32 @@ public class AlgoritmoGenetico {
 		case Completa:
 			for(int i=0; i<this.tamPoblacion; i++) {
 				this.poblacion[i] = new IndividuoMultiplexor6();
-				((IndividuoMultiplexor6) this.poblacion[i]).initializeCompleta(profundidadMaxima, profundidadMaxima);
+				this.poblacion[i].setMaxDepth(profundidadMaxima);
+				this.poblacion[i].setArbol(this.poblacion[i].initializeCompleta(0, profundidadMaxima));
 			}
 			this.elMejor = new IndividuoMultiplexor6();
-			this.elMejor.initialize();
+			this.elMejor.setMaxDepth(profundidadMaxima);
+			this.elMejor.setArbol(this.elMejor.initializeCompleta(0, profundidadMaxima));
 			for(int i = 0; i< numElites; i++) {
 				elites[i] = new IndividuoMultiplexor6();
-				((IndividuoMultiplexor6) elites[i]).initializeCompleta(profundidadMaxima,profundidadMaxima);
+				this.elites[i].setMaxDepth(profundidadMaxima);
+				this.elites[i].setArbol(this.elites[i].initializeCompleta(0, profundidadMaxima));
 				eliteValues[i] = 0;
 			}
 			break;
 		case Creciente:
 			for(int i=0; i<this.tamPoblacion; i++) {
 				this.poblacion[i] = new IndividuoMultiplexor6();
-				((IndividuoMultiplexor6) this.poblacion[i]).initializeCreciente(profundidadMaxima,profundidadMaxima);
+				this.poblacion[i].setMaxDepth(profundidadMaxima);
+				this.poblacion[i].setArbol(this.poblacion[i].initializeCreciente(0, profundidadMaxima));
 			}
 			this.elMejor = new IndividuoMultiplexor6();
-			this.elMejor.initialize();
+			this.elMejor.setMaxDepth(profundidadMaxima);
+			this.elMejor.setArbol(this.elMejor.initializeCompleta(0, profundidadMaxima));
 			for(int i = 0; i< numElites; i++) {
-				elites[i] = new IndividuoMultiplexor6();
-				((IndividuoMultiplexor6) elites[i]).initializeCreciente(profundidadMaxima,profundidadMaxima);
+				this.elites[i] = new IndividuoMultiplexor6();
+				this.elites[i].setMaxDepth(profundidadMaxima);
+				this.elites[i].setArbol(this.elites[i].initializeCreciente(0, profundidadMaxima));
 				eliteValues[i] = 0;
 			}
 			break;
@@ -147,12 +153,14 @@ public class AlgoritmoGenetico {
 			//La primera mitad del grupo se inicializa de forma completa
 			for(int i=j*tamGrupo; i<((j*tamGrupo)+tamMitad); i++) {
 				this.poblacion[i] = new IndividuoMultiplexor6();
-				((IndividuoMultiplexor6) this.poblacion[i]).initializeCompleta(0,profundidadGrupo);
+				this.poblacion[i].setMaxDepth(profundidadMaxima);
+				this.poblacion[i].setArbol(this.poblacion[i].initializeCompleta(0,profundidadGrupo));
 			}
 			//La primera mitad del grupo se inicializa de forma creciente
 			for(int i=((j*tamGrupo)+tamMitad); i<((j+1)*tamGrupo); i++) {
 				this.poblacion[i] = new IndividuoMultiplexor6();
-				((IndividuoMultiplexor6) this.poblacion[i]).initializeCreciente(0,profundidadGrupo);
+				this.poblacion[i].setMaxDepth(profundidadMaxima);
+				this.poblacion[i].setArbol(this.poblacion[i].initializeCreciente(0,profundidadGrupo));
 			}
 		}
 		
@@ -160,16 +168,19 @@ public class AlgoritmoGenetico {
 		int indiceFinalInicializado = tam%tamGrupo;
 		for(int i=indiceFinalInicializado; i<tam; i++) {
 			this.poblacion[i] = new IndividuoMultiplexor6();
-			((IndividuoMultiplexor6) this.poblacion[i]).initializeCompleta(0,profundidadMaxima);
+			this.poblacion[i].setMaxDepth(profundidadMaxima);
+			this.poblacion[i].setArbol(this.poblacion[i].initializeCompleta(0,profundidadMaxima));
 		}
 		
 		//Elites inicializados por defecto
 		int numElites = (int)((double)tam*this.porcElitismo);
 		this.elMejor = new IndividuoMultiplexor6();
-		((IndividuoMultiplexor6) this.elMejor).initializeCreciente(profundidadMaxima,profundidadMaxima);
+		this.elMejor.setMaxDepth(profundidadMaxima);
+		this.elMejor.setArbol(this.elMejor.initializeCreciente(0,profundidadMaxima));
 		for(int i = 0; i< numElites; i++) {
 			elites[i] = new IndividuoMultiplexor6();
-			((IndividuoMultiplexor6) elites[i]).initializeCreciente(profundidadMaxima,profundidadMaxima);
+			this.elites[i].setMaxDepth(profundidadMaxima);
+			this.elites[i].setArbol(this.elMejor.initializeCreciente(0,profundidadMaxima));
 			eliteValues[i] = 0;
 		}
 	}
