@@ -11,10 +11,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 import org.math.plot.Plot2DPanel;
 
@@ -24,8 +24,12 @@ import algoritmoGenetico.TiposInicializacion;
 import algoritmoGenetico.TiposMultiplexor;
 import algoritmoGenetico.TiposMutacion;
 import algoritmoGenetico.TiposSeleccion;
+import algoritmoGenetico.cruces.CruceArboles;
 import algoritmoGenetico.individuos.Individuo;
 import algoritmoGenetico.individuos.InfoMultiplexor;
+import algoritmoGenetico.mutaciones.MutacionFuncional;
+import algoritmoGenetico.mutaciones.MutacionSubarbol;
+import algoritmoGenetico.mutaciones.MutacionTerminal;
 import algoritmoGenetico.seleccion.SeleccionEstocasticoUniversal;
 import algoritmoGenetico.seleccion.SeleccionRanking;
 import algoritmoGenetico.seleccion.SeleccionRestos;
@@ -33,7 +37,6 @@ import algoritmoGenetico.seleccion.SeleccionRuleta;
 import algoritmoGenetico.seleccion.SeleccionTorneoDeterminista;
 import algoritmoGenetico.seleccion.SeleccionTorneoProbabilistico;
 import algoritmoGenetico.seleccion.SeleccionTruncamiento;
-import javax.swing.SwingConstants;
 
 
 //Clase que implementa el punto de entrada de la ejecución del programa y que sostiene tanto la ventana como el bucle principal
@@ -131,12 +134,22 @@ public class PanelPrincipal {
 		//Preparo un operador de cruce u otro dependiendo de lo que me haya dicho la ventana
 		switch(c) {
 		case Arbol:
+			ag.setCruce(new CruceArboles());
 			break;
 		}
 		
 		//Preparo un operador de mutación u otro dependiendo de lo que me haya dicho la ventana
 		switch(m) {		
 		case Terminal:
+			ag.setMutacion(new MutacionTerminal());
+			break;
+		case Funcional:
+			ag.setMutacion(new MutacionFuncional());
+			break;
+		case Subarbol:
+			ag.setMutacion(new MutacionSubarbol());
+			break;
+		default:
 			break;
 		}
 	}
@@ -147,11 +160,17 @@ public class PanelPrincipal {
 		int generacionActual = 0;
 		while(generacionActual < ag.getMaxGeneraciones()) {
 			ag.saveElites();
+			System.out.println(0);
 			ag.Seleccion();
+			System.out.println(1);
 			ag.Cruce();
+			System.out.println(2);
 			ag.Mutacion();
+			System.out.println(3);
 			ag.recoverSavedElites();
+			System.out.println(4);
 			ag.Evaluar(generacionActual);
+			System.out.println(generacionActual);
 			generacionActual++;
 		}
 		Individuo a = ag.getMejorIndividuo();
@@ -357,7 +376,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(lblMetodoInicializacin_1_1);
 		
 		JSpinner spinnerProfMaxima = new JSpinner();
-		spinnerProfMaxima.setModel(new SpinnerNumberModel(7, 2, 10, 1));
+		spinnerProfMaxima.setModel(new SpinnerNumberModel(4, 2, 10, 1));
 		spinnerProfMaxima.setBounds(642, 41, 76, 20);
 		frmGrupoPrctica.getContentPane().add(spinnerProfMaxima);
 		

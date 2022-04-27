@@ -13,7 +13,7 @@ public class OperadorArbol {
 	}
 	
 	public OperadorArbol(OperadorArbol other) {
-		
+		indice = other.indice;
 	}
 	
 	public int evaluar(int[] configuracionActual,MyTree miArbol) {

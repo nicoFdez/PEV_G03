@@ -57,7 +57,7 @@ public class IndividuoMultiplexor6 extends Individuo  {
 	@Override
 	public MyTree  initializeCreciente(int profundidadActual, int profundidadMaxima) {
 		MyTree  newNode = null;
-		if(profundidadActual < profundidadMaxima) {
+		if(profundidadActual < profundidadMaxima - 1) {
 			//Sacas el tipo que le toca dentro de los operadores
 			int low = 0;
 			int high = InfoMultiplexor.ValoresNodos6.values().length;
@@ -93,7 +93,7 @@ public class IndividuoMultiplexor6 extends Individuo  {
 	@Override
 	public MyTree initializeCompleta(int profundidadActual, int profundidadMaxima) {
 		MyTree newNode = null;
-		if(profundidadActual < profundidadMaxima) {
+		if(profundidadActual < profundidadMaxima - 1) {
 			//Sacas el tipo que le toca dentro de los operadores
 			int low = InfoMultiplexor.numTerminales;
 			int high = InfoMultiplexor.ValoresNodos6.values().length;
@@ -134,7 +134,7 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		}
 		
 		//Preguntamos por el tipo del nodo terminal y sacamos uno nuevo que no coincida con el actual
-		InfoMultiplexor.ValoresNodos6 tipoNodo = InfoMultiplexor.ValoresNodos6.values()[((OperadorTerminal)tree.getData()).getIndice()];
+		InfoMultiplexor.ValoresNodos6 tipoNodo = InfoMultiplexor.ValoresNodos6.values()[tree.getData().getIndice()];
 		InfoMultiplexor.ValoresNodos6 nuevoTipo = InfoMultiplexor.ValoresNodos6.values()[rnd.nextInt(InfoMultiplexor.numTerminales)];
 		while(nuevoTipo == tipoNodo) {
 			nuevoTipo = InfoMultiplexor.ValoresNodos6.values()[rnd.nextInt(InfoMultiplexor.numTerminales)];

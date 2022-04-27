@@ -1,5 +1,7 @@
 package algoritmoGenetico;
 
 public enum TiposMutacion {
-	Terminal
+	Terminal,
+	Funcional,
+	Subarbol
 }

@@ -24,8 +24,8 @@ public class OperadorIF extends OperadorArbol {
 		
 		//Les pido a los 3 hijos que se evaluen
 		int a = hijos.get(0).getOperator().evaluar(configuracionActual, hijos.get(0));
-		int b = hijos.get(0).getOperator().evaluar(configuracionActual, hijos.get(1));
-		int c = hijos.get(0).getOperator().evaluar(configuracionActual, hijos.get(2));
+		int b = hijos.get(1).getOperator().evaluar(configuracionActual, hijos.get(1));
+		int c = hijos.get(2).getOperator().evaluar(configuracionActual, hijos.get(2));
 
 		//Devuelvo el resulatado de aplicar la operacion IF sobre mi hijo
 		return (a==1) ? b : c;

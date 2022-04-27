@@ -58,6 +58,16 @@ public class MyTree {
         return preorden;
     }
     
+    public int getMaxDepth(MyTree tree) {
+    	int max = 0;
+    	for(int i=0; i<tree.children.size(); i++) {
+    		int sizeActual = getMaxDepth(tree.getChildren().get(i));
+    		if(sizeActual > max) {
+    			max = sizeActual;
+    		}
+    	}
+    	return max + 1;
+    }
     
     public OperadorArbol getOperator() {
     	return data;

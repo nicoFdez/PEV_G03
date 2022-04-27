@@ -93,12 +93,18 @@ public class CruceArboles<T> implements Cruce {
 		MyTree padreSegundoNodo = listaMadre.get(posSegundoNodo).getParent() ;
 		
 		//Intercambiamos el subarbol del padre por el que nos da la madre
-		int indice= padrePrimerNodo.getChildren().indexOf(listaPadre.get(posPrimerNodo));
-		padrePrimerNodo.changeChild(listaMadre.get(posSegundoNodo), indice);
+		if(padrePrimerNodo != null) {			
+			int indice = padrePrimerNodo.getChildren().indexOf(listaPadre.get(posPrimerNodo));
+			padrePrimerNodo.changeChild(listaMadre.get(posSegundoNodo), indice);
+		}
+		else cromoPadre = listaMadre.get(posSegundoNodo);
 		
 		//Lo mismo pero para la madre
-		indice= padreSegundoNodo.getChildren().indexOf(listaMadre.get(posSegundoNodo));
-		padreSegundoNodo.changeChild(listaPadre.get(posPrimerNodo), indice);
+		if(padreSegundoNodo != null) {
+			int indice = padreSegundoNodo.getChildren().indexOf(listaMadre.get(posSegundoNodo));
+			padreSegundoNodo.changeChild(listaPadre.get(posPrimerNodo), indice);
+		}
+		else cromoMadre = listaPadre.get(posPrimerNodo);
 		
 	}
 	
