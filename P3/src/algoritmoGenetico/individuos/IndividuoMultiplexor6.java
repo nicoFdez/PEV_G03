@@ -40,8 +40,12 @@ public class IndividuoMultiplexor6 extends Individuo  {
 	//Metod que hace la asignación de vuelos a las pistas del aeropuerto
 	private double getValor(MyTree  cromo) {
 		
-		int nAciertos = 0;
+		//BLOATING 
+		if(this.cromosoma.getMaxDepth(this.cromosoma)>this.maxDepth) {
+			return 0;
+		}
 		
+		int nAciertos = 0;
 		for(int i=0; i<64; i++) {
 			int valorTruth = InfoMultiplexor.getSalida(i);
 			
@@ -154,6 +158,17 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		int orIndex = InfoMultiplexor.ValoresNodos6.OR.ordinal();
 		int andIndex = InfoMultiplexor.ValoresNodos6.AND.ordinal();
 		
+		int k =0;
+		while(k<nodos.size()) {
+			int tipoOperador = nodos.get(k).getOperator().getIndice();
+			if(tipoOperador == orIndex || tipoOperador == andIndex)break;
+			k++;
+		}
+		
+		//Si k ha llegado hasta el final, significa que no existen nodos ni de tipo AND ni OR, y son los únicos que pueden
+		//ser mutados de esta forma, asi que como no hay ninguno de estos no se puede hacer nada
+		if(k>=nodos.size())return;
+		
 		int index = rnd.nextInt(nodos.size());
 		while(nodos.get(index).getData().getIndice() != orIndex &&
 			nodos.get(index).getData().getIndice() != andIndex ) {
@@ -175,7 +190,7 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		int p = 0;
 		
 		MyTree tree = this.cromosoma;
-		while(!tree.isLeaf() || p<prof) {
+		while(!tree.isLeaf() && p<prof) {
 			List<MyTree> children =  tree.getChildren();
 			tree = children.get(rnd.nextInt(children.size()));
 			p++;

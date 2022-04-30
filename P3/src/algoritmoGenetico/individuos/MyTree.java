@@ -2,7 +2,12 @@ package algoritmoGenetico.individuos;
 import java.util.ArrayList;
 import java.util.List;
 
+import algoritmoGenetico.individuos.InfoMultiplexor.TipoNodo;
+import algoritmoGenetico.individuos.operadoresArbol.OperadorAnd;
 import algoritmoGenetico.individuos.operadoresArbol.OperadorArbol;
+import algoritmoGenetico.individuos.operadoresArbol.OperadorIF;
+import algoritmoGenetico.individuos.operadoresArbol.OperadorNOT;
+import algoritmoGenetico.individuos.operadoresArbol.OperadorOR;
 import algoritmoGenetico.individuos.operadoresArbol.OperadorTerminal;
 
 public class MyTree {
@@ -17,8 +22,28 @@ public class MyTree {
     public MyTree(MyTree other, MyTree myParent) {
     	//Me pongo como padre a quien me han dicho
     	parent = myParent;
-    	//Operador por copia del operador
-    	data = new OperadorArbol(other.getOperator());
+    	
+    	
+    	TipoNodo tipo = InfoMultiplexor.getTipoNodo(other.getOperator().getIndice());
+    	switch(tipo) {
+    	case NODOAND:
+        	data = new OperadorAnd(other.getOperator().getIndice());
+    		break;
+    	case NODOOR:
+        	data = new OperadorOR(other.getOperator().getIndice());
+    		break;
+    	case NODOIF:
+        	data = new OperadorIF(other.getOperator().getIndice());
+    		break;
+    	case NODONOT:
+        	data = new OperadorNOT(other.getOperator().getIndice());
+    		break;
+    		
+		default:
+        	data = new OperadorTerminal(other.getOperator().getIndice());
+			break;
+    	}
+    	
     	
     	//Recorro los hijos del qu eme estoy copiando ypor cada uno repito este proceso
     	List<MyTree> otherChildren = other.getChildren();

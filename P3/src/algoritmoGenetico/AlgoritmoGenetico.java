@@ -137,8 +137,8 @@ public class AlgoritmoGenetico {
 			inicializarRampedAndHalf(tam,profundidadMaxima);
 			break;
 		}
-		comp = new ComparadorMin();
-		this.maximize = false;
+		comp = new ComparadorMax();
+		this.maximize = true;
 	}
 	
 	

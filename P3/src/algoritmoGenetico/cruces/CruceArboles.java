@@ -56,37 +56,15 @@ public class CruceArboles<T> implements Cruce {
 	private void operacionesArboles( MyTree cromoPadre, MyTree cromoMadre) {
 		//Obtenemos todos los nodos de los arboles ordenados en modo preorden
 		ArrayList<MyTree> listaPadre =  (ArrayList<MyTree>) cromoPadre.getPreOrden();
-		ArrayList<MyTree> listaMadre =  (ArrayList<MyTree>) cromoMadre.getPreOrden();
-		
+		ArrayList<MyTree> listaMadre =  (ArrayList<MyTree>) cromoMadre.getPreOrden();	
 		
 		Random rand = new Random();
 		//Nodo involucrado del padre
-		float esFuncion = rand.nextFloat();
 		int posPrimerNodo = rand.nextInt(listaPadre.size());
-		if(esFuncion <0.8f) {
-			while(listaPadre.get(posPrimerNodo).getData().getIndice() < InfoMultiplexor.numTerminales) {
-				posPrimerNodo = rand.nextInt(listaPadre.size());
-			}
-		}
-		else {
-			while(listaPadre.get(posPrimerNodo).getData().getIndice() >= InfoMultiplexor.numTerminales) {
-				posPrimerNodo = rand.nextInt(listaPadre.size());
-			}
-		}
 		
 		//Nodo involucrado de la madre
-		esFuncion = rand.nextFloat();
 		int posSegundoNodo = rand.nextInt(listaMadre.size());
-		if(esFuncion <0.8f) {
-			while(listaMadre.get(posSegundoNodo).getData().getIndice() < InfoMultiplexor.numTerminales) {
-				posSegundoNodo = rand.nextInt(listaMadre.size());
-			}
-		}
-		else {
-			while(listaMadre.get(posSegundoNodo).getData().getIndice() >= InfoMultiplexor.numTerminales) {
-				posSegundoNodo = rand.nextInt(listaMadre.size());
-			}
-		}
+
 		
 		//Sacamos los padres de los involucrados
 		MyTree padrePrimerNodo = listaPadre.get(posPrimerNodo).getParent();

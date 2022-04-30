@@ -160,17 +160,11 @@ public class PanelPrincipal {
 		int generacionActual = 0;
 		while(generacionActual < ag.getMaxGeneraciones()) {
 			ag.saveElites();
-			System.out.println(0);
 			ag.Seleccion();
-			System.out.println(1);
 			ag.Cruce();
-			System.out.println(2);
 			ag.Mutacion();
-			System.out.println(3);
 			ag.recoverSavedElites();
-			System.out.println(4);
 			ag.Evaluar(generacionActual);
-			System.out.println(generacionActual);
 			generacionActual++;
 		}
 		Individuo a = ag.getMejorIndividuo();
