@@ -18,6 +18,8 @@ public class InfoMultiplexor {
  public enum TipoNodo {TERMINAL, NODOAND, NODOOR, NODONOT, NODOIF}
 
  public static int numTerminales=6;
+ public static int numNodosDistintosTipos = 10;
+ public static int numPosibilidades=64;
  
  
  public static TipoNodo getTipoNodo(int indice) {
@@ -38,13 +40,15 @@ public static void initAlternativo() {
 	//Instancia del singleton
 	 single_instance = new InfoMultiplexor();
 	 entrada = new int[2048][11];
-	 selectSize = 2;
+	 selectSize = 3;
 	 
 	 for(int i=0; i<2048; i++) {
 		 entrada[i] = toBinary(i, 11);
 	 }
 	 numTerminales=11;
 	 Multi6 = false;
+	 numPosibilidades=2048;
+	 numNodosDistintosTipos = 15;
 }
  
  
@@ -61,6 +65,8 @@ public static void initAlternativo() {
 	 }
 	 numTerminales=6;
 	 Multi6 = true;
+	 numPosibilidades=64;
+	 numNodosDistintosTipos = 10;
  }
 
  public static int[] toBinary(int number, int base) {

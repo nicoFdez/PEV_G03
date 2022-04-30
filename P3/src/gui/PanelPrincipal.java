@@ -88,7 +88,6 @@ public class PanelPrincipal {
 			TiposInicializacion ini, TiposMultiplexor mux, int profMaxima) {
 		//Creo y el algoritmo genético y configuro los parámetros más generales
 		
-		InfoMultiplexor.init();
 		ag = new AlgoritmoGenetico();
 		ag.setProbCruce(probCruce);
 		ag.setProbMutacion(probMutacion);
@@ -97,9 +96,11 @@ public class PanelPrincipal {
 		
 		switch(mux) {
 		case Mux11:
+			InfoMultiplexor.initAlternativo();
 			ag.inicializarPoblacion(nIndividuos, profMaxima, ini);
 			break;
 		case Mux6:
+			InfoMultiplexor.init();
 			ag.inicializarPoblacion(nIndividuos, profMaxima, ini);
 			break;
 		default:
@@ -159,6 +160,7 @@ public class PanelPrincipal {
 	private static void bucleAG() {
 		int generacionActual = 0;
 		while(generacionActual < ag.getMaxGeneraciones()) {
+			System.out.println("Generacion "+generacionActual);
 			ag.saveElites();
 			ag.Seleccion();
 			ag.Cruce();

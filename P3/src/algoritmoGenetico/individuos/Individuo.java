@@ -23,7 +23,7 @@ public abstract class Individuo<T> {
 	}
 
 	public int getMaxDepth() {
-		return maxDepth.intValue();
+		return this.cromosoma.getMaxDepth(this.cromosoma);
 	}
 	
 	public void setMaxDepth(int depth) {
@@ -37,7 +37,12 @@ public abstract class Individuo<T> {
 	public void setArbol(MyTree tree){
 		this.cromosoma = tree;
 	}
+	
+	public void setProfundidadMedia(int prof) {
+		this.profundidadMedia=prof;
+	}
 
 	Random rand = new Random();
 	Integer maxDepth;
+	int profundidadMedia = Integer.MAX_VALUE;
 }

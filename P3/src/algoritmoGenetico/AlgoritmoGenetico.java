@@ -50,12 +50,16 @@ public class AlgoritmoGenetico {
 	public void Evaluar(int nGeneracion) {
 		this.aptitudAcumulada=0;
 		this.aptitudMedia=0;
+		int acumuladorProfundidades = 0;
+		
 		
 		//Miramos todos los individuos de nuestra poblacion
 		this.pos_mejor = 0;
 		for(int i =0 ; i< this.poblacion.length;i++) {
 			//Nos informamos del fitness de cada individuo
+			this.poblacion[i].setProfundidadMedia(this.profundidadMedia);
 			double fitnessActual = this.poblacion[i].getFitness();
+			acumuladorProfundidades+= this.poblacion[i].getMaxDepth();
 			this.fitness[i]= fitnessActual;
 			this.aptitudAcumulada += this.fitness[i];
 			//Si estamos maximizando y este es mejor, o si estamos minimizando y este es mas bajo
@@ -82,6 +86,9 @@ public class AlgoritmoGenetico {
 		this.mediasGeneracion[nGeneracion] = this.aptitudMedia;
 		this.mejoresGeneracion[nGeneracion] = this.poblacion[this.pos_mejor].getFitness();
 		this.mejorAbsoluto[nGeneracion] = this.elMejor.getFitness();
+		
+		this.profundidadMedia = acumuladorProfundidades/this.poblacion.length;
+		System.out.println("La profundidad media es "+this.profundidadMedia+ " porque el acumulador ha llegado a "+acumuladorProfundidades);
 	}
 	
 	//M�todo que inicializa la pobalci�n sobre la que vamos a realizar la evoluci�n 
@@ -308,6 +315,7 @@ public class AlgoritmoGenetico {
 	private double[] fitness;
 	private double aptitudAcumulada;
 	private double aptitudMedia;
+	private int profundidadMedia=Integer.MAX_VALUE;
 	
 	private int maxGeneraciones;
 	private double probCruce;

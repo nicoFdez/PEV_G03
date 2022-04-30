@@ -27,8 +27,17 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		
 	}
 	
+	public int getDepth() {
+		return this.cromosoma.getMaxDepth(cromosoma);
+	}
+	
 	@Override
 	public double getFitness() {
+		//BLOATING 
+		if(this.cromosoma.getMaxDepth(this.cromosoma)>this.profundidadMedia && rand.nextInt()%2==0) {
+			//System.out.println("Alguien se ha jodido");
+			//return 1;
+		}
 		return this.getValor();
 	}
 	
@@ -40,16 +49,11 @@ public class IndividuoMultiplexor6 extends Individuo  {
 	//Metod que hace la asignación de vuelos a las pistas del aeropuerto
 	private double getValor(MyTree  cromo) {
 		
-		//BLOATING 
-		if(this.cromosoma.getMaxDepth(this.cromosoma)>this.maxDepth) {
-			return 0;
-		}
-		
 		int nAciertos = 0;
-		for(int i=0; i<64; i++) {
+		for(int i=0; i<InfoMultiplexor.numPosibilidades; i++) {
 			int valorTruth = InfoMultiplexor.getSalida(i);
 			
-			int[] bin = InfoMultiplexor.toBinary(i, 6);
+			int[] bin = InfoMultiplexor.toBinary(i, InfoMultiplexor.numTerminales);
 			int valorArbol = this.cromosoma.getData().evaluar(bin, cromo);
 			
 			if(valorTruth == valorArbol) nAciertos++;
@@ -64,18 +68,18 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		if(profundidadActual < profundidadMaxima - 1) {
 			//Sacas el tipo que le toca dentro de los operadores
 			int low = 0;
-			int high = InfoMultiplexor.ValoresNodos6.values().length;
+			int high = InfoMultiplexor.numNodosDistintosTipos;
 			int result = rand.nextInt(high-low) + low;
 			newNode = new MyTree ();
 			
 			//Dependiendo del tipo se crean X hijos
 			OperadorArbol tipoResultante = newNode.getData();
 			int numHijos=0;
-			switch (InfoMultiplexor.ValoresNodos6.values()[result]) {
-				case AND:	numHijos = 2; newNode = new MyTree (new OperadorAnd(result)); 					break;
-				case OR:	numHijos = 2; newNode = new MyTree (new OperadorOR(result)); 					break;
-				case NOT:	numHijos = 1; newNode = new MyTree (new OperadorNOT(result)); 					break;
-				case IF:	numHijos = 3; newNode = new MyTree (new OperadorIF(result)); 					break;
+			switch (InfoMultiplexor.getTipoNodo(result)) {
+				case NODOAND:	numHijos = 2; newNode = new MyTree (new OperadorAnd(result)); 					break;
+				case NODOOR:	numHijos = 2; newNode = new MyTree (new OperadorOR(result)); 					break;
+				case NODONOT:	numHijos = 1; newNode = new MyTree (new OperadorNOT(result)); 					break;
+				case NODOIF:	numHijos = 3; newNode = new MyTree (new OperadorIF(result)); 					break;
 				default: 	numHijos = 0; newNode = new MyTree (new OperadorTerminal(result));				break;
 			}
 			
@@ -100,15 +104,15 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		if(profundidadActual < profundidadMaxima - 1) {
 			//Sacas el tipo que le toca dentro de los operadores
 			int low = InfoMultiplexor.numTerminales;
-			int high = InfoMultiplexor.ValoresNodos6.values().length;
+			int high = InfoMultiplexor.numNodosDistintosTipos;
 			int result = rand.nextInt(high-low) + low;
 			
 			int numHijos=0;
-			switch (InfoMultiplexor.ValoresNodos6.values()[result]) {
-				case AND:	numHijos = 2; newNode = new MyTree(new OperadorAnd(result)); 					break;
-				case OR:	numHijos = 2; newNode = new MyTree(new OperadorOR(result)); 					break;
-				case NOT:	numHijos = 1; newNode = new MyTree(new OperadorNOT(result)); 					break;
-				case IF:	numHijos = 3; newNode = new MyTree(new OperadorIF(result)); 					break;
+			switch (InfoMultiplexor.getTipoNodo(result)) {
+				case NODOAND:	numHijos = 2; newNode = new MyTree(new OperadorAnd(result)); 					break;
+				case NODOOR:	numHijos = 2; newNode = new MyTree(new OperadorOR(result)); 					break;
+				case NODONOT:	numHijos = 1; newNode = new MyTree(new OperadorNOT(result)); 					break;
+				case NODOIF:	numHijos = 3; newNode = new MyTree(new OperadorIF(result)); 					break;
 				default: 	numHijos = 0; 	break;
 			}
 			for(int i = 0;i<numHijos; i++) 
@@ -138,14 +142,14 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		}
 		
 		//Preguntamos por el tipo del nodo terminal y sacamos uno nuevo que no coincida con el actual
-		InfoMultiplexor.ValoresNodos6 tipoNodo = InfoMultiplexor.ValoresNodos6.values()[tree.getData().getIndice()];
-		InfoMultiplexor.ValoresNodos6 nuevoTipo = InfoMultiplexor.ValoresNodos6.values()[rnd.nextInt(InfoMultiplexor.numTerminales)];
+		int tipoNodo = tree.getData().getIndice();
+		int nuevoTipo = rnd.nextInt(InfoMultiplexor.numTerminales);
 		while(nuevoTipo == tipoNodo) {
-			nuevoTipo = InfoMultiplexor.ValoresNodos6.values()[rnd.nextInt(InfoMultiplexor.numTerminales)];
+			nuevoTipo = rnd.nextInt(InfoMultiplexor.numTerminales);
 		}
 		
 		//Seteamos el arbol al nuevo valor
-		tree.setData(new OperadorTerminal(nuevoTipo.ordinal()));
+		tree.setData(new OperadorTerminal(nuevoTipo));
 	}
 	
 	//Metodo que toma dos posiciones aleatorias dentro del cromosoma e intercambia el contenido de dichas posiciones
