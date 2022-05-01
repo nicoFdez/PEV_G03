@@ -27,16 +27,17 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		
 	}
 	
-	public int getDepth() {
+	@Override 
+	public int getMaxDepth() {
 		return this.cromosoma.getMaxDepth(cromosoma);
 	}
 	
 	@Override
 	public double getFitness() {
 		//BLOATING 
-		if(this.cromosoma.getMaxDepth(this.cromosoma)>this.profundidadMedia && rand.nextInt()%2==0) {
+		if(this.cromosoma.getMaxDepth(this.cromosoma)>this.profundidadMedia && rand.nextInt()%50==0) {
 			//System.out.println("Alguien se ha jodido");
-			//return 1;
+			//return 0;
 		}
 		return this.getValor();
 	}
@@ -46,7 +47,8 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		return getValor(this.cromosoma);
 	}
 	
-	//Metod que hace la asignación de vuelos a las pistas del aeropuerto
+	//Metodo que prueba todas las posibilidades del multiplexor que tengamos y hace un recuento del numero de casos 
+	//que hemos acertado correctamente
 	private double getValor(MyTree  cromo) {
 		
 		int nAciertos = 0;
@@ -62,6 +64,8 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		return nAciertos;
 	}
 	
+	
+	//Métodoq ue realiza una inicialización creciente del arbol 
 	@Override
 	public MyTree  initializeCreciente(int profundidadActual, int profundidadMaxima) {
 		MyTree  newNode = null;
@@ -98,9 +102,12 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		return newNode;
 	}
 	
+	
+	//Métodoq ue realiza una inicialización completa del arbol 
 	@Override
 	public MyTree initializeCompleta(int profundidadActual, int profundidadMaxima) {
 		MyTree newNode = null;
+		//Si todavia no hemos llegado a la profundidad máxima
 		if(profundidadActual < profundidadMaxima - 1) {
 			//Sacas el tipo que le toca dentro de los operadores
 			int low = InfoMultiplexor.numTerminales;
@@ -117,9 +124,7 @@ public class IndividuoMultiplexor6 extends Individuo  {
 			}
 			for(int i = 0;i<numHijos; i++) 
 				newNode.addChild(initializeCompleta(profundidadActual+1, profundidadMaxima));
-			
 		}
-		
 		//Tenemos un nodo terminal
 		else {
 			//Sacas el tipo que le toca dentro de los terminales
@@ -131,7 +136,7 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		return newNode;
 	}
 	
-	//Metodo que toma dos posiciones aleatorias dentro del cromosoma e intercambia el contenido de dichas posiciones
+	//Metodo que busca un nodo terminal en el arbol y lo intercambia por otro nodo terminal distinto
 	@Override
 	public void mutacionTerminal() {
 		MyTree tree = this.cromosoma;
@@ -152,16 +157,18 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		tree.setData(new OperadorTerminal(nuevoTipo));
 	}
 	
-	//Metodo que toma dos posiciones aleatorias dentro del cromosoma e intercambia el contenido de dichas posiciones
+	//Metodo que busca un nodo funcion en el arbol y lo intercambia por otro nodo funcion distinto que tenga el mismo número de hijos
 	@Override
 	public void mutacionFuncional() {
 		MyTree tree = this.cromosoma;
 		Random rnd = new Random();
 		List<MyTree> nodos =  tree.getPreOrden();
 		
-		int orIndex = InfoMultiplexor.ValoresNodos6.OR.ordinal();
-		int andIndex = InfoMultiplexor.ValoresNodos6.AND.ordinal();
+		//Pedimos los indices de los nodos que representan un OR o un AND, porque son los únicos nodos que pueden intervenir en esta mutación
+		int orIndex = InfoMultiplexor.getIndiceTipoNodo(InfoMultiplexor.TipoNodo.NODOOR);		//InfoMultiplexor.ValoresNodos6.OR.ordinal();
+		int andIndex = InfoMultiplexor.getIndiceTipoNodo(InfoMultiplexor.TipoNodo.NODOAND); 	//.ValoresNodos6.AND.ordinal();
 		
+		//Bucasmos algún nodo que sea de estos tipos, en caso de no entonctrarlo lo anotamos y salimos porque entonces no se puede mutar este individuo así
 		int k =0;
 		while(k<nodos.size()) {
 			int tipoOperador = nodos.get(k).getOperator().getIndice();
@@ -173,26 +180,27 @@ public class IndividuoMultiplexor6 extends Individuo  {
 		//ser mutados de esta forma, asi que como no hay ninguno de estos no se puede hacer nada
 		if(k>=nodos.size())return;
 		
+		//Buscamos algún nodo de tipo OR o AND
 		int index = rnd.nextInt(nodos.size());
 		while(nodos.get(index).getData().getIndice() != orIndex &&
 			nodos.get(index).getData().getIndice() != andIndex ) {
 			index = rnd.nextInt(nodos.size());
 		}
-		 
-		if(nodos.get(index).getData().getIndice() == orIndex) {
-			nodos.get(index).setData(new OperadorAnd(andIndex));
-		}
-		else {
-			nodos.get(index).setData(new OperadorAnd(orIndex));
-		}
+		
+		//Ponemos el nodo alternativo al que el nodo ya tiene
+		if(nodos.get(index).getData().getIndice() == orIndex) 	nodos.get(index).setData(new OperadorAnd(andIndex));
+		else 													nodos.get(index).setData(new OperadorAnd(orIndex));
 	}
 	
+	
+	//Método que toma un nodo dentro de nuestro arbol, lo elimina, y genera un nuevo subarbol desde 0
 	@Override
 	public void mutacionSubarbol() {
 		Random rnd = new Random();
 		int prof = rnd.nextInt(this.maxDepth);
 		int p = 0;
 		
+		//Vamos bajando por el arbol de manera aleatoria hasta llegar a la profundidad dicha o hasta que nos encontremos con un nodo hoja
 		MyTree tree = this.cromosoma;
 		while(!tree.isLeaf() && p<prof) {
 			List<MyTree> children =  tree.getChildren();
@@ -200,18 +208,17 @@ public class IndividuoMultiplexor6 extends Individuo  {
 			p++;
 		}
 		
+		//En caso de que hayamos termiando en una hoja nos volvemos un nodo atras antes de realizar la mutación
 		if(tree.isLeaf()) {
 			tree = tree.getParent();
 			p--;
 		}
 		
+		//Decidimos de manera aleatoria cómo vamos a inicializar el resto del subarbol
 		int tipoInicializacion = rnd.nextInt(2);
-		if(tipoInicializacion == 0) {
-			tree = initializeCompleta(p, this.maxDepth);
-		}
-		else {
-			tree = initializeCreciente(p, this.maxDepth);
-		}
+		if(tipoInicializacion == 0)			tree = initializeCompleta(p, this.maxDepth);
+		else 								tree = initializeCreciente(p, this.maxDepth);
+		
 	}
 	
 }

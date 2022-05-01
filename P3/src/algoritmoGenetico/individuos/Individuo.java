@@ -20,6 +20,8 @@ public abstract class Individuo<T> {
 	
 	public void  copyFromAnother(Individuo<T> other){
 		this.cromosoma = new MyTree(other.cromosoma, null);
+		this.profundidadMedia = other.profundidadMedia;
+		this.maxDepth = other.maxDepth;
 	}
 
 	public int getMaxDepth() {

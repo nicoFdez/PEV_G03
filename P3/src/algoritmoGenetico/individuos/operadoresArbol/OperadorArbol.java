@@ -1,6 +1,9 @@
 package algoritmoGenetico.individuos.operadoresArbol;
 import algoritmoGenetico.individuos.MyTree;
 
+
+//Clase padre que contiene el indice que representara a cada  uno de los tipos de operadores y los métodos que cada uno de 
+//estos van a reimplementar
 public class OperadorArbol {
 
 	

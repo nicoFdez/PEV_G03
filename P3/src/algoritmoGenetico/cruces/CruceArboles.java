@@ -48,7 +48,7 @@ public class CruceArboles<T> implements Cruce {
 	}
 	
 	
-	//Método que toma 2 individuos y realiza el cruce PMX sobre estos
+	//Método que toma 2 individuos y realiza el cruce arbol sobre estos
 	private void intercambioSubarboles(Individuo a, Individuo b) {
 		operacionesArboles(((IndividuoMultiplexor6)a).getArbol(), ((IndividuoMultiplexor6)b).getArbol());
 	}
