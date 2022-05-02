@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import algoritmoGenetico.individuos.Individuo;
-import algoritmoGenetico.individuos.IndividuoMultiplexor6;
-import algoritmoGenetico.individuos.InfoMultiplexor;
-import algoritmoGenetico.individuos.InfoMultiplexor.ValoresNodos6;
 import algoritmoGenetico.individuos.MyTree;
 
 
@@ -23,7 +20,7 @@ public class CruceArboles<T> implements Cruce {
 	public Individuo[] cruzar(Individuo[] poblacion, double probCruce) 
 	{
 		//Preparamos una lista en la que nos vamos a quedar con aquells individuos que tienen que ser cruzados
-		ArrayList<Individuo<T>> individuosCruzar = new ArrayList<Individuo<T>>();
+		ArrayList<Individuo> individuosCruzar = new ArrayList<Individuo>();
 		Random rand = new Random();
 		
 		//Recorremos todos los individuos y segun un random y la probabilidad de cruce vemos a cuales les toca 
@@ -50,7 +47,7 @@ public class CruceArboles<T> implements Cruce {
 	
 	//Método que toma 2 individuos y realiza el cruce arbol sobre estos
 	private void intercambioSubarboles(Individuo a, Individuo b) {
-		operacionesArboles(((IndividuoMultiplexor6)a).getArbol(), ((IndividuoMultiplexor6)b).getArbol());
+		operacionesArboles(a.getArbol(), b.getArbol());
 	}
 	
 	private void operacionesArboles( MyTree cromoPadre, MyTree cromoMadre) {

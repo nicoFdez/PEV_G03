@@ -7,9 +7,7 @@ import java.util.List;
 
 import algoritmoGenetico.cruces.Cruce;
 import algoritmoGenetico.individuos.ComparadorMax;
-import algoritmoGenetico.individuos.ComparadorMin;
 import algoritmoGenetico.individuos.Individuo;
-import algoritmoGenetico.individuos.IndividuoMultiplexor6;
 import algoritmoGenetico.mutaciones.Mutacion;
 import algoritmoGenetico.seleccion.Seleccion;
 
@@ -30,7 +28,7 @@ public class AlgoritmoGenetico {
 		Individuo[] aux = Arrays.copyOf(this.poblacion, this.poblacion.length);
 		
 		for(int i=0; i<this.tamPoblacion; i++) {
-			this.poblacion[i] = new IndividuoMultiplexor6(aux[pobSeleccionada[i]]);
+			this.poblacion[i] = new Individuo(aux[pobSeleccionada[i]]);
 		}
 	}
 	
@@ -88,7 +86,7 @@ public class AlgoritmoGenetico {
 		this.mejorAbsoluto[nGeneracion] = this.elMejor.getFitness();
 		
 		this.profundidadMedia = acumuladorProfundidades/this.poblacion.length;
-		System.out.println("La profundidad media es "+this.profundidadMedia+ " porque el acumulador ha llegado a "+acumuladorProfundidades);
+		System.out.println("La profundidad media es "+ this.profundidadMedia + " porque el acumulador ha llegado a "+ acumuladorProfundidades);
 	}
 	
 	//M�todo que inicializa la pobalci�n sobre la que vamos a realizar la evoluci�n 
@@ -110,15 +108,15 @@ public class AlgoritmoGenetico {
 		switch(tipoInicializacion) {
 		case Completa:
 			for(int i=0; i<this.tamPoblacion; i++) {
-				this.poblacion[i] = new IndividuoMultiplexor6();
+				this.poblacion[i] = new Individuo();
 				this.poblacion[i].setMaxDepth(profundidadMaxima);
 				this.poblacion[i].setArbol(this.poblacion[i].initializeCompleta(0, profundidadMaxima));
 			}
-			this.elMejor = new IndividuoMultiplexor6();
+			this.elMejor = new Individuo();
 			this.elMejor.setMaxDepth(profundidadMaxima);
 			this.elMejor.setArbol(this.elMejor.initializeCompleta(0, profundidadMaxima));
 			for(int i = 0; i< numElites; i++) {
-				elites[i] = new IndividuoMultiplexor6();
+				elites[i] = new Individuo();
 				this.elites[i].setMaxDepth(profundidadMaxima);
 				this.elites[i].setArbol(this.elites[i].initializeCompleta(0, profundidadMaxima));
 				eliteValues[i] = 0;
@@ -126,15 +124,15 @@ public class AlgoritmoGenetico {
 			break;
 		case Creciente:
 			for(int i=0; i<this.tamPoblacion; i++) {
-				this.poblacion[i] = new IndividuoMultiplexor6();
+				this.poblacion[i] = new Individuo();
 				this.poblacion[i].setMaxDepth(profundidadMaxima);
 				this.poblacion[i].setArbol(this.poblacion[i].initializeCreciente(0, profundidadMaxima));
 			}
-			this.elMejor = new IndividuoMultiplexor6();
+			this.elMejor = new Individuo();
 			this.elMejor.setMaxDepth(profundidadMaxima);
 			this.elMejor.setArbol(this.elMejor.initializeCompleta(0, profundidadMaxima));
 			for(int i = 0; i< numElites; i++) {
-				this.elites[i] = new IndividuoMultiplexor6();
+				this.elites[i] = new Individuo();
 				this.elites[i].setMaxDepth(profundidadMaxima);
 				this.elites[i].setArbol(this.elites[i].initializeCreciente(0, profundidadMaxima));
 				eliteValues[i] = 0;
@@ -159,13 +157,13 @@ public class AlgoritmoGenetico {
 			
 			//La primera mitad del grupo se inicializa de forma completa
 			for(int i=j*tamGrupo; i<((j*tamGrupo)+tamMitad); i++) {
-				this.poblacion[i] = new IndividuoMultiplexor6();
+				this.poblacion[i] = new Individuo();
 				this.poblacion[i].setMaxDepth(profundidadMaxima);
 				this.poblacion[i].setArbol(this.poblacion[i].initializeCompleta(0,profundidadGrupo));
 			}
 			//La primera mitad del grupo se inicializa de forma creciente
 			for(int i=((j*tamGrupo)+tamMitad); i<((j+1)*tamGrupo); i++) {
-				this.poblacion[i] = new IndividuoMultiplexor6();
+				this.poblacion[i] = new Individuo();
 				this.poblacion[i].setMaxDepth(profundidadMaxima);
 				this.poblacion[i].setArbol(this.poblacion[i].initializeCreciente(0,profundidadGrupo));
 			}
@@ -174,18 +172,18 @@ public class AlgoritmoGenetico {
 		//Nos hacemos cargo de los individuos que se hayan quedado sin inicializar porque los grupos no son exactos
 		int indiceFinalInicializado = tam%tamGrupo;
 		for(int i=indiceFinalInicializado; i<tam; i++) {
-			this.poblacion[i] = new IndividuoMultiplexor6();
+			this.poblacion[i] = new Individuo();
 			this.poblacion[i].setMaxDepth(profundidadMaxima);
 			this.poblacion[i].setArbol(this.poblacion[i].initializeCompleta(0,profundidadMaxima));
 		}
 		
 		//Elites inicializados por defecto
 		int numElites = (int)((double)tam*this.porcElitismo);
-		this.elMejor = new IndividuoMultiplexor6();
+		this.elMejor = new Individuo();
 		this.elMejor.setMaxDepth(profundidadMaxima);
 		this.elMejor.setArbol(this.elMejor.initializeCreciente(0,profundidadMaxima));
 		for(int i = 0; i< numElites; i++) {
-			elites[i] = new IndividuoMultiplexor6();
+			elites[i] = new Individuo();
 			this.elites[i].setMaxDepth(profundidadMaxima);
 			this.elites[i].setArbol(this.elMejor.initializeCreciente(0,profundidadMaxima));
 			eliteValues[i] = 0;

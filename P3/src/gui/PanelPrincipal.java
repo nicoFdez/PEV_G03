@@ -299,7 +299,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(panel);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
-		TextoMejorIndividuo.setBounds(327, 48, 174, 14);
+		TextoMejorIndividuo.setBounds(348, 47, 174, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMejorIndividuo);
 		
 		JLabel lbLabelTamTorneo = new JLabel("Tama\u00F1o torneo:");
@@ -332,21 +332,21 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(textFieldValorTruncamiento);
 		
 		TextoMediaPoblacion = new JLabel("Media poblaci\u00F3n: ");
-		TextoMediaPoblacion.setBounds(327, 29, 174, 14);
+		TextoMediaPoblacion.setBounds(348, 28, 174, 14);
 		frmGrupoPrctica.getContentPane().add(TextoMediaPoblacion);
 		
 		TextoPeorIndividuo = new JLabel("Peor Individuo: ");
-		TextoPeorIndividuo.setBounds(327, 11, 174, 14);
+		TextoPeorIndividuo.setBounds(348, 10, 174, 14);
 		frmGrupoPrctica.getContentPane().add(TextoPeorIndividuo);
 		
 		TextoNCruces = new JLabel("N\u00FAmero de cruces:");
 		TextoNCruces.setHorizontalAlignment(SwingConstants.LEFT);
-		TextoNCruces.setBounds(147, 48, 203, 14);
+		TextoNCruces.setBounds(176, 47, 203, 14);
 		frmGrupoPrctica.getContentPane().add(TextoNCruces);
 		
 		TextoNMutaciones = new JLabel("N\u00FAmero de mutaciones:");
 		TextoNMutaciones.setHorizontalAlignment(SwingConstants.LEFT);
-		TextoNMutaciones.setBounds(147, 16, 203, 14);
+		TextoNMutaciones.setBounds(176, 15, 203, 14);
 		frmGrupoPrctica.getContentPane().add(TextoNMutaciones);
 		
 		JLabel lblMetodoInicializacin = new JLabel("Metodo Inicializaci\u00F3n:");
