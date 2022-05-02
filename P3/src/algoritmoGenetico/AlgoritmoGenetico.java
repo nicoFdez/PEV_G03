@@ -56,7 +56,7 @@ public class AlgoritmoGenetico {
 		for(int i =0 ; i< this.poblacion.length;i++) {
 			//Nos informamos del fitness de cada individuo
 			this.poblacion[i].setProfundidadMedia(this.profundidadMedia);
-			double fitnessActual = this.poblacion[i].getFitness();
+			double fitnessActual = this.poblacion[i].getValor();
 			acumuladorProfundidades+= this.poblacion[i].getMaxDepth();
 			this.fitness[i]= fitnessActual;
 			this.aptitudAcumulada += this.fitness[i];
@@ -68,22 +68,22 @@ public class AlgoritmoGenetico {
 		}
 		
 		//Si estamos maximizando y este es mejor, o si estamos minimizando y este es mas bajo
-		if(( this.maximize && this.fitness[this.pos_mejor] > elMejor.getFitness()) ||
-				( !this.maximize && this.fitness[this.pos_mejor] < elMejor.getFitness())) {			
+		if(( this.maximize && this.fitness[this.pos_mejor] > elMejor.getValor()) ||
+				( !this.maximize && this.fitness[this.pos_mejor] < elMejor.getValor())) {			
 			this.elMejor.copyFromAnother(this.poblacion[this.pos_mejor]);
 		}
 				
 		//Sacamos la aptitud media
 		this.aptitudMedia = this.aptitudAcumulada/this.tamPoblacion;
-		System.out.println("Mejor hasta el momento: " + this.elMejor.getFitness());
-		System.out.println("Mejor actual: " + this.poblacion[this.pos_mejor].getFitness());
+		System.out.println("Mejor hasta el momento: " + this.elMejor.getValor());
+		System.out.println("Mejor actual: " + this.poblacion[this.pos_mejor].getValor());
 		System.out.println("Media poblacion: " + aptitudMedia);
 		System.out.println("------------------");
 		
 		//Almacenamos estos datos para la futua gráfica
 		this.mediasGeneracion[nGeneracion] = this.aptitudMedia;
-		this.mejoresGeneracion[nGeneracion] = this.poblacion[this.pos_mejor].getFitness();
-		this.mejorAbsoluto[nGeneracion] = this.elMejor.getFitness();
+		this.mejoresGeneracion[nGeneracion] = this.poblacion[this.pos_mejor].getValor();
+		this.mejorAbsoluto[nGeneracion] = this.elMejor.getValor();
 		
 		this.profundidadMedia = acumuladorProfundidades/this.poblacion.length;
 		System.out.println("La profundidad media es "+ this.profundidadMedia + " porque el acumulador ha llegado a "+ acumuladorProfundidades);
@@ -127,6 +127,7 @@ public class AlgoritmoGenetico {
 				this.poblacion[i] = new Individuo();
 				this.poblacion[i].setMaxDepth(profundidadMaxima);
 				this.poblacion[i].setArbol(this.poblacion[i].initializeCreciente(0, profundidadMaxima));
+				System.out.println(this.poblacion[i].getArbol().getMaxDepth(this.poblacion[i].getArbol()));
 			}
 			this.elMejor = new Individuo();
 			this.elMejor.setMaxDepth(profundidadMaxima);
@@ -277,9 +278,9 @@ public class AlgoritmoGenetico {
 	}
 	
 	public double getPeorFitness(){
-		double peorFitness = this.poblacion[0].getFitness();
+		double peorFitness = this.poblacion[0].getValor();
 		for(int i=1; i<this.poblacion.length; ++i) {
-			double f = this.poblacion[i].getFitness();
+			double f = this.poblacion[i].getValor();
 			if((this.maximize && f < peorFitness) || (!this.maximize && f > peorFitness)) 
 				peorFitness = f;
 		}

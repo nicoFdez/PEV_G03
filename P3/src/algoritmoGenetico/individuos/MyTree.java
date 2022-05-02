@@ -18,6 +18,7 @@ public class MyTree {
     private List<MyTree> children = new ArrayList<MyTree>();
     private MyTree parent = null;
     private OperadorArbol data = null;
+    private boolean modified = true;
 
     
     //Constructora
@@ -34,6 +35,14 @@ public class MyTree {
     public MyTree(OperadorArbol data, MyTree parent) {
         this.data = data;
         this.parent = parent;
+    }
+    
+    public boolean hasBeenModified() {
+    	return modified;
+    }
+    
+    public void setModified(boolean b) {
+    	this.modified= b;
     }
     
     //Constructora por copia

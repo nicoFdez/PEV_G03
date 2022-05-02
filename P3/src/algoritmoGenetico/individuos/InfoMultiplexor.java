@@ -25,6 +25,8 @@ public class InfoMultiplexor {
  public enum TipoNodo {TERMINAL, NODOAND, NODOOR, NODONOT, NODOIF}
  
  
+ public static int ConstantePenalizacion = 5;
+ public static boolean BloatingCheck=true;
  
  //Metodo que recibe un indice y a partir de este comprueba si estamos trabajando con un multiplexor u otro
  //para poder determinar el tipo de nodo que representa y devolver un Enum que lo indique
@@ -62,6 +64,7 @@ public static void initAlternativo() {
 	 Multi6 = false;
 	 numPosibilidades=2048;
 	 numNodosDistintosTipos = 15;
+	 ConstantePenalizacion = 8;
 }
  
  
@@ -79,6 +82,7 @@ public static void initAlternativo() {
 	 Multi6 = true;
 	 numPosibilidades=64;
 	 numNodosDistintosTipos = 10;
+	 ConstantePenalizacion = 5;
  }
 
  

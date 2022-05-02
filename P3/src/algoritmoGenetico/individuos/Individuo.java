@@ -3,6 +3,7 @@ package algoritmoGenetico.individuos;
 import java.util.List;
 import java.util.Random;
 
+import algoritmoGenetico.individuos.InfoMultiplexor.TipoNodo;
 import algoritmoGenetico.individuos.operadoresArbol.OperadorAnd;
 import algoritmoGenetico.individuos.operadoresArbol.OperadorArbol;
 import algoritmoGenetico.individuos.operadoresArbol.OperadorIF;
@@ -52,22 +53,29 @@ public class Individuo {
 	}
 	
 	public double getFitness() {
+		int value =(int)this.getValor();
 		//BLOATING 
-		if(this.cromosoma.getMaxDepth(this.cromosoma)>this.profundidadMedia && rand.nextInt()%3==0) {
-			//System.out.println("Alguien se ha jodido");
-			return 0;
+		if(InfoMultiplexor.BloatingCheck && this.cromosoma.getMaxDepth(this.cromosoma)>this.profundidadMedia && rand.nextInt()%10==0) {
+			System.out.println("Me han jodido");
+			int alturaDeMas = this.cromosoma.getMaxDepth(this.cromosoma)-this.maxDepth;
+			
+			value -= (InfoMultiplexor.ConstantePenalizacion*alturaDeMas);
+			if(value <0)value =0;
 		}
-		return this.getValor();
+
+		return value;
 	}
 	
 	//Metod que aplica la funcion 5 y devuelvel el valor
-	private double getValor() {
+	public double getValor() {
 		return getValor(this.cromosoma);
 	}
 	
 	//Metodo que prueba todas las posibilidades del multiplexor que tengamos y hace un recuento del numero de casos 
 	//que hemos acertado correctamente
 	private double getValor(MyTree  cromo) {
+		//En caso de que no haya habido ninguna modificación no hacemos nada porque ya lo teníamos calculado de antes
+		if(!this.cromosoma.hasBeenModified()) return lastFitness;
 		
 		int nAciertos = 0;
 		for(int i=0; i<InfoMultiplexor.numPosibilidades; i++) {
@@ -79,6 +87,8 @@ public class Individuo {
 			if(valorTruth == valorArbol) nAciertos++;
 		}
 		
+		lastFitness = nAciertos;
+		this.cromosoma.setModified(false);
 		return nAciertos;
 	}
 	
@@ -87,9 +97,21 @@ public class Individuo {
 	public MyTree  initializeCreciente(int profundidadActual, int profundidadMaxima) {
 		MyTree  newNode = null;
 		if(profundidadActual < profundidadMaxima - 1) {
+			
 			//Sacas el tipo que le toca dentro de los operadores
 			int low = 0;
 			int high = InfoMultiplexor.numNodosDistintosTipos;
+			double probTerminal = rand.nextDouble();
+			if(probTerminal <0.2) {
+				low = 0;
+				high = InfoMultiplexor.getIndiceTipoNodo(TipoNodo.NODOAND);
+			}
+			else {
+				low = InfoMultiplexor.getIndiceTipoNodo(TipoNodo.NODOAND);
+				high = InfoMultiplexor.numNodosDistintosTipos;
+			}
+			
+			
 			int result = rand.nextInt(high-low) + low;
 			newNode = new MyTree ();
 			
@@ -170,6 +192,7 @@ public class Individuo {
 		
 		//Seteamos el arbol al nuevo valor
 		tree.setData(new OperadorTerminal(nuevoTipo));
+		this.cromosoma.setModified(true);
 	}
 	
 	//Metodo que busca un nodo funcion en el arbol y lo intercambia por otro nodo funcion distinto que tenga el mismo número de hijos
@@ -204,6 +227,8 @@ public class Individuo {
 		//Ponemos el nodo alternativo al que el nodo ya tiene
 		if(nodos.get(index).getData().getIndice() == orIndex) 	nodos.get(index).setData(new OperadorAnd(andIndex));
 		else 													nodos.get(index).setData(new OperadorAnd(orIndex));
+		
+		this.cromosoma.setModified(true);
 	}
 	
 	
@@ -232,6 +257,7 @@ public class Individuo {
 		if(tipoInicializacion == 0)			tree = initializeCompleta(p, this.maxDepth);
 		else 								tree = initializeCreciente(p, this.maxDepth);
 		
+		this.cromosoma.setModified(true);
 	}
 
 	Random rand = new Random();
@@ -239,5 +265,5 @@ public class Individuo {
 	int profundidadMedia = Integer.MAX_VALUE;
 	private MyTree cromosoma;
 	private boolean chromoChanged = true;
-	private double lastFitness;
+	private int lastFitness=0;
 }

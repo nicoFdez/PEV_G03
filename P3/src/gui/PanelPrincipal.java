@@ -37,6 +37,8 @@ import algoritmoGenetico.seleccion.SeleccionRuleta;
 import algoritmoGenetico.seleccion.SeleccionTorneoDeterminista;
 import algoritmoGenetico.seleccion.SeleccionTorneoProbabilistico;
 import algoritmoGenetico.seleccion.SeleccionTruncamiento;
+import javax.swing.JToggleButton;
+import javax.swing.JCheckBox;
 
 
 //Clase que implementa el punto de entrada de la ejecución del programa y que sostiene tanto la ventana como el bucle principal
@@ -85,7 +87,7 @@ public class PanelPrincipal {
 			double probCruce, double probMutacion, double porcElitismo,
 			TiposSeleccion s, TiposCruce c, TiposMutacion m,
 			int tamTorneo, double probTorneo, double valorTruncamiento,
-			TiposInicializacion ini, TiposMultiplexor mux, int profMaxima) {
+			TiposInicializacion ini, TiposMultiplexor mux, int profMaxima,boolean controlBloating) {
 		//Creo y el algoritmo genético y configuro los parámetros más generales
 		
 		ag = new AlgoritmoGenetico();
@@ -106,6 +108,8 @@ public class PanelPrincipal {
 		default:
 			break;		
 		}	
+		InfoMultiplexor.BloatingCheck= controlBloating;
+		System.out.println("Control bloating "+InfoMultiplexor.BloatingCheck);
 		
 		//Preparo un operador de selección u otro dependiendo de lo que me haya dicho la ventana
 		switch(s) {
@@ -170,7 +174,7 @@ public class PanelPrincipal {
 			generacionActual++;
 		}
 		Individuo a = ag.getMejorIndividuo();
-		System.out.println("El mejor resultado: "+ a.getFitness());
+		System.out.println("El mejor resultado: "+ a.getValor());
 		generarGrafica();
 	}
 	
@@ -187,7 +191,7 @@ public class PanelPrincipal {
 		grafica.addArrayOfPoints("Media de generaciones", ag.getMediasGeneraciones());
 		grafica.plot();
 		
-		TextoMejorIndividuo.setText("Mejor individuo: "+ ag.getMejorIndividuo().getFitness() +"   ");
+		TextoMejorIndividuo.setText("Mejor individuo: "+ ag.getMejorIndividuo().getValor() +"   ");
 		TextoPeorIndividuo.setText("Peor individuo: "+ ag.getPeorFitness());
 		TextoMediaPoblacion.setText("Media población: "+ ag.getMediaPoblacion());
 		TextoNCruces.setText("Número de cruces: " + ag.getNCruces());
@@ -211,7 +215,7 @@ public class PanelPrincipal {
 		
 		frmGrupoPrctica = new JFrame();
 		frmGrupoPrctica.setTitle("Grupo3 Pr\u00E1ctica 2");
-		frmGrupoPrctica.setBounds(100, 100, 811, 567);
+		frmGrupoPrctica.setBounds(100, 100, 899, 567);
 		frmGrupoPrctica.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmGrupoPrctica.getContentPane().setLayout(null);
 		
@@ -295,7 +299,7 @@ public class PanelPrincipal {
 		frmGrupoPrctica.getContentPane().add(botonEvolucionar);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(183, 75, 580, 373);
+		panel.setBounds(183, 75, 666, 373);
 		frmGrupoPrctica.getContentPane().add(panel);
 		
 		TextoMejorIndividuo = new JLabel("Mejor Individuo: ");
@@ -376,6 +380,12 @@ public class PanelPrincipal {
 		spinnerProfMaxima.setBounds(642, 41, 76, 20);
 		frmGrupoPrctica.getContentPane().add(spinnerProfMaxima);
 		
+		JCheckBox chckbxNewCheckBoxBloating = new JCheckBox("Control de Bloating\r\n");
+		chckbxNewCheckBoxBloating.setSelected(true);
+		chckbxNewCheckBoxBloating.setBounds(736, 38, 141, 23);
+		frmGrupoPrctica.getContentPane().add(chckbxNewCheckBoxBloating);
+		
+		
 		//Añadimos la funcionalidad de que empiece el AG
 		botonEvolucionar.addActionListener(new ActionListener() {
 			@Override
@@ -385,7 +395,8 @@ public class PanelPrincipal {
 						TiposSeleccion.values()[comboBoxMetodoSeleccion.getSelectedIndex()] , TiposCruce.values()[comboBoxMetodoCruce.getSelectedIndex()],
 						TiposMutacion.values()[comboBoxMetodoMutacion.getSelectedIndex()],
 						(int)spinnerTamTorneo.getValue(),Double.parseDouble(textFieldProbTorneo.getText()),Double.parseDouble(textFieldValorTruncamiento.getText()),
-						TiposInicializacion.values()[comboBoxMetodoInicializacion.getSelectedIndex()], TiposMultiplexor.values()[comboBoxTipoMultiplexor.getSelectedIndex()], (int)spinnerProfMaxima.getValue());
+						TiposInicializacion.values()[comboBoxMetodoInicializacion.getSelectedIndex()], TiposMultiplexor.values()[comboBoxTipoMultiplexor.getSelectedIndex()], (int)spinnerProfMaxima.getValue(),
+						chckbxNewCheckBoxBloating.isSelected());
 				bucleAG();
 			}
 

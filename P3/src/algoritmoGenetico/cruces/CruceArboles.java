@@ -81,6 +81,8 @@ public class CruceArboles<T> implements Cruce {
 		}
 		else cromoMadre = listaPadre.get(posPrimerNodo);
 		
+		cromoPadre.setModified(true);
+		cromoMadre.setModified(true);
 	}
 	
 	
