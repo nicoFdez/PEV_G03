@@ -64,7 +64,7 @@ public static void initAlternativo() {
 	 Multi6 = false;
 	 numPosibilidades=2048;
 	 numNodosDistintosTipos = 15;
-	 ConstantePenalizacion = 8;
+	 ConstantePenalizacion = 200;
 }
  
  
@@ -82,7 +82,7 @@ public static void initAlternativo() {
 	 Multi6 = true;
 	 numPosibilidades=64;
 	 numNodosDistintosTipos = 10;
-	 ConstantePenalizacion = 5;
+	 ConstantePenalizacion = 13;
  }
 
  

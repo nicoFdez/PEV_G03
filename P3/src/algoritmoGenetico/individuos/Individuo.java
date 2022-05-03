@@ -55,8 +55,7 @@ public class Individuo {
 	public double getFitness() {
 		int value =(int)this.getValor();
 		//BLOATING 
-		if(InfoMultiplexor.BloatingCheck && this.cromosoma.getMaxDepth(this.cromosoma)>this.profundidadMedia && rand.nextInt()%10==0) {
-			System.out.println("Me han jodido");
+		if(InfoMultiplexor.BloatingCheck && this.cromosoma.getMaxDepth(this.cromosoma)>this.profundidadMedia && rand.nextInt()%2==0) {
 			int alturaDeMas = this.cromosoma.getMaxDepth(this.cromosoma)-this.maxDepth;
 			
 			value -= (InfoMultiplexor.ConstantePenalizacion*alturaDeMas);
@@ -231,11 +230,37 @@ public class Individuo {
 		this.cromosoma.setModified(true);
 	}
 	
-	
-	//Método que toma un nodo dentro de nuestro arbol, lo elimina, y genera un nuevo subarbol desde 0
 	public void mutacionSubarbol() {
 		Random rnd = new Random();
-		int prof = rnd.nextInt(this.maxDepth);
+		List<MyTree> nodos =  this.cromosoma.getPreOrden();
+		
+		int r = rnd.nextInt(nodos.size());
+		MyTree tree = nodos.get(r);
+		
+		int prof = tree.getMaxDepth(tree);
+		int profTotal = this.cromosoma.getMaxDepth(this.cromosoma);
+		int maxProf = profTotal - prof;
+		
+		MyTree newTree;
+		int tipoInicializacion = rnd.nextInt(2);
+		if(tipoInicializacion == 0)			newTree = initializeCompleta(0, maxProf);
+		else 								newTree = initializeCreciente(0, maxProf);
+		
+		MyTree parent = tree.getParent();
+		if(parent!=null) {
+			int pos = parent.getChildren().indexOf(tree);
+			parent.changeChild(newTree, pos);
+		}
+		else this.cromosoma = newTree;
+		
+		tree.fuera();
+		this.cromosoma.setModified(true);
+	}
+	
+	/*//Método que toma un nodo dentro de nuestro arbol, lo elimina, y genera un nuevo subarbol desde 0
+	public void mutacionSubarbol() {
+		Random rnd = new Random();
+		int prof = rnd.nextInt(this.cromosoma.getMaxDepth(this.cromosoma));
 		int p = 0;
 		
 		//Vamos bajando por el arbol de manera aleatoria hasta llegar a la profundidad dicha o hasta que nos encontremos con un nodo hoja
@@ -247,18 +272,28 @@ public class Individuo {
 		}
 		
 		//En caso de que hayamos termiando en una hoja nos volvemos un nodo atras antes de realizar la mutación
-		if(tree.isLeaf()) {
+		if(tree.isLeaf() && tree.getParent()!=null) {
 			tree = tree.getParent();
 			p--;
 		}
 		
+		MyTree newTree = new MyTree();
 		//Decidimos de manera aleatoria cómo vamos a inicializar el resto del subarbol
 		int tipoInicializacion = rnd.nextInt(2);
-		if(tipoInicializacion == 0)			tree = initializeCompleta(p, this.maxDepth);
-		else 								tree = initializeCreciente(p, this.maxDepth);
+		if(tipoInicializacion == 0)			newTree = initializeCompleta(p, this.cromosoma.getMaxDepth(this.cromosoma));
+		else 								newTree = initializeCreciente(p, this.cromosoma.getMaxDepth(this.cromosoma));
+		
+		MyTree parent = tree.getParent();
+		if(parent != null) {
+			int pos = parent.getChildren().indexOf(tree);
+			parent.changeChild(newTree, pos);
+		}
+		else {
+			tree = newTree;
+		}
 		
 		this.cromosoma.setModified(true);
-	}
+	}*/
 
 	Random rand = new Random();
 	Integer maxDepth;
