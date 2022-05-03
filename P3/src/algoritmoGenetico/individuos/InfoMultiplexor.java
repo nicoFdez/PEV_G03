@@ -58,9 +58,11 @@ public static void initAlternativo() {
 	 entrada = new int[2048][11];
 	 selectSize = 3;
 	 
+	 
 	 for(int i=0; i<2048; i++) {
 		 entrada[i] = toBinary(i, 11);
 	 }
+	 
 	 numTerminales=11;
 	 Multi6 = false;
 	 numPosibilidades=2048;
@@ -84,6 +86,7 @@ public static void initAlternativo() {
 	 numPosibilidades=64;
 	 numNodosDistintosTipos = 10;
 	 ConstantePenalizacion = 13;
+	 
  }
 
  
@@ -104,8 +107,8 @@ public static void initAlternativo() {
  //Metodo que recibe un array de bits y lo convierte en un número entero
 private static int binToDec(int[] bin) {
 	int sum = 0;
-	for(int i=0; i<bin.length; i++) {
-		if(bin[i] == 1) sum += Math.pow(2, i);
+	for(int i=bin.length-1; i>=0; i--) {
+		if(bin[i] == 1) sum += Math.pow(2, (bin.length-1-i));
 	}
 	return sum;
 }
