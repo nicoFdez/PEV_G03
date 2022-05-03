@@ -85,16 +85,6 @@ public class MyTree {
         return children;
     }
     
-    public void fuera() {
-    	this.parent = null;
-    	
-    	for(int i=0; i<this.children.size(); i++) {
-    		this.children.get(i).fuera();
-    	}
-    	
-    	this.children.clear();
-    }
-    
     //Metodo que recorre el arbol en el sentido Preorden y devuelve una lista con los nodos que lo componen
     public List<MyTree>  getPreOrden() {
     	List<MyTree> preorden = new ArrayList<MyTree>();

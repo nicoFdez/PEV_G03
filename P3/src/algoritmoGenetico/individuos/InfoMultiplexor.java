@@ -20,6 +20,7 @@ public class InfoMultiplexor {
  public static int numTerminales=6;
  public static int numNodosDistintosTipos = 10;
  public static int numPosibilidades=64;
+ public static int profMaximaInicial = 4;
  
  //Enum que nos permitirá distinguir los diferentes tipos de valores que pueden tener los operadores de los árboles
  public enum TipoNodo {TERMINAL, NODOAND, NODOOR, NODONOT, NODOIF}

@@ -109,6 +109,7 @@ public class PanelPrincipal {
 			break;		
 		}	
 		InfoMultiplexor.BloatingCheck= controlBloating;
+		InfoMultiplexor.profMaximaInicial = profMaxima;
 		System.out.println("Control bloating "+InfoMultiplexor.BloatingCheck);
 		
 		//Preparo un operador de selección u otro dependiendo de lo que me haya dicho la ventana
@@ -165,11 +166,17 @@ public class PanelPrincipal {
 		int generacionActual = 0;
 		while(generacionActual < ag.getMaxGeneraciones()) {
 			System.out.println("Generacion "+generacionActual);
+			System.out.println("SaveElites");
 			ag.saveElites();
+			System.out.println("Seleccion");
 			ag.Seleccion();
+			System.out.println("Cruce");
 			ag.Cruce();
+			System.out.println("Mutacion");
 			ag.Mutacion();
+			System.out.println("RecoverSavedElites");
 			ag.recoverSavedElites();
+			System.out.println("Evaluar");
 			ag.Evaluar(generacionActual);
 			generacionActual++;
 		}
